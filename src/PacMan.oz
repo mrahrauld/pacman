@@ -70,6 +70,8 @@ in
    %{Say "Map:\t"#Args.map}
    %{Say "Pac-man lives:\t"#Args.lives}
 
+   {System.show MAP}
+
    {GUI.startGame MAP}
    {Application.exit 0}
 end

@@ -155,7 +155,7 @@ define
       MySelf
       Ghosts
    in
-      {System.show "test3"}
+      {System.show 'test3'}
       %{Browse show}
       {CreateGame MAP}
       %{Browse aftershow}
