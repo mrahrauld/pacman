@@ -58,6 +58,7 @@ in
 
    {System.show MAP}
 
-   {GUI.startGame}
+   {GUI.StartGame}
+   
    {Application.exit 0}
 end
