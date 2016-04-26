@@ -26,7 +26,21 @@ import
 define
   
    %% Default values
-   MAP      = map
+   MAP      = map(r(1 1 1 1 1 1 1 5 1 1 1 1 1 1 1)
+	r(1 4 0 0 0 0 0 0 0 1 0 0 0 0 1)
+	r(1 0 0 0 0 0 0 0 0 1 2 0 0 0 1)
+	r(1 0 0 0 0 0 0 0 4 1 0 0 0 0 1)
+	r(1 0 0 0 3 0 0 0 0 1 1 1 0 0 1)
+	r(1 0 0 0 0 0 0 0 0 1 0 0 0 0 1)
+	r(1 0 0 0 0 0 0 0 0 1 0 0 0 0 1)
+	r(1 1 1 0 0 1 1 1 1 1 0 0 0 0 1)
+	r(1 0 0 0 0 0 0 1 0 0 0 0 0 0 1)
+	r(1 3 0 0 0 0 0 1 0 0 0 0 0 3 1)
+	r(1 0 0 0 0 0 0 1 0 0 0 0 0 0 1)
+	r(1 0 0 0 0 0 0 1 0 0 0 0 0 0 1)
+	r(1 0 0 0 0 0 0 1 2 0 0 0 0 0 1)
+	r(1 0 0 0 0 0 0 0 0 0 0 0 0 0 1)
+	r(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1))
    LIVES    = 5
 
    %% For feedback
@@ -56,6 +70,6 @@ in
    {Say "Map:\t"#Args.map}
    {Say "Pac-man lives:\t"#Args.lives}
 
-   {GUI.startGame}
+   {GUI.startGame MAP}
    {Application.exit 0}
 end

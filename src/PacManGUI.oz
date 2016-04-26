@@ -13,25 +13,16 @@ define
    GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
    WidthCell=40
    HeightCell=40
-   NW=20
-   NH=20
+   NW
+   NH
    W =WidthCell*NW
    H =HeightCell*NH
    Command
    CommandPort = {NewPort Command}
-   Desc=td(canvas(bg:black
-                  width:W
-                  height:H
-                  handle:Canvas))
-   Window={QTk.build Desc}
-   {Window bind(event:"<Up>" action:proc{$} {Send CommandPort r(0 ~1)} end)}
-   {Window bind(event:"<Left>" action:proc{$} {Send CommandPort r(~1 0)} end)}
-   {Window bind(event:"<Down>" action:proc{$} {Send CommandPort r(0 1)}  end)}
-   {Window bind(event:"<Right>" action:proc{$} {Send CommandPort r(1 0)} end)}
-   proc{DrawBox Color X Y}
-      case Color of white then
+   proc{DrawBox Number X Y}
+      case Number of 4 then
 	 {Canvas create(image X*WidthCell+WidthCell div 2 Y*HeightCell+HeightCell div 2 image:PacManImg)}
-      [] red then
+      [] 3 then
 	    {Canvas create(image X*WidthCell+WidthCell div 2 Y*HeightCell+HeightCell div 2 image:GhostImg)}
       else
 	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:Color outline:black)}
@@ -109,18 +100,65 @@ define
       GhostNewStates1 = {MoveAll GhostNewStates nil}
       {Game MyNewState GhostNewStates1 NextCommand}
    end
+
+   proc {CreateGame MAP}
+
+      %Taille du tableau 
+      {Record.width MAP NW}
+      NH = NW
+
+      %Creation de la window
+      Desc=td(canvas(bg:black
+                  width:W
+                  height:H
+                  handle:Canvas))
+      Window={QTk.build Desc}
+
+      %Ajout des commandes
+      {Window bind(event:"<Up>" action:proc{$} {Send CommandPort r(0 ~1)} end)}
+      {Window bind(event:"<Left>" action:proc{$} {Send CommandPort r(~1 0)} end)}
+      {Window bind(event:"<Down>" action:proc{$} {Send CommandPort r(0 1)}  end)}
+      {Window bind(event:"<Right>" action:proc{$} {Send CommandPort r(1 0)} end)}
+
+      {CreateTable MAP {Record.arity MAP}}
+
+   end
+
+   proc {CreateTable MAP ARITY}
+      case ARITY of H|T then
+	 {CreateLine MAP.H {Record.arity MAP.H} H}
+	 {CreateTable MAP T}
+      else
+	 skip
+      end
+   end
+
+   proc {CreateLine LINE ARITY Y}
+      case ARITY of H|T then
+	 {DrawBox LINE.H H Y}
+	 {CreateLine LINE T Y}
+      else
+	 skip
+      end
+   end
    
-   proc {StartGame}
+   
+
+      
+   
+   
+   proc {StartGame MAP}
       MySelf
       Ghosts
    in
       %{Browse show}
       {Window show}
+      {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
-      MySelf = r(white 8 8)
-      Ghosts = [r(red 1 12) r(blue 10 3) r(green 11 10)]
-      {InitLayout MySelf|Ghosts}
+      MySelf = r(white 1 1)
+      Ghosts = [r(red 4 4)]
+      %{InitLayout MySelf|Ghosts}
       {Game MySelf Ghosts Command}
    end
 end
