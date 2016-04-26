@@ -11,6 +11,10 @@ define
    Desc
    Window
    Canvas
+   W
+   H
+   NW
+   NH
    MainURL={OS.getCWD}
    PacManImg={QTk.newImage photo(url:MainURL#"/pacman.gif")}
    GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
@@ -103,13 +107,6 @@ define
    end
 
    proc {CreateGame MAP}
-
-      NW
-      NH
-      W
-      H 
-
-      in
 
       %Taille du tableau 
       {Record.width MAP NW}
