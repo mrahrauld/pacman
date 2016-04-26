@@ -6,7 +6,8 @@ export
    StartGame
 define
    [QTk]={Module.link ["x-oz://system/wp/QTk.ozf"]}
-
+   Desc
+   Window
    Canvas
    MainURL={OS.getCWD}
    PacManImg={QTk.newImage photo(url:MainURL#"/pacman.gif")}
@@ -25,7 +26,7 @@ define
       [] 3 then
 	    {Canvas create(image X*WidthCell+WidthCell div 2 Y*HeightCell+HeightCell div 2 image:GhostImg)}
       else
-	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:Color outline:black)}
+	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:blue outline:black)}
       end
    end
    proc{InitLayout ListToDraw}
