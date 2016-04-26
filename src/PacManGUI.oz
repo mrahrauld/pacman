@@ -30,7 +30,7 @@ define
       [] 3 then
 	    {Canvas create(image X*WidthCell+WidthCell div 2 Y*HeightCell+HeightCell div 2 image:GhostImg)}
       else
-	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:blue outline:black)}
+	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:black outline:black)}
       end
    end
    proc{InitLayout ListToDraw}
