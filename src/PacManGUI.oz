@@ -143,10 +143,6 @@ define
    end
    
    
-
-      
-   
-   
    proc {StartGame MAP}
       MySelf
       Ghosts
