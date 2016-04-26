@@ -180,7 +180,7 @@ define
       {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
-      MySelf = r(white 1 1)
+      MySelf = r(white 2 2)
       Ghosts = [r(red 4 4)]
       %{InitLayout MySelf|Ghosts}
       {Game MySelf Ghosts Command}
