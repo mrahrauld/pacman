@@ -10,6 +10,7 @@ define
    Canvas
    MainURL={OS.getCWD}
    PacManImg={QTk.newImage photo(url:MainURL#"/pacman.gif")}
+   GhostImg={QTk.newImage photo(url:MainURL#"/ghost.png")}
    WidthCell=40
    HeightCell=40
    NW=20
@@ -30,6 +31,8 @@ define
    proc{DrawBox Color X Y}
       case Color of white then
 	 {Canvas create(image X*WidthCell+WidthCell div 2 Y*HeightCell+HeightCell div 2 image:PacManImg)}
+      [] red then
+	    {Canvas create(image X*WidthCell+WidthCell div 2 Y*HeightCell+HeightCell div 2 image:GhostImg)}
       else
 	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:Color outline:black)}
       end
@@ -116,7 +119,7 @@ define
       %{Browse aftershow}
       %Initialize ghosts and user
       MySelf = r(white 8 8)
-      Ghosts = [r(yellow 1 12) r(blue 10 3) r(green 11 10)]
+      Ghosts = [r(red 1 12) r(blue 10 3) r(green 11 10)]
       {InitLayout MySelf|Ghosts}
       {Game MySelf Ghosts Command}
    end
