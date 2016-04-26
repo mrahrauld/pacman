@@ -6,6 +6,7 @@ export
    StartGame
 define
    [QTk]={Module.link ["x-oz://system/wp/QTk.ozf"]}
+   Say    = System.showInfo
    Desc
    Window
    Canvas
