@@ -106,7 +106,8 @@ define
 
       %Taille du tableau 
       {Record.width MAP NW}
-      NH = NW
+      {Record.width MAP NH}
+      %NH = NW
 
       %Creation de la window
       Desc=td(canvas(bg:black
