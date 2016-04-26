@@ -122,7 +122,9 @@ define
       {Window bind(event:"<Down>" action:proc{$} {Send CommandPort r(0 1)}  end)}
       {Window bind(event:"<Right>" action:proc{$} {Send CommandPort r(1 0)} end)}
 
+      {Say "test1"}
       {CreateTable MAP {Record.arity MAP}}
+      {Say "test2"}
 
    end
 
