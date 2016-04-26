@@ -10,7 +10,7 @@ define
    Canvas
    MainURL={OS.getCWD}
    PacManImg={QTk.newImage photo(url:MainURL#"/pacman.gif")}
-   GhostImg={QTk.newImage photo(url:MainURL#"/ghost.png")}
+   GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
    WidthCell=40
    HeightCell=40
    NW=20
