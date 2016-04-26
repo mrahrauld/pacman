@@ -2,6 +2,7 @@ functor
 import
    Module
    OS
+   System
 export
    StartGame
 define
