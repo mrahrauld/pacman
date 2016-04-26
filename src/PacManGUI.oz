@@ -16,12 +16,10 @@ define
    GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
    WidthCell=40
    HeightCell=40
-   NW
-   NH
-   W =WidthCell*NW
-   H =HeightCell*NH
+   
    Command
    CommandPort = {NewPort Command}
+   
    proc{DrawBox Number X Y}
       case Number of 4 then
 	 {Canvas create(image X*WidthCell+WidthCell div 2 Y*HeightCell+HeightCell div 2 image:PacManImg)}
@@ -106,9 +104,19 @@ define
 
    proc {CreateGame MAP}
 
+      NW
+      NH
+      W
+      H 
+
+      in
+
       %Taille du tableau 
       {Record.width MAP NW}
       {Record.width MAP NH}
+
+      W =WidthCell*NW
+      H =HeightCell*NH
       %NH = NW
 
       %Creation de la window
@@ -149,7 +157,7 @@ define
 	 skip
       end
    end
-   
+
    
    proc {StartGame}
       MySelf
