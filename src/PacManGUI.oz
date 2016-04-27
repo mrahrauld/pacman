@@ -75,48 +75,54 @@ define
        {Pacman X Y NextCommand}
    end
 
-   proc{GameBis MySelf Ghosts Command MAP}
-      MyNewState
-      NextCommand
-      GhostNewStates
-      GhostNewStates1
+   % proc{GameBis MySelf Ghosts Command MAP}
+   %    MyNewState
+   %    NextCommand
+   %    GhostNewStates
+   %    GhostNewStates1
 
-      fun {MoveTo Movement OldState}
-	 NewX NewY DX DY OldX OldY Color  in
-	 r(Color OldX OldY) = OldState
-	 r(DX DY) = Movement
-	 NewX = OldX + DX
-	 NewY = OldY + DY
-	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
-	    r(Color OldX OldY)
-	 else
-	    {DrawBox black OldX OldY}
-	    {DrawBox 4 NewX NewY}
-	    r(Color NewX NewY)
-	 end
-      end
+   %    fun {MoveTo Movement OldState}
+   % 	 NewX NewY DX DY OldX OldY Color  in
+   % 	 r(Color OldX OldY) = OldState
+   % 	 r(DX DY) = Movement
+   % 	 NewX = OldX + DX
+   % 	 NewY = OldY + DY
+   % 	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
+   % 	    r(Color OldX OldY)
+   % 	 else
+   % 	    {DrawBox black OldX OldY}
+   % 	    {DrawBox 4 NewX NewY}
+   % 	    r(Color NewX NewY)
+   % 	 end
+   %    end
       
-      fun {MoveAll OldState NewState}
-	 Dir
-         in
-	 case OldState
-	 of Old|T then
-	    Dir = {Int.'mod' {OS.rand} 4}
-	    case Dir of 0 then
-	       {MoveAll T {MoveTo r(~1 0) Old}|NewState}
-	       [] 1 then {MoveAll T  {MoveTo r(0 1) Old}|NewState}
-	       [] 2 then {MoveAll T  {MoveTo r(1 0) Old}|NewState}
-	       [] 3 then {MoveAll T  {MoveTo r(0 ~1) Old}|NewState}
-	    end
-	 [] nil then  NewState
-	 end
-      end
-   in
-      NextCommand = {UserCommand Command MySelf MyNewState}
-      GhostNewStates = {MoveAll Ghosts nil}
-      GhostNewStates1 = {MoveAll GhostNewStates nil}
-      {GameBis MyNewState GhostNewStates1 NextCommand MAP}
-   end
+   %    fun {MoveAll OldState NewState}
+   % 	 Dir
+   %       in
+   % 	 case OldState
+   % 	 of Old|T then
+   % 	    Dir = {Int.'mod' {OS.rand} 4}
+   % 	    case Dir of 0 then
+   % 	       {MoveAll T {MoveTo r(~1 0) Old}|NewState}
+   % 	       [] 1 then {MoveAll T  {MoveTo r(0 1) Old}|NewState}
+   % 	       [] 2 then {MoveAll T  {MoveTo r(1 0) Old}|NewState}
+   % 	       [] 3 then {MoveAll T  {MoveTo r(0 ~1) Old}|NewState}
+   % 	    end
+   % 	 [] nil then  NewState
+   % 	 end
+   %    end
+   %    fun {UserCommand Command OldState NewState}
+   % 	 case Command of r(DX DY)|T then
+   % 	    NewState = {MoveTo r(DX DY) OldState}
+   % 	    T
+   % 	 end
+   %    end
+   % in
+   %    NextCommand = {UserCommand Command MySelf MyNewState}
+   %    GhostNewStates = {MoveAll Ghosts nil}
+   %    GhostNewStates1 = {MoveAll GhostNewStates nil}
+   %    {GameBis MyNewState GhostNewStates1 NextCommand MAP}
+   % end
 
    proc {CreateGame MAP}
 
