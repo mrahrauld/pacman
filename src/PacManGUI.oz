@@ -82,9 +82,12 @@ define
 	 r(DX DY) = Movement
 	 NewX = OldX + DX
 	 NewY = OldY + DY
-	 {DrawBox black OldX OldY}
-	 {DrawBox 4 NewX NewY}
-	 r(Color NewX NewY)
+	 if NewX < 0 orelse NewX > NW orelse NewY < 0 orelse NewY > NH then skip
+	 else
+	    {DrawBox black OldX OldY}
+	    {DrawBox 4 NewX NewY}
+	    r(Color NewX NewY)
+	 end
       end
       fun {UserCommand Command OldState NewState}
 	 case Command of r(DX DY)|T then
