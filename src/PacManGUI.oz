@@ -190,7 +190,7 @@ define
       %{Browse aftershow}
       %Initialize ghosts and user
       MySelf = r(white 1 1)
-      %Ghosts = [r(red 4 4)]
+      Ghosts = []
       %{InitLayout MySelf|Ghosts}
       {Game MySelf Ghosts Command}
    end
