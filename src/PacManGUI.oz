@@ -93,6 +93,7 @@ define
 	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
 	    r(Color OldX OldY)
 	 else
+	    {DrawBox {GetElement OldX OldY} OldX OldY}
 	    {DrawBox 3 NewX NewY}
 	    r(Color NewX NewY)
 	 end
