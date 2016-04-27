@@ -130,7 +130,7 @@ define
 	  end
 	  NewX = OldX + DX
 	  NewY = OldY + DY
-	  if {MouvementIsAvailable OldState r(DX DY) MAP} then
+	  if {MouvementIsAvailable OldState r(DX DY) MAP} == false then
 	     {NewDirection OldState}
 	  else
 	     r(DX DY)
@@ -139,7 +139,7 @@ define
 
        fun {GhostCommand GhostStream OldState LastDir GhostNewState NewDir}
 	  case GhostStream of r(DX DY)|T then
-	     if {MouvementIsAvailable OldState LastDir MAP} then
+	     if {MouvementIsAvailable OldState LastDir MAP} == true then
 		GhostNewState = {MoveTo LastDir OldState}
 	     else
 		GhostNewState = {MoveTo {NewDirection OldState} OldState}
