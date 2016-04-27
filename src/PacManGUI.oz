@@ -42,7 +42,7 @@ define
       end
    end
    
-   proc{Game MySelf Ghosts Command}
+   proc{Game MySelf Ghosts Command MAP}
       MyNewState
       NextCommand
       GhostNewStates
@@ -54,7 +54,7 @@ define
 	 r(DX DY) = Movement
 	 NewX = OldX + DX
 	 NewY = OldY + DY
-	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) then
+	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
 	    r(Color OldX OldY)
 	 else
 	    {DrawBox black OldX OldY}
@@ -87,7 +87,7 @@ define
       NextCommand = {UserCommand Command MySelf MyNewState}
       GhostNewStates = {MoveAll Ghosts nil}
       GhostNewStates1 = {MoveAll GhostNewStates nil}
-      {Game MyNewState GhostNewStates1 NextCommand}
+      {Game MyNewState GhostNewStates1 NextCommand MAP}
    end
 
    proc {CreateGame MAP}
@@ -174,7 +174,7 @@ define
       MySelf = r(white 1 1)
       Ghosts = nil
       %{InitLayout MySelf|Ghosts}
-      {Game MySelf Ghosts Command}
+      {Game MySelf Ghosts Command MAP}
    end
 
   
