@@ -117,7 +117,7 @@ define
 	 end
        end
 
-       fun {NewDirection OldState LastDir}
+       fun {NewDirection OldState}
 	  Dir = {Int.'mod' {OS.rand} 4}
 	  NewX NewY DX DY OldX OldY Color
        in
@@ -131,7 +131,7 @@ define
 	  NewX = OldX + DX
 	  NewY = OldY + DY
 	  if {MouvementIsAvailable OldState r(DX DY) MAP} then
-	     {NewDirection OldState LastDir}
+	     {NewDirection OldState}
 	  else
 	     r(DX DY)
 	  end
@@ -142,7 +142,7 @@ define
 	     if {MouvementIsAvailable OldState LastDir MAP} then
 		GhostNewState = {MoveTo LastDir OldState}
 	     else
-		GhostNewState = {MoveTo {NewDirection OldState LastDir} OldState}
+		GhostNewState = {MoveTo {NewDirection OldState} OldState}
 	     end
 		T
 	 end
@@ -274,7 +274,7 @@ define
       MySelf = r(white 1 1)
       Ghosts = r(white 2 9)
       %{InitLayout MySelf|Ghosts}
-      thread {Ghost Ghosts GhostStream MAP} end
+      thread {Ghost Ghosts GhostStream MAP nil} end
       {Pacman MySelf Command MAP}
    end
 
