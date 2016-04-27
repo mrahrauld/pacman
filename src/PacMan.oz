@@ -67,8 +67,8 @@ in
    % end
 
    {System.show 'These are the arguments to run the application'}
-   {Say "Map:\t"#Args.map}
-   {Say "Pac-man lives:\t"#Args.lives}
+   %{Say "Map:\t"#Args.map}
+   %{Say "Pac-man lives:\t"#Args.lives}
 
    %{System.show MAP}
 
