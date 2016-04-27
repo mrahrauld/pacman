@@ -54,6 +54,7 @@ define
 	 r(DX DY) = Movement
 	 NewX = OldX + DX
 	 NewY = OldY + DY
+	 {System.show {GetElement NewX NewY MAP}}
 	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
 	    r(Color OldX OldY)
 	 else
