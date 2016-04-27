@@ -167,7 +167,7 @@ define
       %{Browse show}
       
       {CreateGame MAP}
-      {Say {GetElement 0 0 MAP}}
+      {System.show {GetElement 0 0 MAP}}
       %{Browse aftershow}
       %Initialize ghosts and user
       MySelf = r(white 1 1)
