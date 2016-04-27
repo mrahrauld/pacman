@@ -27,11 +27,11 @@ define
    
    proc{DrawBox Number X Y}
       case Number of 0 then
-	 {Canvas create(image X*WidthCell Y*HeightCell image:CoinImg)}
+	 {Canvas create(image X*WidthCell + WidthCell div 2 Y*HeightCell + HeightCell div 2   image:CoinImg)}
       [] 4 then
-	 {Canvas create(image X*WidthCell  Y*HeightCell  image:PacManImg)}
+	 {Canvas create(image X*WidthCell + WidthCell div 2  Y*HeightCell + HeightCell div 2    image:PacManImg)}
       [] 3 then
-	    {Canvas create(image X*WidthCell Y*HeightCell image:GhostImg)}
+	    {Canvas create(image X*WidthCell + WidthCell div 2 Y*HeightCell + HeightCell div 2   image:GhostImg)}
       else
 	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:black outline:black)}
       end
