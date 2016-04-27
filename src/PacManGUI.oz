@@ -122,14 +122,17 @@ define
 	  NewX NewY DX DY OldX OldY Color
        in
 	  r(Color OldX OldY) = OldState
+	  
 	  case Dir of 1 then r(DX DY) = r(1 0)
 	  [] 2 then  r(DX DY) = r(~1 0)
 	  [] 3 then r(DX DY) = r(0 1)
 	  else
 	    r(DX DY) = r(0 ~1)
 	  end
+	  
 	  NewX = OldX + DX
 	  NewY = OldY + DY
+	  
 	  if {MouvementIsAvailable OldState r(DX DY) MAP} == false then
 	     {NewDirection OldState}
 	  else
@@ -150,6 +153,7 @@ define
 
       if LastDir == nil then
 	 LastDir = {NewDirection MySelf}
+	 {System.show 'test'}
       end
 
        NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
