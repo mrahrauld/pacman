@@ -15,6 +15,7 @@ define
    H
    NW
    NH
+   NCoinInit
    MainURL={OS.getCWD}
    PacManImg={QTk.newImage photo(url:MainURL#"/pacman.gif")}
    GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
@@ -40,36 +41,7 @@ define
 	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:black outline:black)}
       end
    end
-   proc{InitLayout ListToDraw}
-      proc{DrawHline X1 Y1 X2 Y2}
-	 if X1>W orelse X1<0 orelse Y1>H orelse Y1<0 then
-	    skip
-	 else
-	    {Canvas create(line X1 Y1 X2 Y2 fill:black)}
-	    {DrawHline X1+HeightCell Y1 X2+HeightCell Y2}
-	 end
-      end
-      proc{DrawVline X1 Y1 X2 Y2}
-	 if X1>W orelse X1<0 orelse Y1>H orelse Y1<0 then
-	    skip
-	 else
-	    {Canvas create(line X1 Y1 X2 Y2 fill:black)}
-	    {DrawVline X1 Y1+WidthCell X2 Y2+WidthCell}
-	 end
-      end
-      proc{DrawUnits L}
-	 case L of r(Color X Y)|T then
-	    {DrawBox Color X Y}
-	    {DrawUnits T}
-	 else
-	    skip
-	 end
-      end
-   in
-      {DrawHline 0 0 0 W}
-      {DrawVline 0 0 W 0}
-      {DrawUnits ListToDraw}
-   end
+   
    proc{Game MySelf Ghosts Command}
       MyNewState
       NextCommand
@@ -78,7 +50,7 @@ define
 
       fun {MoveTo Movement OldState}
 	 NewX NewY DX DY OldX OldY Color  in
-	 r(Color OldX OldY) = OldState
+	 r(Value OldX OldY) = OldState
 	 r(DX DY) = Movement
 	 NewX = OldX + DX
 	 NewY = OldY + DY
@@ -165,6 +137,12 @@ define
       end
    end
 
+    fun {GetElement X Y MAP}
+      if X > (NW - 1) orelse X < 0 orelse Y > (NH - 1) orelse Y < 0 then
+	 false
+      end
+      MAP.X.Y
+   end
    
    proc {StartGame}
       MySelf
@@ -186,6 +164,7 @@ define
 	r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0))
    in
       %{Browse show}
+      {System.show {GetElement 0 0 MAP}}
       {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
@@ -194,4 +173,7 @@ define
       %{InitLayout MySelf|Ghosts}
       {Game MySelf Ghosts Command}
    end
+
+  
+   
 end
