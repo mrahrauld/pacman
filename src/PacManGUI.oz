@@ -29,7 +29,7 @@ define
       case Number of 0 then
 	 {Canvas create(image X*WidthCell+WidthCell div 2 Y*HeightCell+HeightCell div 2 image:CoinImg)}
       [] 4 then
-	 {Canvas create(image X*WidthCell+WidthCell div 2 Y*HeightCell+HeightCell div 2 image:PacManImg)}
+	 {Canvas create(image X*WidthCell+1 div 2 Y*HeightCell+1 div 2 image:PacManImg)}
       [] 3 then
 	    {Canvas create(image X*WidthCell+1 div 2 Y*HeightCell+1 div 2 image:GhostImg)}
       else
