@@ -55,11 +55,11 @@ define
 	 NewX = OldX + DX
 	 NewY = OldY + DY
 	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) then
-	    r(Color OldX OldY)
+	    r(Value OldX OldY)
 	 else
 	    {DrawBox black OldX OldY}
 	    {DrawBox 4 NewX NewY}
-	    r(Color NewX NewY)
+	    r(Value NewX NewY)
 	 end
       end
       fun {UserCommand Command OldState NewState}
