@@ -18,6 +18,7 @@ define
    MainURL={OS.getCWD}
    PacManImg={QTk.newImage photo(url:MainURL#"/pacman.gif")}
    GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
+   CoinImg={QTk.newImage photo(url:MainURL#"/yellow-coin.gif")}
    WidthCell=40
    HeightCell=40
    
@@ -25,7 +26,9 @@ define
    CommandPort = {NewPort Command}
    
    proc{DrawBox Number X Y}
-      case Number of 4 then
+      case Number of 0 then
+	 {Canvas create(image X*WidthCell+WidthCell div 2 Y*HeightCell+HeightCell div 2 image:CoinImg)}
+      [] 4 then
 	 {Canvas create(image X*WidthCell+WidthCell div 2 Y*HeightCell+HeightCell div 2 image:PacManImg)}
       [] 3 then
 	    {Canvas create(image X*WidthCell+WidthCell div 2 Y*HeightCell+HeightCell div 2 image:GhostImg)}
@@ -159,8 +162,8 @@ define
    proc {StartGame}
       MySelf
       Ghosts
-      MAP = map(r(1 1 1 1 1 1 1 5 1 1 1 1 1 1 1)
-	r(1 4 0 0 0 0 0 0 0 1 0 0 0 0 1)
+      MAP = map(r(4 1 1 1 1 1 1 5 1 1 1 1 1 1 1)
+	r(1 1 0 0 0 0 0 0 0 1 0 0 0 0 1)
 	r(1 0 0 0 0 0 0 0 0 1 2 0 0 0 1)
 	r(1 0 0 0 0 0 0 0 0 1 0 0 0 0 1)
 	r(1 0 0 0 3 0 0 0 0 1 1 1 0 0 1)
