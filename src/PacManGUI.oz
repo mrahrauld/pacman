@@ -135,10 +135,11 @@ define
 
 	  {System.show 'test'}
 	  
-	   if {MouvementIsAvailable OldState r(DX DY) MAP} == false then
+	  if {MouvementIsAvailable OldState r(DX DY) MAP} == false then
 	       {System.show 'test2'}
 	     {NewDirection OldState}
 	  else
+	     {System.show 'test3'}
 	     r(DX DY)
 	  end
        end
