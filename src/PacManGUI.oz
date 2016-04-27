@@ -139,7 +139,7 @@ define
 
     fun {GetElement X Y MAP}
       if X > (NW - 1) orelse X < 0 orelse Y > (NH - 1) orelse Y < 0 then
-	 unit
+	 -1
       end
       MAP.X.Y
    end
