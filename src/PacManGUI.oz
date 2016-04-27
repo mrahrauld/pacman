@@ -95,11 +95,12 @@ define
        {Pacman MyNewState NextCommand MAP}
    end
 
-   proc{Ghost MySelf GhostStream MAP LastDir}
+   proc{Ghost MySelf GhostStream MAP InitDir}
 
       GhostNewState
       NextGhostStream
       NewDir
+      LastDir
       
        fun {MoveTo Movement OldState}
 	 NewX NewY DX DY OldX OldY Color  in
@@ -132,14 +133,10 @@ define
 	  
 	  NewX = OldX + DX
 	  NewY = OldY + DY
-
-	  {System.show 'test'}
 	  
 	  if {MouvementIsAvailable OldState r(DX DY) MAP} == false then
-	       {System.show 'test2'}
 	     {NewDirection OldState}
 	  else
-	     {System.show 'test3'}
 	     r(DX DY)
 	  end
        end
@@ -155,8 +152,10 @@ define
 	 end
        end in
 
-      if LastDir == nil then
+      if InitDir == nil then
 	 LastDir = {NewDirection MySelf}
+      else
+	 LastDir = InitDir
       end
 
        NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
