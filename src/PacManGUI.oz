@@ -137,7 +137,7 @@ define
       end
    end
 
-    fun {GetElement X Y MAP}
+   fun {GetElement X Y MAP}
       if X > (NW - 1) orelse X < 0 orelse Y > (NH - 1) orelse Y < 0 then
 	 MAP
       else
@@ -165,7 +165,7 @@ define
 	r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0))
    in
       %{Browse show}
-      {System.show {GetElement 0 0 MAP}}
+      {Say {GetElement 0 0 MAP}}
       {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
