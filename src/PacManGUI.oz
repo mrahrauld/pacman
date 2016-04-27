@@ -165,8 +165,9 @@ define
 	r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0))
    in
       %{Browse show}
-      {Say {GetElement 0 0 MAP}}
+      
       {CreateGame MAP}
+      {Say {GetElement 0 0 MAP}}
       %{Browse aftershow}
       %Initialize ghosts and user
       MySelf = r(white 1 1)
