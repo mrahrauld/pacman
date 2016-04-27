@@ -114,7 +114,7 @@ define
 	  NewX = OldX + DX
 	  NewY = OldY + DY
 	  if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
-	     r(Color OldX OldY)
+	     r(DX DY)
 	  else
 	     {NewPos OldState}
 	  end
