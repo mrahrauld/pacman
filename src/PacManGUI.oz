@@ -46,6 +46,21 @@ define
 	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:black outline:black)}
       end
    end
+
+   fun {MouvementIsAvailable OldState Dir}
+	  NewX NewY DX DY OldX OldY Color 
+	  r(Color OldX OldY) = OldState
+	  in
+	  r(DX DY) = Dir
+	  NewX = OldX + DX
+	  NewY = OldY + DY
+	  
+	  if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
+	     false
+	  else
+	     true
+	  end 
+       end
    
    proc{Pacman MySelf Command MAP}
 
@@ -79,10 +94,11 @@ define
        {Pacman MyNewState NextCommand MAP}
    end
 
-   proc{Ghost MySelf GhostStream MAP}
+   proc{Ghost MySelf GhostStream MAP LastDir}
 
       GhostNewState
       NextGhostStream
+      NewDir
       
        fun {MoveTo Movement OldState}
 	 NewX NewY DX DY OldX OldY Color  in
@@ -100,10 +116,9 @@ define
 	 end
        end
 
-       fun {NewPos OldState}
+       fun {NewDirection OldState LastDir}
 	  Dir = {Int.'mod' {OS.rand} 4}
-	  NewX NewY DX DY OldX OldY Color 
-	  r(Color OldX OldY) = OldState
+	  NewX NewY DX DY 
        in
 	  case Dir of 1 then r(DX DY) = r(1 0)
 	  [] 2 then  r(DX DY) = r(~1 0)
@@ -113,23 +128,32 @@ define
 	  end
 	  NewX = OldX + DX
 	  NewY = OldY + DY
-	  if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
-	     {NewPos OldState}
+	  if {MouvementIsAvailable OldState r(DX DY)} then
+	     {NewDirection OldState LastDir}
 	  else
 	     r(DX DY)
 	  end
-	  
        end
 
-       fun {GhostCommand GhostStream OldState GhostNewState}
-	  case GhostStream of r(DX DY)|T then
-	    GhostNewState = {MoveTo {NewPos OldState} OldState}
-	    T
-	 end
-      end in
+       
 
-       NextGhostStream = {GhostCommand GhostStream MySelf GhostNewState}
-       {Ghost GhostNewState NextGhostStream MAP}
+       fun {GhostCommand GhostStream OldState LastDir GhostNewState NewDir}
+	  case GhostStream of r(DX DY)|T then
+	     if {MouvementIsAvailable OldState LastDir} then
+		GhostNewState = {MoveTo LastDir OldState}
+	     else
+		GhostNewState = {MoveTo {NewDirection OldState LastDir} OldState}
+	     end
+		T
+	 end
+       end in
+
+      if LastDir == nil then
+	 LastDir = {NewDirection MySelf}
+      end
+
+       NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
+       {Ghost GhostNewState NextGhostStream MAP NewDir}
    end
 
    % proc{GameBis MySelf Ghosts Command MAP}
