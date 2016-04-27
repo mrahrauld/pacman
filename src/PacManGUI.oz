@@ -51,8 +51,6 @@ define
 
       MyNewState
       NextCommand
-      GhostNewStates
-      GhostNewStates1
       
        fun {MoveTo Movement OldState}
 	 NewX NewY DX DY OldX OldY Color  in
@@ -65,6 +63,7 @@ define
 	 else
 	    {DrawBox black OldX OldY}
 	    {DrawBox 4 NewX NewY}
+	    {Send GhostPort r(NewX NewY)} 
 	    r(Color NewX NewY)
 	 end
        end
@@ -80,12 +79,10 @@ define
        {Pacman MyNewState NextCommand MAP}
    end
 
-   proc{Ghost MySelf Command MAP}
+   proc{Ghost MySelf GhostStream MAP}
 
-      MyNewState
+      GhostNewState
       NextCommand
-      GhostNewStates
-      GhostNewStates1
       
        fun {MoveTo Movement OldState}
 	 NewX NewY DX DY OldX OldY Color  in
@@ -101,15 +98,25 @@ define
 	 end
        end
 
-       fun {UserCommand Command OldState NewState}
-	  case Command of r(DX DY)|T then
-	    NewState = {MoveTo r(DX DY) OldState}
+       fun {NewPos}
+	  Dir = {Int.'mod' {OS.rand} 4} in
+	  case Dir of 1 then r(1 0)
+	  [] 2 then  r(~1 0)
+	  [] 3 then r(0 1)
+	  else
+	     r(0 ~1)
+	  end
+       end
+
+       fun {GhostCommand GhostStream OldState GhostNewState}
+	  case GhostStream of r(DX DY)|T then
+	    GhostNewState = {MoveTo {NewPos} OldState}
 	    T
 	 end
       end in
 
-       NextCommand = {UserCommand Command MySelf MyNewState}
-       {Ghost NextCommand MyNewState MAP}
+       NextGhostStream = {GhostCommand GhostStream MySelf GhostNewState}
+       {Ghost NextGhostStream GhostNewState MAP}
    end
 
    % proc{GameBis MySelf Ghosts Command MAP}
@@ -228,8 +235,9 @@ define
       %{Browse aftershow}
       %Initialize ghosts and user
       MySelf = r(white 1 1)
-      Ghosts = nil
+      Ghosts = r(white 2 9)
       %{InitLayout MySelf|Ghosts}
+      thread {Ghost Ghosts GhostStream MAP} end
       {Pacman MySelf Command MAP}
    end
 
