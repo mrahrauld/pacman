@@ -132,8 +132,11 @@ define
 	  
 	  NewX = OldX + DX
 	  NewY = OldY + DY
+
+	  {System.show 'test'}
 	  
-	  if {MouvementIsAvailable OldState r(DX DY) MAP} == false then
+	   if {MouvementIsAvailable OldState r(DX DY) MAP} == false then
+	       {System.show 'test2'}
 	     {NewDirection OldState}
 	  else
 	     r(DX DY)
@@ -152,9 +155,7 @@ define
        end in
 
       if LastDir == nil then
-	 {System.show 'test1'}
 	 LastDir = {NewDirection MySelf}
-	 {System.show 'test2'}
       end
 
        NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
