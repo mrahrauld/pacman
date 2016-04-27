@@ -134,15 +134,13 @@ define
 
       {Window show}
 
-      {Say "test1"}
       {CreateTable MAP {Record.arity MAP}}
-      {Say "test2"}
 
    end
 
    proc {CreateTable MAP ARITY}
       case ARITY of H|T then
-	 {CreateLine MAP.H {Record.arity MAP.H} H}
+	 {CreateLine MAP.H {Record.arity MAP.H} H-1}
 	 {CreateTable MAP T}
       else
 	 skip
@@ -151,7 +149,7 @@ define
 
    proc {CreateLine LINE ARITY Y}
       case ARITY of H|T then
-	 {DrawBox LINE.H H Y}
+	 {DrawBox LINE.H H-1 Y}
 	 {CreateLine LINE T Y}
       else
 	 skip
@@ -178,7 +176,6 @@ define
 	r(1 0 0 0 0 0 0 0 0 0 0 0 0 0 1)
 	r(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1))
    in
-      {System.show 'test3'}
       %{Browse show}
       {CreateGame MAP}
       %{Browse aftershow}
