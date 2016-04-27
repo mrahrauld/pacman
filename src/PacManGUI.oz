@@ -138,10 +138,12 @@ define
    end
 
    fun {GetElement X Y MAP}
+      Line in
       if X > (NW - 1) orelse X < 0 orelse Y > (NH - 1) orelse Y < 0 then
 	 MAP
       else
-	 MAP.(X+1)
+	 Line = MAP.(X+1)
+	 Line.(Y+1)
       end
    end
    
