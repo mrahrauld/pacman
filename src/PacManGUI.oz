@@ -82,7 +82,7 @@ define
 	 r(DX DY) = Movement
 	 NewX = OldX + DX
 	 NewY = OldY + DY
-	 if NewX<0 orelse NewX>NW orelse NewY<0 orelse NewY>NH then
+	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) then
 	    r(Color OldX OldY)
 	 else
 	    {DrawBox black OldX OldY}
@@ -190,7 +190,7 @@ define
       %{Browse aftershow}
       %Initialize ghosts and user
       MySelf = r(white 1 1)
-      Ghosts = [r(red 4 4)]
+      %Ghosts = [r(red 4 4)]
       %{InitLayout MySelf|Ghosts}
       {Game MySelf Ghosts Command}
    end
