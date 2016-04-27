@@ -144,9 +144,11 @@ define
        fun {GhostCommand GhostStream OldState LastDir GhostNewState NewDir}
 	  case GhostStream of r(DX DY)|T then
 	     if {MouvementIsAvailable OldState LastDir MAP} == true then
+		{System.show 'LastDir'}
 		GhostNewState = {MoveTo LastDir OldState}
 	     else
 		NewDir = {NewDirection OldState}
+		{System.show 'NewDir'}
 		GhostNewState = {MoveTo NewDir OldState}
 	     end
 		T
