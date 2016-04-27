@@ -47,7 +47,7 @@ define
       end
    end
    
-   proc{Pacman X Y Command}
+   proc{Pacman MySelf Command MAP}
 
       MyNewState
       NextCommand
@@ -77,7 +77,7 @@ define
       end in
 
        NextCommand = {UserCommand Command MySelf MyNewState}
-       {Pacman X Y NextCommand}
+       {Pacman MyNewState NextCommand MAP}
    end
 
    % proc{GameBis MySelf Ghosts Command MAP}
@@ -198,7 +198,7 @@ define
       MySelf = r(white 1 1)
       Ghosts = nil
       %{InitLayout MySelf|Ghosts}
-      {Pacman 1 1 Command}
+      {Pacman MySelf Command MAP}
    end
 
   
