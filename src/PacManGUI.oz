@@ -105,7 +105,7 @@ define
 	  NewX NewY DX DY OldX OldY Color 
 	  r(Color OldX OldY) = OldState
        in
-	  case Dir of 1 then DirF = r(1 0)
+	  case Dir of 1 then r(DX DY) = r(1 0)
 	  [] 2 then  r(DX DY) = r(~1 0)
 	  [] 3 then r(DX DY) = r(0 1)
 	  else
