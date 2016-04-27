@@ -74,7 +74,7 @@ define
 	    NewState = {MoveTo r(DX DY) OldState}
 	    T
 	 end
-      end
+      end in
 
        NextCommand = {UserCommand Command MySelf MyNewState}
        {Pacman X Y NextCommand}
