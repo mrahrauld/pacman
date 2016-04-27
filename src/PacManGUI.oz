@@ -83,7 +83,7 @@ define
 	 NewX = OldX + DX
 	 NewY = OldY + DY
 	 if NewX<0 orelse NewX>NW orelse NewY<0 orelse NewY>NH then
-	    skip
+	    
 	 else
 	    {DrawBox black OldX OldY}
 	    {DrawBox 4 NewX NewY}
