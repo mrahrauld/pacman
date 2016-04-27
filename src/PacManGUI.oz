@@ -171,7 +171,7 @@ define
       {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
-      MySelf = r(white 1 1)
+      MySelf = r(4 1 1)
       Ghosts = nil
       %{InitLayout MySelf|Ghosts}
       {Game MySelf Ghosts Command}
