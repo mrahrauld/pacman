@@ -47,7 +47,7 @@ define
       end
    end
 
-   fun {MouvementIsAvailable OldState Dir}
+   fun {MouvementIsAvailable OldState Dir MAP}
 	  NewX NewY DX DY OldX OldY Color 
 	  r(Color OldX OldY) = OldState
 	  in
@@ -60,7 +60,8 @@ define
 	  else
 	     true
 	  end 
-       end
+   end
+   
    
    proc{Pacman MySelf Command MAP}
 
@@ -118,8 +119,9 @@ define
 
        fun {NewDirection OldState LastDir}
 	  Dir = {Int.'mod' {OS.rand} 4}
-	  NewX NewY DX DY 
+	  NewX NewY DX DY OldX OldY Color
        in
+	  r(Color OldX OldY) = OldState
 	  case Dir of 1 then r(DX DY) = r(1 0)
 	  [] 2 then  r(DX DY) = r(~1 0)
 	  [] 3 then r(DX DY) = r(0 1)
@@ -128,18 +130,16 @@ define
 	  end
 	  NewX = OldX + DX
 	  NewY = OldY + DY
-	  if {MouvementIsAvailable OldState r(DX DY)} then
+	  if {MouvementIsAvailable OldState r(DX DY) MAP} then
 	     {NewDirection OldState LastDir}
 	  else
 	     r(DX DY)
 	  end
        end
 
-       
-
        fun {GhostCommand GhostStream OldState LastDir GhostNewState NewDir}
 	  case GhostStream of r(DX DY)|T then
-	     if {MouvementIsAvailable OldState LastDir} then
+	     if {MouvementIsAvailable OldState LastDir MAP} then
 		GhostNewState = {MoveTo LastDir OldState}
 	     else
 		GhostNewState = {MoveTo {NewDirection OldState LastDir} OldState}
