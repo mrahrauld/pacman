@@ -50,16 +50,16 @@ define
 
       fun {MoveTo Movement OldState}
 	 NewX NewY DX DY OldX OldY Color  in
-	 r(Value OldX OldY) = OldState
+	 r(Color OldX OldY) = OldState
 	 r(DX DY) = Movement
 	 NewX = OldX + DX
 	 NewY = OldY + DY
 	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) then
-	    r(Value OldX OldY)
+	    r(Color OldX OldY)
 	 else
 	    {DrawBox black OldX OldY}
 	    {DrawBox 4 NewX NewY}
-	    r(Value NewX NewY)
+	    r(Color NewX NewY)
 	 end
       end
       fun {UserCommand Command OldState NewState}
@@ -171,7 +171,7 @@ define
       {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
-      MySelf = r(4 1 1)
+      MySelf = r(white 1 1)
       Ghosts = nil
       %{InitLayout MySelf|Ghosts}
       {Game MySelf Ghosts Command}
