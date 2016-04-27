@@ -116,7 +116,7 @@ define
       end in
 
        NextGhostStream = {GhostCommand GhostStream MySelf GhostNewState}
-       {Ghost NextGhostStream GhostNewState MAP}
+       {Ghost GhostNewState NextGhostStream MAP}
    end
 
    % proc{GameBis MySelf Ghosts Command MAP}
