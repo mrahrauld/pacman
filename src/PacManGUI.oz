@@ -147,29 +147,13 @@ define
       end
    end
    
-   proc {StartGame}
+   proc {StartGame MAP}
       MySelf
       Ghosts
-      MAP = map(r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0)
-	r(0 4 0 0 0 0 0 0 0 0 0 0 0 0 0)
-	r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0)
-	r(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
-	r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0)
-	r(0 0 0 0 0 0 0 3 0 0 0 0 0 0 0)
-	r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0)
-	r(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
-	r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0)
-	r(0 0 3 0 0 0 0 0 0 0 0 0 0 0 0)
-	r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0)
-	r(0 0 0 0 0 0 0 0 0 0 0 3 0 0 0)
-	r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0)
-	r(0 0 0 0 0 0 0 3 0 0 0 0 0 0 0)
-	r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0))
    in
       %{Browse show}
       
       {CreateGame MAP}
-      {System.show {GetElement 0 0 MAP}}
       %{Browse aftershow}
       %Initialize ghosts and user
       MySelf = r(white 1 1)
