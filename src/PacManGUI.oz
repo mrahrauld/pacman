@@ -118,6 +118,22 @@ define
 	 end
        end
 
+       fun {OtherDirAvailaible State LasDir}
+
+	  if {MouvementIsAvailable OldState r(1 0) MAP} andthen LastDir Not r(1 0) then
+	     true
+	  elseif {MouvementIsAvailable OldState r(~1 0) MAP} andthen LastDir Not r(~1 0) then
+	     true
+	  elseif {MouvementIsAvailable OldState r(0 1) MAP} andthen LastDir Not r(0 1) then
+	     true
+	  elseif {MouvementIsAvailable OldState r(0 ~1) MAP} andthen LastDir Not r(0 ~1) then
+	     true
+	  else
+	     false
+	  end
+       end
+       
+
        fun {NewDirection OldState}
 	  Dir = {Int.'mod' {OS.rand} 4}
 	  NewX NewY DX DY OldX OldY Color
