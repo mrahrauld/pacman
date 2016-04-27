@@ -100,19 +100,30 @@ define
 	 end
        end
 
-       fun {NewPos}
-	  Dir = {Int.'mod' {OS.rand} 4} in
-	  case Dir of 1 then r(1 0)
-	  [] 2 then  r(~1 0)
-	  [] 3 then r(0 1)
+       fun {NewPos OldState}
+	  Dir = {Int.'mod' {OS.rand} 4}
+	  NewX NewY DX DY OldX OldY Color 
+	  r(Color OldX OldY) = OldState
+       in
+	  case Dir of 1 then DirF = r(1 0)
+	  [] 2 then  r(DX DY) = r(~1 0)
+	  [] 3 then r(DX DY) = r(0 1)
 	  else
-	     r(0 ~1)
+	    r(DX DY) = r(0 ~1)
 	  end
+	  NewX = OldX + DX
+	  NewY = OldY + DY
+	  if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
+	     r(Color OldX OldY)
+	  else
+	     {NewPos OldState}
+	  end
+	  
        end
 
        fun {GhostCommand GhostStream OldState GhostNewState}
 	  case GhostStream of r(DX DY)|T then
-	    GhostNewState = {MoveTo {NewPos} OldState}
+	    GhostNewState = {MoveTo {NewPos OldState} OldState}
 	    T
 	 end
       end in
