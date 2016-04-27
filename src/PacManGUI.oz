@@ -141,7 +141,7 @@ define
       if X > (NW - 1) orelse X < 0 orelse Y > (NH - 1) orelse Y < 0 then
 	 MAP
       else
-	 MAP.X.Y
+	 MAP.X
       end
    end
    
