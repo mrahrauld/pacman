@@ -54,8 +54,8 @@ define
 	 r(DX DY) = Movement
 	 NewX = OldX + DX
 	 NewY = OldY + DY
-	 {System.show {GetElement NewX-1 NewY-1 MAP}}
-	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX-1 NewY-1 MAP} == 1 then
+	 {System.show {GetElement NewX NewY MAP}}
+	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
 	    r(Color OldX OldY)
 	 else
 	    {DrawBox black OldX OldY}
@@ -143,8 +143,8 @@ define
       if X > (NW - 1) orelse X < 0 orelse Y > (NH - 1) orelse Y < 0 then
 	 MAP
       else
-	 Line = MAP.(X+1)
-	 Line.(Y+1)
+	 Line = MAP.(Y+1)
+	 Line.(X+1)
       end
    end
    
