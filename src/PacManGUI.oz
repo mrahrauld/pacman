@@ -80,6 +80,38 @@ define
        {Pacman MyNewState NextCommand MAP}
    end
 
+   proc{Ghost MySelf Command MAP}
+
+      MyNewState
+      NextCommand
+      GhostNewStates
+      GhostNewStates1
+      
+       fun {MoveTo Movement OldState}
+	 NewX NewY DX DY OldX OldY Color  in
+	 r(Color OldX OldY) = OldState
+	 r(DX DY) = Movement
+	 NewX = OldX + DX
+	 NewY = OldY + DY
+	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
+	    r(Color OldX OldY)
+	 else
+	    {DrawBox 3 NewX NewY}
+	    r(Color NewX NewY)
+	 end
+       end
+
+       fun {UserCommand Command OldState NewState}
+	  case Command of r(DX DY)|T then
+	    NewState = {MoveTo r(DX DY) OldState}
+	    T
+	 end
+      end in
+
+       NextCommand = {UserCommand Command MySelf MyNewState}
+       {Ghost NextCommand MyNewState MAP}
+   end
+
    % proc{GameBis MySelf Ghosts Command MAP}
    %    MyNewState
    %    NextCommand
