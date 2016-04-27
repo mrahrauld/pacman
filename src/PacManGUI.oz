@@ -82,7 +82,7 @@ define
    proc{Ghost MySelf GhostStream MAP}
 
       GhostNewState
-      NextCommand
+      NextGhostStream
       
        fun {MoveTo Movement OldState}
 	 NewX NewY DX DY OldX OldY Color  in
