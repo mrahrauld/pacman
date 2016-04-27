@@ -22,9 +22,14 @@ define
    CoinImg={QTk.newImage photo(url:MainURL#"/yellow-coin.gif")}
    WidthCell=40
    HeightCell=40
+
    
    Command
    CommandPort = {NewPort Command}
+   GhostStream
+   GhostPort = {NewPort GhostStream}
+   MapStream
+   MapPort = {NewPort MapStream}
    
    proc{DrawBox Number X Y}
       case Number of 0 then  %Empty case
@@ -42,7 +47,35 @@ define
       end
    end
    
-   proc{Game MySelf Ghosts Command MAP}
+   proc{Pacman X Y Command}
+
+       fun {MoveTo Movement OldState}
+	 NewX NewY DX DY OldX OldY Color  in
+	 r(Color OldX OldY) = OldState
+	 r(DX DY) = Movement
+	 NewX = OldX + DX
+	 NewY = OldY + DY
+	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
+	    r(Color OldX OldY)
+	 else
+	    {DrawBox black OldX OldY}
+	    {DrawBox 4 NewX NewY}
+	    r(Color NewX NewY)
+	 end
+       end
+
+       fun {UserCommand Command OldState NewState}
+	 case Command of r(DX DY)|T then
+	    NewState = {MoveTo r(DX DY) OldState}
+	    T
+	 end
+      end
+
+       NextCommand = {UserCommand Command MySelf MyNewState}
+       {Pacman X Y NextCommand}
+   end
+
+   proc{GameBis MySelf Ghosts Command MAP}
       MyNewState
       NextCommand
       GhostNewStates
@@ -62,12 +95,7 @@ define
 	    r(Color NewX NewY)
 	 end
       end
-      fun {UserCommand Command OldState NewState}
-	 case Command of r(DX DY)|T then
-	    NewState = {MoveTo r(DX DY) OldState}
-	    T
-	 end
-      end
+      
       fun {MoveAll OldState NewState}
 	 Dir
          in
@@ -87,7 +115,7 @@ define
       NextCommand = {UserCommand Command MySelf MyNewState}
       GhostNewStates = {MoveAll Ghosts nil}
       GhostNewStates1 = {MoveAll GhostNewStates nil}
-      {Game MyNewState GhostNewStates1 NextCommand MAP}
+      {GameBis MyNewState GhostNewStates1 NextCommand MAP}
    end
 
    proc {CreateGame MAP}
@@ -159,7 +187,7 @@ define
       MySelf = r(white 1 1)
       Ghosts = nil
       %{InitLayout MySelf|Ghosts}
-      {Game MySelf Ghosts Command MAP}
+      {Pacman 1 1 Command}
    end
 
   
