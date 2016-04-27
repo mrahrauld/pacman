@@ -26,13 +26,17 @@ define
    CommandPort = {NewPort Command}
    
    proc{DrawBox Number X Y}
-      case Number of 0 then
+      case Number of 0 then  %Empty case
 	 {Canvas create(image X*WidthCell + WidthCell div 2 Y*HeightCell + HeightCell div 2   image:CoinImg)}
-      [] 4 then
+      [] 1 then %Wall
+	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:white outline:white)}
+      [] 2 then %Power pellets
+	 skip
+      [] 3 then %Ghost
+	 {Canvas create(image X*WidthCell + WidthCell div 2 Y*HeightCell + HeightCell div 2   image:GhostImg)}
+      [] 4 then %Pacman
 	 {Canvas create(image X*WidthCell + WidthCell div 2  Y*HeightCell + HeightCell div 2    image:PacManImg)}
-      [] 3 then
-	    {Canvas create(image X*WidthCell + WidthCell div 2 Y*HeightCell + HeightCell div 2   image:GhostImg)}
-      else
+      else %Whorhole
 	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:black outline:black)}
       end
    end
