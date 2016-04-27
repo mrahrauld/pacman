@@ -29,7 +29,7 @@ define
       case Number of 0 then  %Empty case
 	 {Canvas create(image X*WidthCell + WidthCell div 2 Y*HeightCell + HeightCell div 2   image:CoinImg)}
       [] 1 then %Wall
-	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:white outline:white)}
+	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:white outline:black)}
       [] 2 then %Power pellets
 	 skip
       [] 3 then %Ghost
@@ -75,6 +75,7 @@ define
       NextCommand
       GhostNewStates
       GhostNewStates1
+
       fun {MoveTo Movement OldState}
 	 NewX NewY DX DY OldX OldY Color  in
 	 r(Color OldX OldY) = OldState
@@ -82,7 +83,7 @@ define
 	 NewX = OldX + DX
 	 NewY = OldY + DY
 	 {DrawBox black OldX OldY}
-	 {DrawBox Color NewX NewY}
+	 {DrawBox 4 NewX NewY}
 	 r(Color NewX NewY)
       end
       fun {UserCommand Command OldState NewState}
