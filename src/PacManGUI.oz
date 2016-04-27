@@ -49,6 +49,11 @@ define
    
    proc{Pacman X Y Command}
 
+      MyNewState
+      NextCommand
+      GhostNewStates
+      GhostNewStates1
+      
        fun {MoveTo Movement OldState}
 	 NewX NewY DX DY OldX OldY Color  in
 	 r(Color OldX OldY) = OldState
