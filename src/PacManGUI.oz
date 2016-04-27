@@ -152,8 +152,9 @@ define
        end in
 
       if LastDir == nil then
+	 {System.show 'test1'}
 	 LastDir = {NewDirection MySelf}
-	 {System.show 'test'}
+	 {System.show 'test2'}
       end
 
        NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
