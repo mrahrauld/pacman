@@ -146,7 +146,8 @@ define
 	     if {MouvementIsAvailable OldState LastDir MAP} == true then
 		GhostNewState = {MoveTo LastDir OldState}
 	     else
-		GhostNewState = {MoveTo {NewDirection OldState} OldState}
+		NewDir = {NewDirection OldState}
+		GhostNewState = {MoveTo NewDir OldState}
 	     end
 		T
 	 end
@@ -157,7 +158,7 @@ define
       else
 	 LastDir = InitDir
       end
-
+      
        NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
        {Ghost GhostNewState NextGhostStream MAP NewDir}
    end
