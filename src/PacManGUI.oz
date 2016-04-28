@@ -119,13 +119,13 @@ define
        end
 
        fun {OtherDirAvailaible State LastDir}
-       	  if LastDir Not r(1 0) andthen LastDir Not r(~1 0) andthen {MouvementIsAvailable State r(1 0) MAP} then
+       	  if LastDir \= r(1 0) andthen LastDir \= r(~1 0) andthen {MouvementIsAvailable State r(1 0) MAP} then
        	     true
-       	  elseif LastDir Not r(1 0) andthen LastDir Not r(~1 0) andthen {MouvementIsAvailable State r(~1 0) MAP} then
+       	  elseif LastDir \= r(1 0) andthen LastDir \= r(~1 0) andthen {MouvementIsAvailable State r(~1 0) MAP} then
        	     true
-       	  elseif LastDir Not r(0 ~1) andthen LastDir Not r(0 1) andthen {MouvementIsAvailable State r(0 1) MAP} then
+       	  elseif LastDir \= r(0 ~1) andthen LastDir \= r(0 1) andthen {MouvementIsAvailable State r(0 1) MAP} then
 	     true
-       	  elseif LastDir Not r(0 ~1) andthen LastDir Not r(0 1) andthen {MouvementIsAvailable State r(0 ~1) MAP} then
+       	  elseif LastDir \= r(0 ~1) andthen LastDir \= r(0 1) andthen {MouvementIsAvailable State r(0 ~1) MAP} then
        	     true
        	  else
        	     false
