@@ -324,7 +324,7 @@ define
 	 case ARITY of X|T then
 	    {DrawBox LINE.X X Y}
 	    case LINE.X of 3 then %CreateGhost
-	       {CreateGhost X Y}
+	       {NewGhost X Y}
 	    [] 4 then %Launch Pacman
 	       thread {Pacman pos(4 X Y LIVES 0) Command} end
 	    else skip end
@@ -332,7 +332,7 @@ define
 	 end
       end
 
-      proc {CreateGhost X Y}
+      proc {NewGhost X Y}
 	 {Send CreateGhostPort r(3 X Y)}
       end
 
