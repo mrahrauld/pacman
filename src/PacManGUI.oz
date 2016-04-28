@@ -33,19 +33,19 @@ define
    
    proc{DrawBox Number X Y}
       case Number of 0 then  %Empty case
-	 {Canvas create(image X*WidthCell + WidthCell div 2 Y*HeightCell + HeightCell div 2   image:CoinImg)}
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:CoinImg)}
       [] -1 then
-	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:black outline:black)}
+	 {Canvas create(rect (X-1)*WidthCell (Y-1)*HeightCell (X-1)*WidthCell+WidthCell (Y-1)*HeightCell+HeightCell fill:black outline:black)}
       [] 1 then %Wall
-	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:white outline:black)}
+	 {Canvas create(rect (X-1)*WidthCell (Y-1)*HeightCell (X-1)*WidthCell+WidthCell (Y-1)*HeightCell+HeightCell fill:white outline:black)}
       [] 2 then %Power pellets
 	 skip
       [] 3 then %Ghost
-	 {Canvas create(image X*WidthCell + WidthCell div 2 Y*HeightCell + HeightCell div 2   image:GhostImg)}
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:GhostImg)}
       [] 4 then %Pacman
-	 {Canvas create(image X*WidthCell + WidthCell div 2  Y*HeightCell + HeightCell div 2    image:PacManImg)}
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManImg)}
       else %Whorhole
-	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:black outline:black)}
+	 {Canvas create(rect (X-1)*WidthCell (Y-1)*HeightCell (X-1)*WidthCell+WidthCell (Y-1)*HeightCell+HeightCell fill:black outline:black)}
       end
    end
 
@@ -57,10 +57,10 @@ define
 	  NewX = OldX + DX
 	  NewY = OldY + DY
 	  
-	  if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
+	  if NewX<1 orelse NewX>(NW) orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	     false
 	  else
-	     true
+	     r(Color NewX NewY)
 	  end 
    end
    fun {Map MapStream MAP CoinCount}
@@ -117,18 +117,18 @@ define
       NextCommand
       
        fun {MoveTo Movement OldState}
-	 NewX NewY DX DY OldX OldY Color  in
-	 r(Color OldX OldY) = OldState
+	 NewX NewY DX DY OldX OldY Type  in
+	 r(Type OldX OldY) = OldState
 	 r(DX DY) = Movement
 	 NewX = OldX + DX
 	 NewY = OldY + DY
-	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
-	    r(Color OldX OldY)
+	 if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
+	    r(Type OldX OldY)
 	 else
 	    {DrawBox black OldX OldY}
 	    {DrawBox 4 NewX NewY}
 	    {Send GhostPort r(NewX NewY)} 
-	    r(Color NewX NewY)
+	    r(Type NewX NewY)
 	 end
        end
 
@@ -149,14 +149,14 @@ define
       NextGhostStream
       NewDir
       LastDir
-      
+
        fun {MoveTo Movement OldState}
 	 NewX NewY DX DY OldX OldY Color  in
 	 r(Color OldX OldY) = OldState
 	 r(DX DY) = Movement
 	 NewX = OldX + DX
 	 NewY = OldY + DY
-	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
+	 if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	    r(Color OldX OldY)
 	 else
 	    {DrawBox black OldX OldY}
@@ -166,6 +166,9 @@ define
 	 end
        end
 
+       %
+       % Regarde si une autre direction est disponible pour le Ghost
+       %
        fun {OtherDirAvailaible State LastDir}
        	  if LastDir \= r(1 0) andthen LastDir \= r(~1 0) andthen {MouvementIsAvailable State r(1 0) MAP} then
        	     true
@@ -181,6 +184,9 @@ define
        end
        
 
+       %
+       % Choisit une nouvelle direction pour le Ghost
+       %
        fun {NewDirection OldState}
 	  Dir = {Int.'mod' {OS.rand} 4}
 	  NewX NewY DX DY OldX OldY Color
@@ -193,7 +199,6 @@ define
 	  else
 	    r(DX DY) = r(0 ~1)
 	  end
-	  
 	  NewX = OldX + DX
 	  NewY = OldY + DY
 	  
@@ -227,55 +232,6 @@ define
        {Ghost GhostNewState NextGhostStream MAP NewDir}
    end
 
-   % proc{GameBis MySelf Ghosts Command MAP}
-   %    MyNewState
-   %    NextCommand
-   %    GhostNewStates
-   %    GhostNewStates1
-
-   %    fun {MoveTo Movement OldState}
-   % 	 NewX NewY DX DY OldX OldY Color  in
-   % 	 r(Color OldX OldY) = OldState
-   % 	 r(DX DY) = Movement
-   % 	 NewX = OldX + DX
-   % 	 NewY = OldY + DY
-   % 	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
-   % 	    r(Color OldX OldY)
-   % 	 else
-   % 	    {DrawBox black OldX OldY}
-   % 	    {DrawBox 4 NewX NewY}
-   % 	    r(Color NewX NewY)
-   % 	 end
-   %    end
-      
-   %    fun {MoveAll OldState NewState}
-   % 	 Dir
-   %       in
-   % 	 case OldState
-   % 	 of Old|T then
-   % 	    Dir = {Int.'mod' {OS.rand} 4}
-   % 	    case Dir of 0 then
-   % 	       {MoveAll T {MoveTo r(~1 0) Old}|NewState}
-   % 	       [] 1 then {MoveAll T  {MoveTo r(0 1) Old}|NewState}
-   % 	       [] 2 then {MoveAll T  {MoveTo r(1 0) Old}|NewState}
-   % 	       [] 3 then {MoveAll T  {MoveTo r(0 ~1) Old}|NewState}
-   % 	    end
-   % 	 [] nil then  NewState
-   % 	 end
-   %    end
-   %    fun {UserCommand Command OldState NewState}
-   % 	 case Command of r(DX DY)|T then
-   % 	    NewState = {MoveTo r(DX DY) OldState}
-   % 	    T
-   % 	 end
-   %    end
-   % in
-   %    NextCommand = {UserCommand Command MySelf MyNewState}
-   %    GhostNewStates = {MoveAll Ghosts nil}
-   %    GhostNewStates1 = {MoveAll GhostNewStates nil}
-   %    {GameBis MyNewState GhostNewStates1 NextCommand MAP}
-   % end
-
    proc {CreateGame MAP}
 
       %Taille du tableau 
@@ -305,9 +261,16 @@ define
 
    end
 
+   fun {ChangeMap MAP C X Y}
+      
+     {AdjoinList MAP [X#{AdjoinList MAP.Y [X#C]}]}
+
+   end
+   
+
    proc {CreateTable MAP ARITY}
       case ARITY of H|T then
-	 {CreateLine MAP.H {Record.arity MAP.H} H-1}
+	 {CreateLine MAP.H {Record.arity MAP.H} H}
 	 {CreateTable MAP T}
       else
 	 skip
@@ -316,7 +279,7 @@ define
 
    proc {CreateLine LINE ARITY Y}
       case ARITY of H|T then
-	 {DrawBox LINE.H H-1 Y}
+	 {DrawBox LINE.H H Y}
 	 {CreateLine LINE T Y}
       else
 	 skip
@@ -325,11 +288,11 @@ define
 
    fun {GetElement X Y MAP}
       Line in
-      if X > (NW - 1) orelse X < 0 orelse Y > (NH - 1) orelse Y < 0 then
+      if X > NW orelse X < 1 orelse Y > NH orelse Y < 1 then
 	 MAP
       else
-	 Line = MAP.(Y+1)
-	 Line.(X+1)
+	 Line = MAP.Y
+	 Line.X
       end
    end
    
