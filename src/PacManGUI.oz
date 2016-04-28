@@ -350,6 +350,16 @@ define
 	    skip
 	 end
       end
+
+      proc {CreateNilLis N NilLisT}
+	 NewNilList
+	 if N == 0 then
+	    NilList = nil
+	 else
+	    nil|{CreateNilLis N-1 NewNilList}
+	 end
+      end
+      
       
    in
 
@@ -379,9 +389,11 @@ define
 
       {CreateTable MAP {Record.arity MAP}}
 
-      {System.show {List.length GHOSTS}}
-      
-
+      local GHOST2 in
+	 {CreateNilLis {List.length GHOSTS} GHOST2}
+	 {System.show GHOST2}
+      end
+ 
    end
 
    fun {ChangeMap MAP C X Y}
