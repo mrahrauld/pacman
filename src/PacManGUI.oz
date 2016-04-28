@@ -514,7 +514,7 @@ define
       
       NewMap = {CreateGame MAP}
       
-      {Map PacmanStream GhostPort MAP COINS 1 AlivePacmanStream}
+      {Map PacmanStream GhostPort NewMAP COINS 1 AlivePacmanStream}
 
    end
 
