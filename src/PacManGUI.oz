@@ -341,13 +341,13 @@ define
 
       proc {CreateGhost CreateGhostStream NGHOST}
 	 NewGHOST in
-	 case CreateGhostStream of H|T then
-	    case H of r(C X Y) then
+	 case CreateGhostStream of r(C X Y)|T then
 	       {CreateGhost T NewGHOST}
 	       NGHOST = H|NewGHOST
-	    else
+	 [] nil|T then
 	       NGHOST = nil
-	    end
+	 else
+	    skip
 	 end
       end
       
