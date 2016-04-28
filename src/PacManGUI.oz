@@ -309,7 +309,6 @@ define
       CreateGhostStream
       CreateGhostPort = {NewPort CreateGhostStream}
       GHOSTS
-   in
 
       proc {CreateTable MAP ARITY}
 	 case ARITY of H|T then
