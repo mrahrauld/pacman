@@ -34,6 +34,8 @@ define
    proc{DrawBox Number X Y}
       case Number of 0 then  %Empty case
 	 {Canvas create(image X*WidthCell + WidthCell div 2 Y*HeightCell + HeightCell div 2   image:CoinImg)}
+      [] -1 then
+	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:black outline:black)}
       [] 1 then %Wall
 	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:white outline:black)}
       [] 2 then %Power pellets
@@ -61,7 +63,46 @@ define
 	     true
 	  end 
    end
+   fun {Map MapStream MAP CoinCount}
+      NextMapStream
+      NewMAP
+      NewCoinCount
+      
+      % fun{Draw Number OldX OldY NewX NewY}
+      % 	 case Number
+      % 	 of 4 then {Drawbox -1 OldX OldY} {Drawbox 4 NewX NewY}
+	    
+      % 	 [] 3 then {Drawbox {GetElement OldX OldY MAP} OldX OldY} {Drawbox 3 NewX NewY}
+	   
+      % 	 end
+	 
+      % end
+      
+
+      fun{ChangeMap OldMAP NewMAP MapStream CoinCount NewCoinCount}
+	 case MapStream of r(C OX OY NX NY)|T
+	    case Number
+	    of 4 then {Drawbox -1 OX OY} {Drawbox 4 NX NY}
+	       if {GetElement NX NY MAP} == 0 then
+		  
+		  NewMAP = 
+		  NewCoinCount = CoinCount-1;
+	       else
+	       end
+	       
+	    [] 3 then {Drawbox {GetElement OX OY MAP} OX OY} {Drawbox 3 NX NY}
+	       
+	    end
+	    
+	    NewMAP = 
+	    T
+	 end
+      end
+   NextMapStream = {ChangeMap MAP NewMap MapStream CoinCount NewCoinCount}
+   {Map NextMapStream NewMap NewCoinCount}
+   end
    
+      
    
    proc{Pacman MySelf Command MAP}
 
@@ -288,6 +329,7 @@ define
    proc {StartGame MAP}
       MySelf
       Ghosts
+      Ghosts2
    in
       %{Browse show}
       
