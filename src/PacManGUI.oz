@@ -77,7 +77,6 @@ define
       % 	 end
 	 
       % end
-      
 
       fun{WaitStream OldMAP NewMAP MapStream CoinCount NewCoinCount}
 	 case MapStream of H|T then
