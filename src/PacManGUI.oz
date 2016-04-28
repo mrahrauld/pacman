@@ -36,6 +36,8 @@ define
    GhostPort = {NewPort GhostStream}
    PacmanStream
    PacmanPort = {NewPort PacmanStream}
+   AlivePacmanStream
+   AlivePacmansPort = {NewPort AlivePacmanStream}
    
    proc{DrawBox Number X Y}
       case Number of 0 then  %Empty case
@@ -79,10 +81,15 @@ define
 	     r(NewX NewY)
 	  end 
    end
-   proc {Map MapStream GhostPort MAP CoinCount}
+
+   
+   %%%%% MAP %%%%
+   proc {Map MapStream GhostPort MAP CoinCount AlivePacmans AlivePacmanStream}
       NextMapStream
       NewMAP
       NewCoinCount
+      NewAlivePacmans
+      NextAlivePacmanStream
 
       fun {MovePacman MAP OldState NewState CoinCount NewCoinCount Coins NewCoins}
 	 NewX NewY OldX OldY NewMAP in
@@ -123,9 +130,9 @@ define
 	    r(C GOX GOY) = H
 	    r(C2 GNX GNY) = NewGhost.1
 	    if GNX==NX andthen GNY==NY then % si les nouvelles positions sont les mêmes
-	       {IsDead Lives-1 OX OY NX NY OldGhost.2 NewGhost.2}
+	       Lives-1
 	    elseif GNX==OX andthen GNY==OY andthen NX==GOX andthen NY==GOY then % S'ils se croisent
-	       {IsDead Lives-1 OX OY NX NY OldGhost.2 NewGhost.2}
+	       Lives-1
 	    else
 	       {IsDead Lives OX OY NX NY OldGhost.2 NewGhost.2}
 	    end
@@ -182,13 +189,23 @@ define
 	 
       end
 
-      in
+   in
       NextMapStream = {WaitStream MAP NewMAP MapStream GhostPort CoinCount NewCoinCount}
-      {Map NextMapStream  GhostPort NewMAP  NewCoinCount}
+      case AlivePacmanStream of H|T then %recalcul du nombre de pacman en vie
+	  {System.show H}
+	 NextAlivePacmanStream = T
+	 NewAlivePacmans = AlivePacmans-H
+	 {System.show NewAlivePacmans}
+	 
+      end
+      if NewAlivePacmans==0 then {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
+      else
+	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
+      end
    end
    
       
-   
+   %%%% PACMAN %%%%
    proc {Pacman MySelf Command}
 
       MyNewState
@@ -209,13 +226,18 @@ define
       NextCommand = {UserCommand Command MySelf MyNewState}
       case MyNewState of pos(C X Y Lives Coins) then
 	 if Lives \= 0 then
+	    {System.show 'test'}
+	    {Send AlivePacmansPort 0}
 	    {Pacman MyNewState NextCommand}
 	 else
-	    skip
+	    {System.show 'test3'}
+	    {Send AlivePacmansPort 1}
 	 end
       end
    end
 
+   
+   %%%% GHOST %%%%
    proc{Ghost MySelf GhostStream MAP InitDir}
 
       GhostNewState
@@ -307,11 +329,14 @@ define
 	  end
 	  in
 	  case GhostStream of H|T then
-	     
-	     NewDir = {GhostCommand2 OldState LastDir}
-	     GhostNewState = {MoveGhost NewDir OldState}
-	     H = OldState#GhostNewState
-	     T
+	     if H == ~1 then
+		H
+	     else
+		NewDir = {GhostCommand2 OldState LastDir}
+		GhostNewState = {MoveGhost NewDir OldState}
+		H = OldState#GhostNewState
+		T
+	     end
    	 end
        end in
 
@@ -322,8 +347,11 @@ define
       end
       
       NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
-
-       {Ghost GhostNewState NextGhostStream MAP NewDir}
+      
+      if NextGhostStream== ~1 then {System.show NextGhostStream}
+      else
+	 {Ghost GhostNewState NextGhostStream MAP NewDir}
+      end
    end
 
 
@@ -451,7 +479,8 @@ define
 
 
     
-      {Map PacmanStream GhostPort MAP 10} 
+      {Map PacmanStream GhostPort MAP 10 1 AlivePacmanStream}
+      {System.show 'testttttttt'}
    end
 
   

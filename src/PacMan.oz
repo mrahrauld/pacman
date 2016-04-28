@@ -41,7 +41,7 @@ define
 	r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0)
 	r(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
 	r(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1))
-   LIVES    = 5
+   LIVES    = 1
 
    %% For feedback
    Say    = System.showInfo
@@ -73,6 +73,8 @@ in
    %{System.show MAP}
 
    {GUI.startGame MAP LIVES}
-   
-   {Application.exit 0}
+   {System.show 'fin pacman'}
+   % {Delay 1000}
+   % {Application.exit 0}
+    {System.show 'fin pacman'}
 end
