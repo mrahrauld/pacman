@@ -143,7 +143,7 @@ define
 	    end
 	 end
       end
-      proc{MoveGhost OldStates NewStates NX NY}
+      proc{MoveGhost OldStates NewStates NX NY OX OY}
 	    OldX OldY NewX NewY C C2 in
 	    case OldStates of nil then skip
 	    []H|T then
@@ -151,11 +151,14 @@ define
 	       r(C NewX NewY) = NewStates.1
 	       {DrawBox ~1 OldX OldY}
 	       {DrawBox {GetElement OldX OldY MAP} OldX OldY}
-	       if  NX==OldX andthen NY==OldY then %Si pacman est juste derrier ghost
-		  {DrawBox 4 OldX OldY}
+	       if  NX==OldX andthen NY==OldY then %Si pacman est juste derriere ghost
+		  if OX\= NewX orelse OY\=NewY then
+		     {System.show OX}
+		     {DrawBox 4 OldX OldY}
+		  end
 	       end
 	       {DrawBox 3 NewX NewY}
-	       {MoveGhost OldStates.2 NewStates.2}
+	       {MoveGhost OldStates.2 NewStates.2 NX NY OX OY}
 	    end
       end
       fun{WaitStream OldMAP NewMAP MapStream GhostPort CoinCount NewCoinCount }
@@ -166,7 +169,9 @@ define
 	    
 	    case H of move(C OX OY DX DY OriginX OriginY Lives Coins)#Ack then
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
-	       case NewPos of r(NX NY) then
+	       case NewPos of r(X Y) then
+		  NX = X
+		  NY = Y
 	       	  NewLives = {IsDead Lives OX OY NX NY OldGhost NewGhost}
 		  if NewLives==Lives then
 		     Ack= pos(C NX NY OriginX OriginY Lives NewCoins)
@@ -189,9 +194,10 @@ define
 		     Ack = pos(C OriginX OriginY OriginX OriginY NewLives Coins)
 		     NewCoinCount = Coins
 		  end
+		  
+
 	       end
-	       
-	       {MoveGhost OldGhost NewGhost NX NY}
+	       {MoveGhost OldGhost NewGhost NX NY OX OY}
 	      
 	    end
 	    T
