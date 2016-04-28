@@ -52,7 +52,8 @@ define
    fun {MouvementIsAvailable OldState Dir MAP}
 	  NewX NewY DX DY OldX OldY Color 
 	  r(Color OldX OldY) = OldState
-	  in
+   in
+      {System.show 'test9'}
 	  r(DX DY) = Dir
 	  NewX = OldX + DX
 	  NewY = OldY + DY
