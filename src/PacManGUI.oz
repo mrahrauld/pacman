@@ -343,7 +343,7 @@ define
 	 NewGHOST in
 	 case CreateGhostStream of r(C X Y)|T then
 	       {CreateGhost T NewGHOST}
-	       NGHOST = H|NewGHOST
+	       NGHOST = r(C X Y)|NewGHOST
 	 [] nil|T then
 	       NGHOST = nil
 	 else
