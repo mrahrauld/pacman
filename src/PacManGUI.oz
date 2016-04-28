@@ -11,6 +11,7 @@ define
    Desc
    Window
    Canvas
+   LIVES
    W
    H
    NW
@@ -300,33 +301,66 @@ define
        {Ghost GhostNewState NextGhostStream MAP NewDir}
    end
 
+
+
+
+   
    proc {CreateGame MAP}
+      CreateGhostStream
+      CreateGhostPort = {NewPort CreateGhostStream}
+      GHOSTS
+   in
 
       proc {CreateTable MAP ARITY}
-      case ARITY of H|T then
-	 {CreateLine MAP.H {Record.arity MAP.H} H}
-	 {CreateTable MAP T}
-      else
-	 skip
+	 case ARITY of H|T then
+	    {CreateLine MAP.H {Record.arity MAP.H} H}
+	    {CreateTable MAP T}
+	 else
+	    skip 
+	 end
       end
-   end
 
-   proc {CreateLine LINE ARITY Y}
-      case ARITY of H|T then
-	 {DrawBox LINE.H H Y}
-	 {CreateLine LINE T Y}
-      else
-	 skip
+
+      fun {CreateLine LINE ARITY Y}
+	 case ARITY of X|T then
+	    {DrawBox LINE.X X Y}
+	    case LINE.X of 3 then %CreateGhost
+	       {CreateGhost X Y}
+	    [] 4 then %Launch Pacman
+	       thread {Pacman pos(4 X Y LIVES 0) Command} end
+	    else skip end
+	    {CreateLine LINE T Y}
+	 else
+	 end
       end
-   end
+
+      proc {CreateGhost X Y}
+	 {Send CreateGhostPort r(3 X Y)}
+      end
+
+      fun {CreateGhost CreateGhostStream NGHOST}
+	 case CreateGhostStream of H|T then
+	    if H \= nil then 
+	       case NGHOST of nil then {CreateGhost T H}
+	       else
+		  {CreateGhost T NGHOST|H}
+	       end
+	    else
+	       NGHOST|nil
+	    end
+	 end
+      end
+      
    in
+
+      thread GHOSTS = {CreateGhost CreateGhostStream nil} end
+      
       %Taille du tableau 
       {Record.width MAP NW}
       {Record.width MAP NH}
 
       W =WidthCell*NW
       H =HeightCell*NH
-      %NH = NW
 
       %Creation de la window
       Desc=td(canvas(bg:black
@@ -343,7 +377,8 @@ define
 
       {Window show}
 
-      {CreateTable MAP {Record.arity MAP}}
+      {CreateTable MAP {Record.arity MAP} nil 0}
+      
 
    end
 
@@ -363,18 +398,19 @@ define
       end
    end
    
-   proc {StartGame MAP LIVES}
+   proc {StartGame MAP LIVE}
       MySelf
       Ghosts
       Ghosts2
       Ghosts3
    in
+      LIVES = LIVE
       %{Browse show}
       
       {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
-      MySelf = pos(4 2 2 3 0)
+      MySelf = pos(4 2 2 LIVE 0)
       Ghosts = r(white 2 9)
       Ghosts2 = r(white 7 5)
       Ghosts3 = r(white 13 1)
