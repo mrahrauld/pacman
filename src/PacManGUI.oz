@@ -123,10 +123,10 @@ define
       NextCommand
 
       fun {UserCommand Command OldState NewState}
-	 X Y DX DY Ack Lives Coins C in
+	 X Y Ack Lives Coins C in
 	 {System.show 'AAA'}
 	 pos(C X Y Lives Coins) = OldState
-	 case Command of H|T then
+	 case Command of r(DX DY)|T then
 	    {System.show 'test-3'}
 	    {Send PacmanPort move(C X Y DX DY Lives Coins)#Ack}
 	    {System.show 'test-4'}
