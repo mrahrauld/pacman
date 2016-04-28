@@ -76,18 +76,11 @@ define
 	 r(NewX NewY) = NewState
 
 	 case {GetElement NewX NewY MAP} of 0 then
-	    {System.show 'test8'}
 	    NewCoinCount = CoinCount-1
-	    {System.show 'test9'}
 	    NewCoins = Coins+1
-	    {System.show 'test10'}
 	    {DrawBox ~1 OldX OldY}
-	    {System.show 'test11'}
 	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
-	    {System.show 'test12'}
 	    {DrawBox 4 NewX NewY}
-	    {System.show 'test13'}
-	    
 	    NewMAP = {ChangeMap MAP ~1 NewX NewY}
 	 else
 	    {System.show 'test9'}
