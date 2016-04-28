@@ -363,7 +363,7 @@ define
 	       COINS2 = 1
 	    [] 0 then
 	       COINS2 = 1
-	    else skip end
+	    else COINS2 = 0 end
 	    {System.show 'test2'}
 	    {CreateLine LINE T Y NewCoins}
 	    {System.show 'test3'}
