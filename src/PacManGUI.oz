@@ -217,11 +217,11 @@ define
       NextCommand
 
       fun {UserCommand Command OldState NewState}
-	 X Y Ack Lives Coins C in
+	 X Y OX OY Ack Lives Coins C in
 
-	 pos(C X Y Lives Coins) = OldState
+	 pos(C X Y OX OY Lives Coins) = OldState
 	 case Command of r(DX DY)|T then
-	    {Send PacmanPort move(C X Y DX DY 2 2 Lives Coins)#Ack}
+	    {Send PacmanPort move(C X Y DX DY OX OY Lives Coins)#Ack}
 	    
 	    {Wait Ack} % Ack = pos(X Y Lives Coins)
 	    NewState = Ack
@@ -229,7 +229,7 @@ define
 	 end
       end in
       NextCommand = {UserCommand Command MySelf MyNewState}
-      case MyNewState of pos(C X Y Lives Coins) then
+      case MyNewState of pos(C X Y OX OY Lives Coins) then
 	 if Lives \= 0 then
 	    {System.show 'test'}
 	    {Send AlivePacmansPort 0}
@@ -409,7 +409,7 @@ define
 
       proc {NewPacman X Y}
 	 {Send CreateGhostPort r(4 X Y)}
-	 thread {Pacman pos(4 X Y LIVES 0) Command} end
+	 thread {Pacman pos(4 X Y X Y LIVES 0) Command} end
       end
 
       proc {CreateGhost CreateGhostStream NGHOST}
