@@ -343,9 +343,11 @@ define
 	 NewGHOST in
 	 case CreateGhostStream of H|T then
 	    if H \= nil then
+	       {System.show 'new Ghost'}
 	       {CreateGhost T NewGHOST}
 	       NGHOST = H|NewGHOST
 	    else
+	       {System.show 'fin Ghost'}
 	       NGHOST = nil
 	    end
 	 end
