@@ -356,7 +356,8 @@ define
 	 if N == 0 then
 	    NilList = nil
 	 else
-	    NilList = nil|{CreateNilList N-1 NewNilList}
+	    {CreateNilList N-1 NewNilList}
+	    NilList = nil|NewNilList
 	 end
       end
       
