@@ -12,6 +12,7 @@ define
    Window
    Canvas
    LIVES
+   COINS
    W
    H
    NW
@@ -336,25 +337,34 @@ define
       NewMap
       GHOSTS
 
-      proc {CreateTable MAP ARITY}
+      proc {CreateTable MAP ARITY COINS}
+	 NewCoins1 NewCoins2 in
 	 case ARITY of H|T then
 	    {CreateLine MAP.H {Record.arity MAP.H} H}
-	    {CreateTable MAP T}
+	    {CreateTable MAP T NewCoins2}
+	    COINS = NewCoins1 + NewCoins2
 	 else
-	    {Send CreateGhostPort nil} 
+	    {Send CreateGhostPort nil}
+	    COINS = 0
 	 end
       end
 
 
-      proc {CreateLine LINE ARITY Y}
+      proc {CreateLine LINE ARITY Y COINS}
+	 COINS2 NewCoins in
 	 case ARITY of X|T then
 	    {DrawBox LINE.X X Y}
 	    case LINE.X of 3 then %CreateGhost
 	       {NewGhost X Y}
+	       COINS2 = 0
 	    [] 4 then %Launch Pacman
 	       {NewPacman X Y}
+	       COINS2 = 1
+	    [] 0
+	       COINS2 = 1
 	    else skip end
-	    {CreateLine LINE T Y}
+	    {CreateLine LINE T Y NewCoins}
+	    COINS = COINS2 + NewCoins
 	 else
 	    skip
 	 end
