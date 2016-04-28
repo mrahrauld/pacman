@@ -368,8 +368,8 @@ define
 	    {CreateLine LINE T Y NewCoins}
 	    {System.show 'test3'}
 	    COINS = COINS2 + NewCoins
+	 else
 	    {System.show 'test4'}
-	 else 
 	    COINS = 0
 	 end
 	 
