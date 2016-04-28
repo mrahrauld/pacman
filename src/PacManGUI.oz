@@ -118,20 +118,19 @@ define
 	 end
        end
 
-       % fun {OtherDirAvailaible State LasDir}
-
-       % 	  if {MouvementIsAvailable OldState r(1 0) MAP} andthen LastDir Not r(1 0) then
-       % 	     true
-       % 	  elseif {MouvementIsAvailable OldState r(~1 0) MAP} andthen LastDir Not r(~1 0) then
-       % 	     true
-       % 	  elseif {MouvementIsAvailable OldState r(0 1) MAP} andthen LastDir Not r(0 1) then
-       % 	     true
-       % 	  elseif {MouvementIsAvailable OldState r(0 ~1) MAP} andthen LastDir Not r(0 ~1) then
-       % 	     true
-       % 	  else
-       % 	     false
-       % 	  end
-       % end
+       fun {OtherDirAvailaible State LasDir}
+       	  if LastDir Not r(1 0) andthen LastDir Not r(~1 0) andthen {MouvementIsAvailable State r(1 0) MAP} then
+       	     true
+       	  elseif LastDir Not r(1 0) andthen LastDir Not r(~1 0) andthen {MouvementIsAvailable State r(~1 0) MAP} then
+       	     true
+       	  elseif LastDir Not r(0 ~1) andthen LastDir Not r(0 1) andthen {MouvementIsAvailable State r(0 1) MAP} then
+	     true
+       	  elseif LastDir Not r(0 ~1) andthen LastDir Not r(0 1) andthen {MouvementIsAvailable State r(0 ~1) MAP} then
+       	     true
+       	  else
+       	     false
+       	  end
+       end
        
 
        fun {NewDirection OldState}
@@ -159,7 +158,7 @@ define
 
        fun {GhostCommand GhostStream OldState LastDir GhostNewState NewDir}
 	  case GhostStream of r(DX DY)|T then
-	     if {MouvementIsAvailable OldState LastDir MAP} == true then
+	     if {OtherDirAvailaible State LasDir} == false andthen {MouvementIsAvailable OldState LastDir MAP} == true then
 		NewDir = LastDir
 		GhostNewState = {MoveTo LastDir OldState}
 	     else
