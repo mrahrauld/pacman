@@ -25,6 +25,7 @@ define
    PacManLImg={QTk.newImage photo(url:MainURL#"/pacmanL.gif")}
    PacManRImg={QTk.newImage photo(url:MainURL#"/pacmanR.gif")}
    WormholeImg={QTk.newImage photo(url:MainURL#"/wormhole.gif")}
+   WallImg={QTk.newImage photo(url:MainURL#"/wall.gif")}
    
    GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
    CoinImg={QTk.newImage photo(url:MainURL#"/yellow-coin.gif")}
@@ -45,7 +46,7 @@ define
       [] ~1 then
 	 {Canvas create(rect (X-1)*WidthCell (Y-1)*HeightCell (X-1)*WidthCell+WidthCell (Y-1)*HeightCell+HeightCell fill:black outline:black)}
       [] 1 then %Wall
-	 {Canvas create(rect (X-1)*WidthCell (Y-1)*HeightCell (X-1)*WidthCell+WidthCell (Y-1)*HeightCell+HeightCell fill:white outline:black)}
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:WallImg)}
       [] 2 then %Power pellets
 	 skip
       [] 3 then %Ghost
