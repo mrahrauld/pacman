@@ -65,7 +65,7 @@ define
 	     r(NewX NewY)
 	  end 
    end
-   proc {Map MapStream MAP CoinCount}
+   proc {Map MapStream GhostPort MAP CoinCount}
       NextMapStream
       NewMAP
       NewCoinCount
@@ -87,21 +87,25 @@ define
 	 {DrawBox ~1 OldX OldY}
 	 {DrawBox {GetElement OldX OldY MAP} OldX OldY}
 	 {DrawBox 4 NewX NewY}
-	 {Send GhostPort r(NewX NewY)}
 	 NewMAP
 	 
       end
-      
-      fun{WaitStream OldMAP NewMAP MapStream CoinCount NewCoinCount}
-	 NewCoins NewPos in
+      fun{WaitGhost GhostPort}
+	 Ack in
+	 {Send GhostPort Ack}
+	  {System.show 'Ack'} 
+	 {System.show Ack} 
+	 Ack
+      end
+      fun{WaitStream OldMAP NewMAP MapStream GhostPort CoinCount NewCoinCount }
+	 NewCoins NewPos GhostPos in
 	 case MapStream of H|T then
+	    GhostPos = {WaitGhost GhostPort}
+	    
 	    case H of move(C OX OY DX DY Lives Coins)#Ack then
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
-	       {System.show NewPos}
 	       case NewPos of r(NX NY) then
-		  {System.show r(OX OY)}
 		  NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
-		  {System.show NewMAP}
 		  Ack= pos(C NX NY Lives NewCoins)
 	       else
 		  NewMAP = MAP
@@ -115,8 +119,8 @@ define
       end
 
       in
-      NextMapStream = {WaitStream MAP NewMAP MapStream CoinCount NewCoinCount}
-      {Map NextMapStream NewMAP NewCoinCount}
+      NextMapStream = {WaitStream MAP NewMAP MapStream GhostPort CoinCount NewCoinCount}
+      {Map NextMapStream  GhostPort NewMAP  NewCoinCount}
    end
    
       
@@ -128,11 +132,11 @@ define
 
       fun {UserCommand Command OldState NewState}
 	 X Y Ack Lives Coins C in
-	 X Y DX DY Ack Lives Coins C in
 
 	 pos(C X Y Lives Coins) = OldState
 	 case Command of r(DX DY)|T then
 	    {Send PacmanPort move(C X Y DX DY Lives Coins)#Ack}
+	    
 	    {Wait Ack} % Ack = pos(X Y Lives Coins)
 	    NewState = Ack
 	    T
@@ -146,94 +150,127 @@ define
       end
    end
 
-   % proc{Ghost MySelf GhostStream MAP InitDir}
+   proc{Ghost MySelf GhostStream MAP InitDir}
 
-   %    GhostNewState
-   %    NextGhostStream
-   %    NewDir
-   %    LastDir
+      GhostNewState
+      NextGhostStream
+      NewDir
+      LastDir
 
-   %     fun {MoveTo Movement OldState}
-   % 	 NewX NewY DX DY OldX OldY Color  in
-   % 	 r(Color OldX OldY) = OldState
-   % 	 r(DX DY) = Movement
-   % 	 NewX = OldX + DX
-   % 	 NewY = OldY + DY
-   % 	 if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
-   % 	    r(Color OldX OldY)
-   % 	 else
-   % 	    {DrawBox black OldX OldY}
-   % 	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
-   % 	    {DrawBox 3 NewX NewY}
-   % 	    r(Color NewX NewY)
-   % 	 end
-   %     end
+      fun {MoveGhost Movement OldState}
+	 NewX NewY DX DY OldX OldY Color  in
+	 case Movement of nil then nil
+	 [] H|T then
+   	 r(Color OldX OldY) = OldState.1
+   	 r(DX DY) = H
+   	 NewX = OldX + DX
+   	 NewY = OldY + DY
+ 
+   	    {DrawBox black OldX OldY}
+   	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
+   	    {DrawBox 3 NewX NewY}
+	    r(Color NewX NewY)|{MoveGhost T OldState.2}
+	 end
+       end
 
-   %     %
-   %     % Regarde si une autre direction est disponible pour le Ghost
-   %     %
-   %     fun {OtherDirAvailaible State LastDir}
-   %     	  if LastDir \= r(1 0) andthen LastDir \= r(~1 0) andthen {MouvementIsAvailable State r(1 0) MAP} then
-   %     	     true
-   %     	  elseif LastDir \= r(1 0) andthen LastDir \= r(~1 0) andthen {MouvementIsAvailable State r(~1 0) MAP} then
-   %     	     true
-   %     	  elseif LastDir \= r(0 ~1) andthen LastDir \= r(0 1) andthen {MouvementIsAvailable State r(0 1) MAP} then
-   % 	     true
-   %     	  elseif LastDir \= r(0 ~1) andthen LastDir \= r(0 1) andthen {MouvementIsAvailable State r(0 ~1) MAP} then
-   %     	     true
-   %     	  else
-   %     	     false
-   %     	  end
-   %     end
+       %
+       % Regarde si une autre direction est disponible pour le Ghost
+       %
+      fun {OtherDirAvailaible State LastDir}
+	 fun {MouvementIsAvailable OldState Dir MAP}
+	    NewX NewY DX DY OldX OldY Color 
+	    r(Color OldX OldY) = OldState
+	 in
+	    
+	    r(DX DY) = Dir
+	    NewX = OldX + DX
+	    NewY = OldY + DY
+	    
+	    if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
+	       false
+	    else
+	       
+	       true
+	    end 
+	 end in
+	 if LastDir \= r(1 0) andthen LastDir \= r(~1 0) andthen {MouvementIsAvailable State r(1 0) MAP} then
+	    true
+	 elseif LastDir \= r(1 0) andthen LastDir \= r(~1 0) andthen {MouvementIsAvailable State r(~1 0) MAP} then
+	    true
+	 elseif LastDir \= r(0 ~1) andthen LastDir \= r(0 1) andthen {MouvementIsAvailable State r(0 1) MAP} then
+	    true
+	 elseif LastDir \= r(0 ~1) andthen LastDir \= r(0 1) andthen {MouvementIsAvailable State r(0 ~1) MAP} then
+	    true
+	 else
+	    false
+	 end
+      end
        
 
-   %     %
-   %     % Choisit une nouvelle direction pour le Ghost
-   %     %
-   %     fun {NewDirection OldState}
-   % 	  Dir = {Int.'mod' {OS.rand} 4}
-   % 	  NewX NewY DX DY OldX OldY Color
-   %     in
-   % 	  r(Color OldX OldY) = OldState
+       %
+       % Choisit une nouvelle direction pour le Ghost
+       %
+       fun {NewDirection OldState}
+   	  Dir = {Int.'mod' {OS.rand} 4}
+   	  NewX NewY DX DY OldX OldY Color
+       in
+   	  r(Color OldX OldY) = OldState
 	  
-   % 	  case Dir of 1 then r(DX DY) = r(1 0)
-   % 	  [] 2 then  r(DX DY) = r(~1 0)
-   % 	  [] 3 then r(DX DY) = r(0 1)
-   % 	  else
-   % 	    r(DX DY) = r(0 ~1)
-   % 	  end
-   % 	  NewX = OldX + DX
-   % 	  NewY = OldY + DY
+   	  case Dir of 1 then r(DX DY) = r(1 0)
+   	  [] 2 then  r(DX DY) = r(~1 0)
+   	  [] 3 then r(DX DY) = r(0 1)
+   	  else
+   	    r(DX DY) = r(0 ~1)
+   	  end
+   	  NewX = OldX + DX
+   	  NewY = OldY + DY
 	  
-   % 	  if {MouvementIsAvailable OldState r(DX DY) MAP} == false then
-   % 	     {NewDirection OldState}
-   % 	  else
-   % 	     r(DX DY)
-   % 	  end
-   %     end
+   	  if {MouvementIsAvailable OldState r(DX DY) MAP} == false then
+   	     {NewDirection OldState}
+   	  else
+   	     r(DX DY)
+   	  end
+       end
+       
+       fun {GhostCommand GhostStream OldState LastDir GhostNewState NewDir}
+	  fun{GhostCommand2 OldState LastDir}
+	     case OldState of nil then nil
+	     [] H|T then
+		if {OtherDirAvailaible H LastDir.1} == false andthen {MouvementIsAvailable H LastDir.1 MAP} == true then
+		   LastDir|{GhostCommand2 T LastDir.2}
+		else
+		   {NewDirection H}|{GhostCommand2 T LastDir.2}
+		end
+	     end
+	  end
+	  in
+	      {System.show 'test'}
+	  case GhostStream of H|T then
+	     
+	     {System.show 'test1'}
+	     NewDir = {GhostCommand2 OldState LastDir}
+	     {System.show 'test2'}
+	     GhostNewState = {MoveGhost NewDir OldState}
+	     {System.show 'test3'}
+	     {System.show GhostNewState}
+	     {System.show OldState}
+	     H = OldState#GhostNewState
+	     {System.show 'test4'}
+	     T
+   	 end
+       end in
 
-   %     fun {GhostCommand GhostStream OldState LastDir GhostNewState NewDir}
-   % 	  case GhostStream of r(DX DY)|T then
-   % 	     if {OtherDirAvailaible OldState LastDir} == false andthen {MouvementIsAvailable OldState LastDir MAP} == true then
-   % 		NewDir = LastDir
-   % 		GhostNewState = {MoveTo LastDir OldState}
-   % 	     else
-   % 		NewDir = {NewDirection OldState}
-   % 		GhostNewState = {MoveTo NewDir OldState}
-   % 	     end
-   % 		T
-   % 	 end
-   %     end in
-
-   %    if InitDir == nil then
-   % 	 LastDir = {NewDirection MySelf}
-   %    else
-   % 	 LastDir = InitDir
-   %    end
+      if InitDir == nil then
+   	 LastDir = {NewDirection MySelf}
+      else
+   	 LastDir = InitDir
+      end
       
-   %     NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
-   %     {Ghost GhostNewState NextGhostStream MAP NewDir}
-   % end
+      NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
+      {System.show NewDir}
+      {System.show GhostNewState}
+       {Ghost GhostNewState NextGhostStream MAP NewDir}
+   end
 
    proc {CreateGame MAP}
 
@@ -312,9 +349,9 @@ define
       Ghosts = r(white 2 9)
       Ghosts2 = r(white 7 5)
       %{InitLayout MySelf|Ghosts}
-      %thread {Ghost Ghosts GhostStream MAP nil} end
-      %thread {Ghost Ghosts2 GhostStream MAP nil} end
-      thread {Map PacmanStream MAP 10} end
+      thread {Ghost [Ghosts Ghosts2] GhostStream MAP [nil nil]} end
+      %thread {Ghost Ghosts2 GhostStream2 MAP nil} end
+      thread {Map PacmanStream GhostPort MAP 10} end
       {Pacman MySelf Command}
    end
 
