@@ -368,7 +368,7 @@ define
 	    {CreateLine LINE T Y NewCoins}
 	    COINS = COINS2 + NewCoins
 	 else
-	    skip
+	    COINS = 0
 	 end
 	 
       end
