@@ -351,8 +351,8 @@ define
 	 end
       end
 
-      proc {CreateNilLis N NilLisT}
-	 NewNilList
+      proc {CreateNilLis N NilList}
+	 NewNilList in
 	 if N == 0 then
 	    NilList = nil
 	 else
