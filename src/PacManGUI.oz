@@ -309,7 +309,7 @@ define
       {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
-      MySelf = pos(4 1 1 3 0)
+      MySelf = pos(4 2 2 3 0)
       Ghosts = r(white 2 9)
       Ghosts2 = r(white 7 5)
       %{InitLayout MySelf|Ghosts}
