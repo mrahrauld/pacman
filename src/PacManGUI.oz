@@ -79,27 +79,35 @@ define
       % end
       
 
-      fun{ChangeMap OldMAP NewMAP MapStream CoinCount NewCoinCount}
-	 case MapStream of r(C OX OY NX NY)|T
-	    case Number
-	    of 4 then {Drawbox -1 OX OY} {Drawbox 4 NX NY}
-	       if {GetElement NX NY MAP} == 0 then
-		  
-		  NewMAP = 
-		  NewCoinCount = CoinCount-1;
-	       else
+      fun{WaitStream OldMAP NewMAP MapStream CoinCount NewCoinCount}
+	 case MapStream of H|T then
+	    case H of move(C OX OY DX DY)#Ack|T
+	       r = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
+	       case r of r(C NX NY) then
+	       	  case C
+	       	  of 4 then {Drawbox -1 OX OY}
+	       	     if {GetElement NX NY MAP} == 0 then
+			
+	       		NewMAP = ChangeMap{OldMAP -1 DX DY} 
+	       		NewCoinCount = CoinCount-1;
+	       	     else
+	       	     end
+	       	  [] 3 then {Drawbox {GetElement OX OY MAP} OX OY} {Drawbox 3 NX NY}
+		     
+	       	  end
+	       	  NewMAP = 
 	       end
+	    [] CreateMap(M)#Ack|T then
 	       
-	    [] 3 then {Drawbox {GetElement OX OY MAP} OX OY} {Drawbox 3 NX NY}
-	       
-	    end
 	    
-	    NewMAP = 
-	    T
+	    end
 	 end
+	 T
       end
-   NextMapStream = {ChangeMap MAP NewMap MapStream CoinCount NewCoinCount}
-   {Map NextMapStream NewMap NewCoinCount}
+
+      in
+      NextMapStream = {WaitStream MAP NewMap MapStream CoinCount NewCoinCount}
+      {Map NextMapStream NewMap NewCoinCount}
    end
    
       
