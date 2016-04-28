@@ -50,12 +50,15 @@ define
    end
 
    fun {MouvementIsAvailable OldState Dir MAP}
-	  NewX NewY DX DY OldX OldY Color 
-	  r(Color OldX OldY) = OldState
+      NewX NewY DX DY OldX OldY Color 
+      r(Color OldX OldY) = OldState
    in
-	  r(DX DY) = Dir
-	  NewX = OldX + DX
-	  NewY = OldY + DY
+      
+      r(DX DY) = Dir
+      NewX = OldX + DX
+      NewY = OldY + DY
+      {System.show {GetElement NewX NewY MAP}}
+      
       if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	     false
 	  else
@@ -306,7 +309,7 @@ define
       {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
-      MySelf = pos(4 1 1 3 0)
+      MySelf = pos(4 2 2 3 0)
       Ghosts = r(white 2 9)
       Ghosts2 = r(white 7 5)
       %{InitLayout MySelf|Ghosts}
