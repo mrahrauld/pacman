@@ -362,7 +362,7 @@ define
 	       COINS2 = 0
 	    [] 4 then %Launch Pacman
 	       {NewPacman X Y}
-	       COINS2 = 1
+	       COINS2 = 0
 	    [] 0 then
 	       COINS2 = 1
 	    else COINS2 = 0 end
@@ -401,11 +401,7 @@ define
 
       fun {AdaptMap MapStream MAP}
 	 case MapStream of r(C X Y)|T then
-	    case C of 3 then
 	       {AdaptMap T {ChangeMap MAP ~1 X Y}}
-	    else
-	       {AdaptMap T {ChangeMap MAP 0 X Y}}
-	    end
 	 [] nil|T then
 	    MAP
 	 end
