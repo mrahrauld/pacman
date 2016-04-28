@@ -394,9 +394,7 @@ define
 	       {AdaptMap MapStream {ChangeMap MAP 0 X Y}}
 	    end
 	 [] nil|T then
-	       MAP
-	 else
-	    skip
+	    MAP
 	 end
       end
 
@@ -415,7 +413,7 @@ define
 
       thread
 	 {CreateGhost CreateGhostStream GHOSTS}
-	 NewMap = {AdaptMap MapStream MAP}
+	 NewMap = {AdaptMap CreateGhostStream MAP}
       end
 
       %Taille du tableau 
