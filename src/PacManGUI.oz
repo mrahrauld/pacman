@@ -423,18 +423,9 @@ define
       %{Browse show}
       
       {CreateGame MAP}
-      %{Browse aftershow}
-      %Initialize ghosts and user
-      MySelf = pos(4 2 2 LIVE 0)
-      Ghosts = r(white 2 9)
-      Ghosts2 = r(white 7 5)
-      Ghosts3 = r(white 13 1)
-      
-      %{InitLayout MySelf|Ghosts}
-      %thread {Ghost [Ghosts Ghosts2 Ghosts3] GhostStream MAP [nil nil nil]} end
-      %thread {Ghost Ghosts2 GhostStream2 MAP nil} end
-      thread {Map PacmanStream GhostPort MAP 10} end
-      {Pacman MySelf Command}
+
+    
+      {Map PacmanStream GhostPort MAP 10} 
    end
 
   
