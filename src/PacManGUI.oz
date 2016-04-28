@@ -92,23 +92,11 @@ define
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
 	       case NewPos of r(C NX NY) then
 		  
-		  NewMAP = {MovePacman OldMap r(OX OY) r(NX NY)  CoinCount NewCoinCount NewCoins Coins}
-		  Ack= pos(NX NY lives NewCoins}
+		  NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
+		  Ack= pos(NX NY Lives NewCoins}
 	       else
 		  NewMAP = MAP
-		  Ack = pos(OX OY lives Coins)
-			    
-		  
-
-	       	  % case C
-	       	  % of 4 then {Drawbox -1 OX OY}
-	       	  %    if {GetElement NX NY MAP} == 0 then
-			
-	       	  % 	NewMAP = ChangeMap{OldMAP -1 DX DY} 
-	       	  % 	NewCoinCount = CoinCount-1;
-	       	  %    else
-	       	  %    end
-	       	  % [] 3 then {Drawbox {GetElement OX OY MAP} OX OY} {Drawbox 3 NX NY}	     
+		  Ack = pos(OX OY Lives Coins)
 	       end
 	    [] CreateMap(M)#Ack|T then
 	       
@@ -141,9 +129,9 @@ define
 	 end
       end in
 
-      case Ack of pos(X Y Lives Coins) then
+      NextCommand = {UserCommand Command MySelf MyNewState}
+      case MyNewState of pos(X Y Lives Coins) then
 	 if Lives \= 0 then
-	    NextCommand = {UserCommand Command MySelf MyNewState}
 	    {Pacman MyNewState NextCommand} 
 	 else
 	    Coins
@@ -313,7 +301,7 @@ define
       {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
-      MySelf = r(1 1 1 LIVES 0)
+      MySelf = r(1 1 LIVES 0)
       Ghosts = r(white 2 9)
       Ghosts2 = r(white 7 5)
       %{InitLayout MySelf|Ghosts}
