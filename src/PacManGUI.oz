@@ -108,6 +108,7 @@ define
 	       else
 		  NewMAP = MAP
 		  Ack = pos(C OX OY Lives Coins)
+		  NewCoinCount = Coins
 	       end
 	    % [] CreateMap(M)#Ack|T then
 	       
