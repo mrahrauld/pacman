@@ -12,6 +12,7 @@ define
    Window
    Canvas
    LIVES
+   COINS
    W
    H
    NW
@@ -23,6 +24,7 @@ define
    PacManDImg={QTk.newImage photo(url:MainURL#"/pacmanD.gif")}
    PacManLImg={QTk.newImage photo(url:MainURL#"/pacmanL.gif")}
    PacManRImg={QTk.newImage photo(url:MainURL#"/pacmanR.gif")}
+   WormholeImg={QTk.newImage photo(url:MainURL#"/wormhole.gif")}
    
    GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
    CoinImg={QTk.newImage photo(url:MainURL#"/yellow-coin.gif")}
@@ -52,6 +54,8 @@ define
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:GhostImg)}
       [] 4 then %Pacman
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManImg)}
+      [] 5 then %Pacman
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:WormholeImg)}
       []41 then
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManUImg)}
       []42 then
@@ -358,32 +362,42 @@ define
 
 
    
-   proc {CreateGame MAP}
+   fun {CreateGame MAP}
       CreateGhostStream
       CreateGhostPort = {NewPort CreateGhostStream}
+      NewMap
       GHOSTS
 
-      proc {CreateTable MAP ARITY}
+      proc {CreateTable MAP ARITY COINS}
+	 NewCoins1 NewCoins2 in
 	 case ARITY of H|T then
-	    {CreateLine MAP.H {Record.arity MAP.H} H}
-	    {CreateTable MAP T}
+	    {CreateLine MAP.H {Record.arity MAP.H} H NewCoins1}
+	    {CreateTable MAP T NewCoins2}
+	    COINS = NewCoins1 + NewCoins2
 	 else
-	    {Send CreateGhostPort nil} 
+	    {Send CreateGhostPort nil}
+	    COINS = 0
 	 end
       end
 
 
-      proc {CreateLine LINE ARITY Y}
+      proc {CreateLine LINE ARITY Y COINS}
+	 COINS2 NewCoins in
 	 case ARITY of X|T then
 	    {DrawBox LINE.X X Y}
-	    case LINE.X of 3 then %CreateGhost
+	    case LINE.X of 3 then %Launch Ghost
 	       {NewGhost X Y}
+	       COINS2 = 0
 	    [] 4 then %Launch Pacman
-	       thread {Pacman pos(4 X Y LIVES 0) Command} end
-	    else skip end
-	    {CreateLine LINE T Y}
+	       {NewPacman X Y}
+	       COINS2 = 0
+	    [] 0 then
+	       COINS2 = 1
+	    else COINS2 = 0 end
+	    {CreateLine LINE T Y NewCoins}
+	    COINS = COINS2 + NewCoins
 	 else
-	    skip
+	    COINS = 0
 	 end
 	 
       end
@@ -392,15 +406,32 @@ define
 	 {Send CreateGhostPort r(3 X Y)}
       end
 
+      proc {NewPacman X Y}
+	 {Send CreateGhostPort r(4 X Y)}
+	 thread {Pacman pos(4 X Y LIVES 0) Command} end
+      end
+
       proc {CreateGhost CreateGhostStream NGHOST}
 	 NewGHOST in
 	 case CreateGhostStream of r(C X Y)|T then
-	       {CreateGhost T NewGHOST}
+	    {CreateGhost T NewGHOST}
+	    case C of 3 then 
 	       NGHOST = r(C X Y)|NewGHOST
+	    else
+	       NGHOST = NewGHOST
+	    end
 	 [] nil|T then
 	       NGHOST = nil
 	 else
 	    skip
+	 end
+      end
+
+      fun {AdaptMap MapStream MAP}
+	 case MapStream of r(C X Y)|T then
+	       {AdaptMap T {ChangeMap MAP ~1 X Y}}
+	 [] nil|T then
+	    MAP
 	 end
       end
 
@@ -417,7 +448,10 @@ define
       
    in
 
-      thread  {CreateGhost CreateGhostStream GHOSTS} end
+      thread
+	 {CreateGhost CreateGhostStream GHOSTS}
+	 NewMap = {AdaptMap CreateGhostStream MAP}
+      end
 
       %Taille du tableau 
       {Record.width MAP NW}
@@ -441,12 +475,14 @@ define
 
       {Window show}
 
-      {CreateTable MAP {Record.arity MAP}}
+      {CreateTable MAP {Record.arity MAP} COINS}
 
       local GHOST2 in
 	 {CreateNilList {List.length GHOSTS} GHOST2}
 	 thread {Ghost GHOSTS GhostStream MAP GHOST2} end
       end
+
+      NewMap
  
    end
 
@@ -471,16 +507,15 @@ define
       Ghosts
       Ghosts2
       Ghosts3
+      NewMap
    in
       LIVES = LIVE
       %{Browse show}
       
-      {CreateGame MAP}
+      NewMap = {CreateGame MAP}
+      
+      {Map PacmanStream GhostPort MAP COINS 1 AlivePacmanStream}
 
-
-    
-      {Map PacmanStream GhostPort MAP 10 1 AlivePacmanStream}
-      {System.show 'testttttttt'}
    end
 
   
