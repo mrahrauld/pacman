@@ -108,14 +108,29 @@ define
 	    {DrawBox 42 NewX NewY}
 	 elseif OldY-NewY == 1 then
 	    {DrawBox 41 NewX NewY}
+	 else
+	    {DrawBox 4 NewX NewY}
 	 end
 	 NewMAP
 	 
       end
       
-      fun{MoveGhost GhostPort}
-	 Ack
-	 proc{MoveGhost2 OldStates NewStates}
+      fun{IsDead Lives OX OY NX NY OldGhost NewGhost}
+	 GOX GOY GNX GNY C C2 in
+	 case OldGhost of nil then Lives
+	 [] H|T then
+	    r(C GOX GOY) = H
+	    r(C2 GNX GNY) = NewGhost.1
+	    if GNX==NX andthen GNY==NY then % si les nouvelles positions sont les mêmes
+	       {IsDead Lives-1 OX OY NX NY OldGhost.2 NewGhost.2}
+	    elseif GNX==OX andthen GNY==OY andthen NX==GOX andthen NY==GOY then % S'ils se croisent
+	       {IsDead Lives-1 OX OY NX NY OldGhost.2 NewGhost.2}
+	    else
+	       {IsDead Lives OX OY NX NY OldGhost.2 NewGhost.2}
+	    end
+	 end
+      end
+      proc{MoveGhost OldStates NewStates}
 	    OldX OldY NewX NewY C C2 in
 	    case OldStates of nil then skip
 	    []H|T then
@@ -124,33 +139,41 @@ define
 	       {DrawBox ~1 OldX OldY}
 	       {DrawBox {GetElement OldX OldY MAP} OldX OldY}
 	       {DrawBox 3 NewX NewY}
-	       {MoveGhost2 OldStates.2 NewStates.2}
+	       {MoveGhost OldStates.2 NewStates.2}
 	    end
-	 end
-      in
-	 {Send GhostPort Ack}
-	 case Ack of O#N then
-	    {MoveGhost2 O N}	    
-	    Ack
-	 end
       end
-      
       fun{WaitStream OldMAP NewMAP MapStream GhostPort CoinCount NewCoinCount }
-	 NewCoins NewPos GhostPos in
+	 NewCoins NewPos GhostPos NX NY NewLives OldGhost NewGhost in
 	 case MapStream of H|T then
-	    GhostPos = {MoveGhost GhostPort}
+	    {Send GhostPort GhostPos}	 
+	    OldGhost#NewGhost=GhostPos
 	    
-	    case H of move(C OX OY DX DY Lives Coins)#Ack then
+	    case H of move(C OX OY DX DY OriginX OriginY Lives Coins)#Ack then
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
 	       case NewPos of r(NX NY) then
-		  Ack= pos(C NX NY Lives NewCoins)
-		  NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
-		  
+	       	  NewLives = {IsDead Lives OX OY NX NY OldGhost NewGhost}
+		  if NewLives==Lives then
+		     Ack= pos(C NX NY Lives NewCoins)
+		     NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
+		  else
+		     {System.show NewLives}
+		     Ack= pos(C OriginX OriginY NewLives NewCoins)
+		     NewMAP = {MovePacman OldMAP r(OX OY) r(OriginX OriginY)  CoinCount NewCoinCount Coins NewCoins} 
+		  end	  
 	       else
+	       	  NewLives = {IsDead Lives OX OY OX OY OldGhost NewGhost}
+		  if NewLives==Lives then
 		  NewMAP = MAP
 		  Ack = pos(C OX OY Lives Coins)
-		  NewCoinCount = Coins
+		     NewCoinCount = Coins
+		  else
+		     NewMAP = {MovePacman OldMAP r(OX OY) r(OriginX OriginY)  CoinCount NewCoinCount Coins NewCoins} 
+		     Ack = pos(C OriginX OriginY NewLives Coins)
+		     NewCoinCount = Coins
+		  end
 	       end
+	       
+	       {MoveGhost OldGhost NewGhost}
 	      
 	    end
 	    T
@@ -175,7 +198,7 @@ define
 
 	 pos(C X Y Lives Coins) = OldState
 	 case Command of r(DX DY)|T then
-	    {Send PacmanPort move(C X Y DX DY Lives Coins)#Ack}
+	    {Send PacmanPort move(C X Y DX DY 2 2 Lives Coins)#Ack}
 	    
 	    {Wait Ack} % Ack = pos(X Y Lives Coins)
 	    NewState = Ack
@@ -185,7 +208,9 @@ define
       NextCommand = {UserCommand Command MySelf MyNewState}
       case MyNewState of pos(C X Y Lives Coins) then
 	 if Lives \= 0 then
-	    {Pacman MyNewState NextCommand} 
+	    {Pacman MyNewState NextCommand}
+	 else
+	    skip
 	 end
       end
    end
@@ -374,7 +399,7 @@ define
       {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
-      MySelf = pos(4 2 2 3 0)
+      MySelf = pos(4 2 2 10 0)
       Ghosts = r(white 2 9)
       Ghosts2 = r(white 7 5)
       Ghosts3 = r(white 13 1)
