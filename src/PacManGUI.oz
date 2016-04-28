@@ -57,7 +57,6 @@ define
       r(DX DY) = Dir
       NewX = OldX + DX
       NewY = OldY + DY
-      {System.show {GetElement NewX NewY MAP}}
       
       if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	     false
@@ -77,6 +76,7 @@ define
 	 r(NewX NewY) = NewState
 
 	 case {GetElement NewX NewY MAP} of 0 then
+	    {System.show 'test8'}
 	    NewCoinCount = CoinCount-1
 	    NewCoins = Coins+1
 	    {DrawBox ~1 OldX OldY}
@@ -85,6 +85,7 @@ define
 	    
 	    NewMAP = {ChangeMap MAP ~1 NewX NewY}
 	 else
+	    {System.show 'test9'}
 	    NewMAP = MAP
 	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
 	    {DrawBox 4 NewX NewY}
@@ -102,13 +103,12 @@ define
 	       {System.show NewPos}
 	       case NewPos of r(NX NY) then
 		  {System.show 'test2'}
+		  {System.show r(OX OY)}
 		  NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
 		  {System.show NewMAP}
 		  Ack= pos(C NX NY Lives NewCoins)
 	       else
-		  {System.show 'teste'}
 		  NewMAP = MAP
-		  {System.show NewMAP}
 		  Ack = pos(C OX OY Lives Coins)
 	       end
 	    % [] CreateMap(M)#Ack|T then
@@ -134,20 +134,15 @@ define
 
       fun {UserCommand Command OldState NewState}
 	 X Y DX DY Ack Lives Coins C in
-	 {System.show 'AAA'}
 	 pos(C X Y Lives Coins) = OldState
 	 case Command of r(DX DY)|T then
-	    {System.show 'test-3'}
 	    {Send PacmanPort move(C X Y DX DY Lives Coins)#Ack}
-	    {System.show 'test-4'}
 	    {Wait Ack} % Ack = pos(X Y Lives Coins)
 	    NewState = Ack
 	    T
 	 end
       end in
-      {System.show 'test-1'}
       NextCommand = {UserCommand Command MySelf MyNewState}
-      {System.show 'test-5'}
       case MyNewState of pos(C X Y Lives Coins) then
 	 if Lives \= 0 then
 	    {Pacman MyNewState NextCommand} 
