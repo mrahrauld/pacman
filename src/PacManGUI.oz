@@ -296,8 +296,10 @@ define
       %Initialize ghosts and user
       MySelf = r(white 1 1)
       Ghosts = r(white 2 9)
+      Ghosts2 = r(white 7 5)
       %{InitLayout MySelf|Ghosts}
       thread {Ghost Ghosts GhostStream MAP nil} end
+      thread {Ghost Ghosts2 GhostStream MAP nil} end
       {Pacman MySelf Command MAP}
    end
 
