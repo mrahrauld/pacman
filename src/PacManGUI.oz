@@ -67,16 +67,6 @@ define
       NextMapStream
       NewMAP
       NewCoinCount
-      
-      % fun{Draw Number OldX OldY NewX NewY}
-      % 	 case Number
-      % 	 of 4 then {Drawbox -1 OldX OldY} {Drawbox 4 NewX NewY}
-	    
-      % 	 [] 3 then {Drawbox {GetElement OldX OldY MAP} OldX OldY} {Drawbox 3 NewX NewY}
-	   
-      % 	 end
-	 
-      % end
 
       fun {MovePacman MAP OldState NewState CoinCount NewCoinCount Coins NewCoins}
 	 NewX NewY OldX OldY  in
@@ -95,14 +85,6 @@ define
 	 end
       end
       
-      fun{Move MAP NX NY CoinCount NewCoinCount NewCoins Coins}
-	 if {GetElement NX NY OldMAP}==0
-	    NewCoinCount = CoinCount-1
-	    NewCoins = Coins+1;
-	    {ChangeMap MAP -1 NX NY}    
-	 end
-      end
-      
       fun{WaitStream OldMAP NewMAP MapStream CoinCount NewCoinCount}
 	 NewCoins in
 	 case MapStream of H|T then
@@ -110,9 +92,12 @@ define
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
 	       case NewPos of r(C NX NY) then
 		  
-		  NewMAP = {Move OldMap NX NY CoinCount NewCoinCount Ack NewCoins Coins}
-		  Ack= pos( NX NY lives NewCoins}
-	       [] false then
+		  NewMAP = {MovePacman OldMap r(OX OY) r(NX NY)  CoinCount NewCoinCount NewCoins Coins}
+		  Ack= pos(NX NY lives NewCoins}
+	       else
+		  NewMAP = MAP
+		  Ack = pos(OX OY lives Coins)
+			    
 		  
 
 	       	  % case C
