@@ -72,7 +72,7 @@ in
 
    %{System.show MAP}
 
-   {GUI.startGame MAP}
+   {GUI.startGame MAP LIVES}
    
    {Application.exit 0}
 end
