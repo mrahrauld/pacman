@@ -288,7 +288,7 @@ define
 
    fun {ChangeMap MAP C X Y}
       
-     {AdjoinList MAP [X#{AdjoinList MAP.Y [X#C]}]}
+     {AdjoinList MAP [Y#{AdjoinList MAP.Y [X#C]}]}
 
    end
 
