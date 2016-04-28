@@ -102,6 +102,7 @@ define
 	       else
 		  {System.show 'teste'}
 		  NewMAP = MAP
+		  {System.show NewMap}
 		  Ack = pos(C OX OY Lives Coins)
 	       end
 	    % [] CreateMap(M)#Ack|T then
