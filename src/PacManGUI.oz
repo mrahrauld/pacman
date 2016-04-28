@@ -341,7 +341,7 @@ define
 	 case CreateGhostStream of H|T then
 	    if H \= nil then 
 	       {CreateGhost T NewGHOST}
-	       NGHOST = H|NewGhost
+	       NGHOST = H|NewGHOST
 	    else
 	       NGHOST = nil
 	    end
