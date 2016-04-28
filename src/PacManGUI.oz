@@ -342,11 +342,14 @@ define
       proc {CreateGhost CreateGhostStream NGHOST}
 	 NewGHOST in
 	 case CreateGhostStream of r(C X Y)|T then
+	    {System.show 'nouv ghost'}
 	       {CreateGhost T NewGHOST}
 	       NGHOST = H|NewGHOST
 	 [] nil|T then
+	    {System.show 'nouv nil'}
 	       NGHOST = nil
 	 else
+	    {System.show 'test'}
 	    skip
 	 end
       end
