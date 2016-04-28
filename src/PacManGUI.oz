@@ -57,7 +57,7 @@ define
 	  NewX = OldX + DX
 	  NewY = OldY + DY
 	  
-	  if NewX<1 orelse NewX>(NW) orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
+	  if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	     false
 	  else
 	     r(NewX NewY)
@@ -92,6 +92,7 @@ define
 	    case H of move(C OX OY DX DY Lives Coins)#Ack then
 	       {System.show 'test1'}
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
+	       {System.show NewPos}
 	       case NewPos of r(NX NY) then
 		  {System.show 'test2'}
 		  NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
