@@ -143,7 +143,7 @@ define
 	    end
 	 end
       end
-      proc{MoveGhost OldStates NewStates}
+      proc{MoveGhost OldStates NewStates NX NY}
 	    OldX OldY NewX NewY C C2 in
 	    case OldStates of nil then skip
 	    []H|T then
@@ -151,6 +151,9 @@ define
 	       r(C NewX NewY) = NewStates.1
 	       {DrawBox ~1 OldX OldY}
 	       {DrawBox {GetElement OldX OldY MAP} OldX OldY}
+	       if  NX==OldX andthen NY==OldY then %Si pacman est juste derrier ghost
+		  {DrawBox 4 OldX OldY}
+	       end
 	       {DrawBox 3 NewX NewY}
 	       {MoveGhost OldStates.2 NewStates.2}
 	    end
@@ -166,27 +169,29 @@ define
 	       case NewPos of r(NX NY) then
 	       	  NewLives = {IsDead Lives OX OY NX NY OldGhost NewGhost}
 		  if NewLives==Lives then
-		     Ack= pos(C NX NY Lives NewCoins)
+		     Ack= pos(C NX NY OriginX OriginY Lives NewCoins)
 		     NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
 		  else
 		     {System.show NewLives}
-		     Ack= pos(C OriginX OriginY NewLives NewCoins)
+		     Ack= pos(C OriginX OriginY OriginX OriginY NewLives NewCoins)
 		     NewMAP = {MovePacman OldMAP r(OX OY) r(OriginX OriginY)  CoinCount NewCoinCount Coins NewCoins} 
 		  end	  
 	       else
+		  NX = OX
+		  NY = OY
 	       	  NewLives = {IsDead Lives OX OY OX OY OldGhost NewGhost}
 		  if NewLives==Lives then
 		  NewMAP = MAP
-		  Ack = pos(C OX OY Lives Coins)
+		  Ack = pos(C OX OY OriginX OriginY Lives Coins)
 		     NewCoinCount = Coins
 		  else
 		     NewMAP = {MovePacman OldMAP r(OX OY) r(OriginX OriginY)  CoinCount NewCoinCount Coins NewCoins} 
-		     Ack = pos(C OriginX OriginY NewLives Coins)
+		     Ack = pos(C OriginX OriginY OriginX OriginY NewLives Coins)
 		     NewCoinCount = Coins
 		  end
 	       end
 	       
-	       {MoveGhost OldGhost NewGhost}
+	       {MoveGhost OldGhost NewGhost NX NY}
 	      
 	    end
 	    T
