@@ -329,7 +329,10 @@ define
 	       thread {Pacman pos(4 X Y LIVES 0) Command} end
 	    else skip end
 	    {CreateLine LINE T Y}
+	 else
+	    skip
 	 end
+	 
       end
 
       proc {NewGhost X Y}
