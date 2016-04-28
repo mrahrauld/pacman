@@ -90,17 +90,35 @@ define
 	 NewMAP
 	 
       end
-      fun{WaitGhost GhostPort}
-	 Ack in
-	 {Send GhostPort Ack}
-	  {System.show 'Ack'} 
-	 {System.show Ack} 
+      
+      fun{MoveGhost GhostPort}
 	 Ack
+	 proc{MoveGhost2 OldStates NewStates}
+	    OldX OldY NewX NewY C C2 in
+	    case OldStates of nil then skip
+	    []H|T then
+	       r(C2 OldX OldY) = H
+	       r(C NewX NewY) = NewStates.1
+	       {DrawBox ~1 OldX OldY}
+	       {DrawBox {GetElement OldX OldY MAP} OldX OldY}
+	       {DrawBox 3 NewX NewY}
+	       {MoveGhost2 OldStates.2 NewStates.2}
+	    end
+	 end
+      in
+	 {Send GhostPort Ack}
+	 {System.show 'Ack'} 
+	 {System.show Ack}
+	 case Ack of O#N then
+	    {MoveGhost2 O N}	    
+	    Ack
+	 end
       end
+      
       fun{WaitStream OldMAP NewMAP MapStream GhostPort CoinCount NewCoinCount }
 	 NewCoins NewPos GhostPos in
 	 case MapStream of H|T then
-	    GhostPos = {WaitGhost GhostPort}
+	    GhostPos = {MoveGhost GhostPort}
 	    
 	    case H of move(C OX OY DX DY Lives Coins)#Ack then
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
@@ -164,11 +182,7 @@ define
    	 r(Color OldX OldY) = OldState.1
    	 r(DX DY) = H
    	 NewX = OldX + DX
-   	 NewY = OldY + DY
- 
-   	    {DrawBox black OldX OldY}
-   	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
-   	    {DrawBox 3 NewX NewY}
+   	 NewY = OldY +  DY
 	    r(Color NewX NewY)|{MoveGhost T OldState.2}
 	 end
        end
@@ -339,6 +353,7 @@ define
       MySelf
       Ghosts
       Ghosts2
+      Ghosts3
    in
       %{Browse show}
       
@@ -348,8 +363,10 @@ define
       MySelf = pos(4 2 2 3 0)
       Ghosts = r(white 2 9)
       Ghosts2 = r(white 7 5)
+      Ghosts3 = r(white 13 1)
+      
       %{InitLayout MySelf|Ghosts}
-      thread {Ghost [Ghosts Ghosts2] GhostStream MAP [nil nil]} end
+      thread {Ghost [Ghosts Ghosts2 Ghosts3] GhostStream MAP [nil nil nil]} end
       %thread {Ghost Ghosts2 GhostStream2 MAP nil} end
       thread {Map PacmanStream GhostPort MAP 10} end
       {Pacman MySelf Command}
