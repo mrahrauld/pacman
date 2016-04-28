@@ -129,29 +129,49 @@ define
 	 end
       in
 	 {Send GhostPort Ack}
-	 {System.show 'Ack'} 
-	 {System.show Ack}
 	 case Ack of O#N then
 	    {MoveGhost2 O N}	    
 	    Ack
 	 end
       end
+
+      % fun{DecountLives Lives OX OY NX NY GhostOld GhostNew}
+      % 	 GOX GOY GNX GNY C C2 in
+
+      % 	 case GhostOld of nil then Lives
+      % 	 [] H|T then
+      % 	    r(C GOX GOY) = GhostOld
+      % 	    r(C2 GNX GNY) = GhostNew
+      % 	    if NX==GNX andthen NY==GNY then
+
+      % 	    end
+	    
+      % 	 end
+	 
+      % end
       
       fun{WaitStream OldMAP NewMAP MapStream GhostPort CoinCount NewCoinCount }
-	 NewCoins NewPos GhostPos in
+	 NewCoins NewPos GhostPos NX NY NewLives in
 	 case MapStream of H|T then
 	    GhostPos = {MoveGhost GhostPort}
 	    
 	    case H of move(C OX OY DX DY Lives Coins)#Ack then
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
-	       case NewPos of r(NX NY) then
+	       case NewPos of r(X Y) then
+		  NX = X
+		  NY = Y
 		  NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
-		  Ack= pos(C NX NY Lives NewCoins)
+		  
 	       else
+		  NX = OX
+		  NY = OY
 		  NewMAP = MAP
-		  Ack = pos(C OX OY Lives Coins)
 		  NewCoinCount = Coins
-	       end	    
+	       end
+	       % case GhostPos of O#N then
+	       % 	  NewLives = {DecountLives Lives OX OY NX NY O N}
+	       % end
+	       Ack= pos(C NX NY Lives NewCoins)
 	    end
 	    T
 	 end
@@ -280,18 +300,11 @@ define
 	     end
 	  end
 	  in
-	      {System.show 'test'}
 	  case GhostStream of H|T then
 	     
-	     {System.show 'test1'}
 	     NewDir = {GhostCommand2 OldState LastDir}
-	     {System.show 'test2'}
 	     GhostNewState = {MoveGhost NewDir OldState}
-	     {System.show 'test3'}
-	     {System.show GhostNewState}
-	     {System.show OldState}
 	     H = OldState#GhostNewState
-	     {System.show 'test4'}
 	     T
    	 end
        end in
@@ -303,8 +316,6 @@ define
       end
       
       NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
-      {System.show NewDir}
-      {System.show GhostNewState}
        {Ghost GhostNewState NextGhostStream MAP NewDir}
    end
 
