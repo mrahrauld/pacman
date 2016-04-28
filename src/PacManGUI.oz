@@ -340,7 +340,7 @@ define
       proc {CreateTable MAP ARITY COINS}
 	 NewCoins1 NewCoins2 in
 	 case ARITY of H|T then
-	    {CreateLine MAP.H {Record.arity MAP.H} H}
+	    {CreateLine MAP.H {Record.arity MAP.H} H NewCoins1}
 	    {CreateTable MAP T NewCoins2}
 	    COINS = NewCoins1 + NewCoins2
 	 else
