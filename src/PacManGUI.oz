@@ -378,6 +378,7 @@ define
 	       NGHOST = r(C X Y)|NewGHOST
 	    else
 	       NGHOST = NewGHOST
+	    end
 	 [] nil|T then
 	       NGHOST = nil
 	 else
