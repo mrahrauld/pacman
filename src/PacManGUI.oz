@@ -388,11 +388,10 @@ define
 
       fun {AdaptMap MapStream MAP}
 	 case MapStream of r(C X Y)|T then
-	    {System.show r(C X Y)}
 	    case C of 3 then
-	       {AdaptMap MapStream {ChangeMap MAP ~1 X Y}}
+	       {AdaptMap T {ChangeMap MAP ~1 X Y}}
 	    else
-	       {AdaptMap MapStream {ChangeMap MAP 0 X Y}}
+	       {AdaptMap T {ChangeMap MAP 0 X Y}}
 	    end
 	 [] nil|T then
 	    MAP
