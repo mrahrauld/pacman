@@ -315,7 +315,7 @@ define
 	    {CreateLine MAP.H {Record.arity MAP.H} H}
 	    {CreateTable MAP T}
 	 else
-	    skip 
+	    {Send CreateGhostPort nil} 
 	 end
       end
 
@@ -336,22 +336,23 @@ define
 	 {Send CreateGhostPort r(3 X Y)}
       end
 
-      fun {CreateGhost CreateGhostStream NGHOST}
+      proc {CreateGhost CreateGhostStream NGHOST}
+	 NewGHOST in
 	 case CreateGhostStream of H|T then
 	    if H \= nil then 
-	       case NGHOST of nil then {CreateGhost T H}
-	       else
-		  {CreateGhost T NGHOST|H}
-	       end
+	       {CreateGhost T NewGHOST}
+	       NGHOST = H|NewGhost
 	    else
-	       NGHOST|nil
+	       NGHOST = nil
 	    end
 	 end
       end
       
    in
 
-      thread GHOSTS = {CreateGhost CreateGhostStream nil} end
+      thread  {CreateGhost CreateGhostStream GHOSTS} end
+
+      {System.show GHOSTS}
       
       %Taille du tableau 
       {Record.width MAP NW}
@@ -375,7 +376,7 @@ define
 
       {Window show}
 
-      {CreateTable MAP {Record.arity MAP} nil 0}
+      {CreateTable MAP {Record.arity MAP}}
       
 
    end
