@@ -76,21 +76,17 @@ define
 	 r(NewX NewY) = NewState
 
 	 case {GetElement NewX NewY MAP} of 0 then
+	    NewMAP = {ChangeMap MAP ~1 NewX NewY}
 	    NewCoinCount = CoinCount-1
 	    NewCoins = Coins+1
-	    {DrawBox ~1 OldX OldY}
-	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
-	    {DrawBox 4 NewX NewY}
-	    NewMAP = {ChangeMap MAP ~1 NewX NewY}
 	 else
-	    {System.show 'test9'}
 	    NewMAP = MAP
-	    {DrawBox ~1 OldX OldY}
-	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
-	    {DrawBox 4 NewX NewY}
 	    NewCoinCount = CoinCount
 	    NewCoins = Coins
 	 end
+	 {DrawBox ~1 OldX OldY}
+	 {DrawBox {GetElement OldX OldY MAP} OldX OldY}
+	 {DrawBox 4 NewX NewY}
 	 {Send GhostPort r(NewX NewY)}
 	 NewMAP
 	 
@@ -103,7 +99,6 @@ define
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
 	       {System.show NewPos}
 	       case NewPos of r(NX NY) then
-		  {System.show 'test2'}
 		  {System.show r(OX OY)}
 		  NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
 		  {System.show NewMAP}
@@ -112,10 +107,7 @@ define
 		  NewMAP = MAP
 		  Ack = pos(C OX OY Lives Coins)
 		  NewCoinCount = Coins
-	       end
-	    % [] CreateMap(M)#Ack|T then
-	       
-	    
+	       end	    
 	    end
 	    T
 	 end
