@@ -342,6 +342,7 @@ define
 	 case ARITY of H|T then
 	    {CreateLine MAP.H {Record.arity MAP.H} H NewCoins1}
 	    {CreateTable MAP T NewCoins2}
+	    {System.show 'test1'}
 	    COINS = NewCoins1 + NewCoins2
 	 else
 	    {Send CreateGhostPort nil}
@@ -363,6 +364,7 @@ define
 	    [] 0 then
 	       COINS2 = 1
 	    else skip end
+	    {System.show 'test2'}
 	    {CreateLine LINE T Y NewCoins}
 	    COINS = COINS2 + NewCoins
 	 else
