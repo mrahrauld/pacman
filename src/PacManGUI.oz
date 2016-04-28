@@ -134,44 +134,24 @@ define
 	    Ack
 	 end
       end
-
-      % fun{DecountLives Lives OX OY NX NY GhostOld GhostNew}
-      % 	 GOX GOY GNX GNY C C2 in
-
-      % 	 case GhostOld of nil then Lives
-      % 	 [] H|T then
-      % 	    r(C GOX GOY) = GhostOld
-      % 	    r(C2 GNX GNY) = GhostNew
-      % 	    if NX==GNX andthen NY==GNY then
-
-      % 	    end
-	    
-      % 	 end
-	 
-      % end
       
       fun{WaitStream OldMAP NewMAP MapStream GhostPort CoinCount NewCoinCount }
-	 NewCoins NewPos GhostPos NX NY NewLives in
+	 NewCoins NewPos GhostPos in
 	 case MapStream of H|T then
 	    GhostPos = {MoveGhost GhostPort}
 	    
 	    case H of move(C OX OY DX DY Lives Coins)#Ack then
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
-	       case NewPos of r(X Y) then
-		  NX = X
-		  NY = Y
+	       case NewPos of r(NX NY) then
+		  Ack= pos(C NX NY Lives NewCoins)
 		  NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
 		  
 	       else
-		  NX = OX
-		  NY = OY
 		  NewMAP = MAP
+		  Ack = pos(C OX OY Lives Coins)
 		  NewCoinCount = Coins
 	       end
-	       % case GhostPos of O#N then
-	       % 	  NewLives = {DecountLives Lives OX OY NX NY O N}
-	       % end
-	       Ack= pos(C NX NY Lives NewCoins)
+	      
 	    end
 	    T
 	 end
@@ -316,6 +296,7 @@ define
       end
       
       NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
+
        {Ghost GhostNewState NextGhostStream MAP NewDir}
    end
 
