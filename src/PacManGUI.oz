@@ -507,12 +507,12 @@ define
       Ghosts
       Ghosts2
       Ghosts3
-      NewMap
+      NewMAP
    in
       LIVES = LIVE
       %{Browse show}
       
-      NewMap = {CreateGame MAP}
+      NewMAP = {CreateGame MAP}
       
       {Map PacmanStream GhostPort NewMAP COINS 1 AlivePacmanStream}
 

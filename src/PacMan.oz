@@ -41,7 +41,7 @@ define
 	r(0 1 1 1 1 1 1 1 1 1 1 1 1 1 0)
 	r(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
 	r(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1))
-   LIVES    = 1
+   LIVES    = 20
 
    %% For feedback
    Say    = System.showInfo
