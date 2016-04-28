@@ -355,6 +355,7 @@ define
 
       thread  {CreateGhost CreateGhostStream GHOSTS} end
 
+      {Wait GHOSTS}
       {System.show GHOSTS}
       
       %Taille du tableau 
