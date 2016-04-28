@@ -360,7 +360,7 @@ define
 	    [] 4 then %Launch Pacman
 	       {NewPacman X Y}
 	       COINS2 = 1
-	    [] 0
+	    [] 0 then
 	       COINS2 = 1
 	    else skip end
 	    {CreateLine LINE T Y NewCoins}
