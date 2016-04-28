@@ -77,6 +77,24 @@ define
       % 	 end
 	 
       % end
+
+      fun {MovePacman MAP OldState NewState CoinCount NewCoinCount Coins NewCoins}
+	 NewX NewY OldX OldY  in
+	 r(OldX OldY) = OldState
+	 r(NewX NewY) = NewState
+
+	 case {GetElement NX NY MAP} of 0
+	    NewCoinCount = CoinCount-1
+	    NewCoins = Coins+1;
+	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
+	    {DrawBox 4 NewX NewY}
+	    {Send GhostPort r(NewX NewY)}
+	    {ChangeMap MAP -1 NX NY}
+	 else
+	    MAP
+	 end
+      end
+      
       fun{Move MAP NX NY CoinCount NewCoinCount NewCoins Coins}
 	 if {GetElement NX NY OldMAP}==0
 	    NewCoinCount = CoinCount-1
@@ -126,19 +144,8 @@ define
 
       MyNewState
       NextCommand
-      
-      fun {MovePacman OldState NewState}
-	 NewX NewY OldX OldY  in
-	 r(OldX OldY) = OldState
-	 r(NewX NewY) = Movement
-	    {DrawBox black OldX OldY}
-	    {DrawBox 4 NewX NewY}
-	    {Send GhostPort r(NewX NewY)} 
-	    r(Type NewX NewY)
-	 end
-       end
 
-       fun {UserCommand Command OldState NewState}
+      fun {UserCommand Command OldState NewState}
 	  X Y Ack in
 	  r(C X Y) = OldState
 	 case Command of r(DX DY)|T then
