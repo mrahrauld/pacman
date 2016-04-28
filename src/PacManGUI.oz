@@ -50,12 +50,15 @@ define
    end
 
    fun {MouvementIsAvailable OldState Dir MAP}
-	  NewX NewY DX DY OldX OldY Color 
-	  r(Color OldX OldY) = OldState
+      NewX NewY DX DY OldX OldY Color 
+      r(Color OldX OldY) = OldState
    in
-	  r(DX DY) = Dir
-	  NewX = OldX + DX
-	  NewY = OldY + DY
+      
+      r(DX DY) = Dir
+      NewX = OldX + DX
+      NewY = OldY + DY
+      {System.show NewX}
+      {System.show NewY}
       if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	     false
 	  else
