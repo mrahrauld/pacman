@@ -85,6 +85,7 @@ define
 	 else
 	    {System.show 'test9'}
 	    NewMAP = MAP
+	    {DrawBox ~1 OldX OldY}
 	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
 	    {DrawBox 4 NewX NewY}
 	    NewCoinCount = CoinCount
