@@ -343,11 +343,9 @@ define
 	 NewGHOST in
 	 case CreateGhostStream of H|T then
 	    if H \= nil then
-	       {System.show 'newgost'}
 	       {CreateGhost T NewGHOST}
 	       NGHOST = H|NewGHOST
 	    else
-	       {System.show 'fin gohst'}
 	       NGHOST = nil
 	    end
 	 end
@@ -355,10 +353,11 @@ define
       
    in
 
-      thread  {CreateGhost CreateGhostStream GHOSTS} end
+      thread  {CreateGhost CreateGhostStream GHOSTS}
+	 {System.show GHOSTS}
+      end
 
-      {Wait GHOSTS}
-      {System.show GHOSTS}
+      
       
       %Taille du tableau 
       {Record.width MAP NW}
