@@ -448,7 +448,8 @@ define
 
       {Window show}
 
-      {CreateTable MAP {Record.arity MAP}}
+      {CreateTable MAP {Record.arity MAP} COINS}
+      {System.show COINS}
 
       local GHOST2 in
 	 {CreateNilList {List.length GHOSTS} GHOST2}
