@@ -53,13 +53,10 @@ define
 	  NewX NewY DX DY OldX OldY Color 
 	  r(Color OldX OldY) = OldState
    in
-      
 	  r(DX DY) = Dir
 	  NewX = OldX + DX
 	  NewY = OldY + DY
-	  {System.show 'test9'}
       if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
-	 {System.show 'test10'}
 	     false
 	  else
 	     
@@ -91,9 +88,7 @@ define
       fun{WaitStream OldMAP NewMAP MapStream CoinCount NewCoinCount}
 	 NewCoins NewPos in
 	 case MapStream of H|T then
-	    {System.show 'test0'}
 	    case H of move(C OX OY DX DY Lives Coins)#Ack then
-	       {System.show 'test1'}
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
 	       {System.show NewPos}
 	       case NewPos of r(NX NY) then
@@ -130,7 +125,7 @@ define
 	 X Y DX DY Ack Lives Coins C in
 	 {System.show 'AAA'}
 	 pos(C X Y Lives Coins) = OldState
-	 case Command of H|T then
+	 case Command of r(DX DY)|T then
 	    {System.show 'test-3'}
 	    {Send PacmanPort move(C X Y DX DY Lives Coins)#Ack}
 	    {System.show 'test-4'}
