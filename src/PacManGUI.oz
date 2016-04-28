@@ -53,14 +53,16 @@ define
 	  NewX NewY DX DY OldX OldY Color 
 	  r(Color OldX OldY) = OldState
    in
-      {System.show 'test9'}
+      
 	  r(DX DY) = Dir
 	  NewX = OldX + DX
 	  NewY = OldY + DY
-	  
-	  if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
+	  {System.show 'test9'}
+      if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
+	 {System.show 'test10'}
 	     false
 	  else
+	     
 	     r(NewX NewY)
 	  end 
    end
