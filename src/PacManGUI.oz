@@ -288,6 +288,7 @@ define
    proc {StartGame MAP}
       MySelf
       Ghosts
+      Ghosts2
    in
       %{Browse show}
       
