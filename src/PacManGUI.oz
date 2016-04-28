@@ -314,7 +314,7 @@ define
       %thread {Ghost Ghosts GhostStream MAP nil} end
       %thread {Ghost Ghosts2 GhostStream MAP nil} end
       thread {Map PacmanStream MAP 10} end
-      thread {Pacman MySelf Command} end
+      {Pacman MySelf Command}
    end
 
   
