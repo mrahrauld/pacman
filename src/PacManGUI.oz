@@ -24,6 +24,7 @@ define
    PacManDImg={QTk.newImage photo(url:MainURL#"/pacmanD.gif")}
    PacManLImg={QTk.newImage photo(url:MainURL#"/pacmanL.gif")}
    PacManRImg={QTk.newImage photo(url:MainURL#"/pacmanR.gif")}
+   WormholeImg={QTk.newImage photo(url:MainURL#"/wormhole.gif")}
    
    GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
    CoinImg={QTk.newImage photo(url:MainURL#"/yellow-coin.gif")}
@@ -51,6 +52,8 @@ define
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:GhostImg)}
       [] 4 then %Pacman
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManImg)}
+      [] 5 then %Pacman
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:WormholeImg)}
       []41 then
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManUImg)}
       []42 then
@@ -342,7 +345,6 @@ define
 	 case ARITY of H|T then
 	    {CreateLine MAP.H {Record.arity MAP.H} H NewCoins1}
 	    {CreateTable MAP T NewCoins2}
-	    {System.show 'test1'}
 	    COINS = NewCoins1 + NewCoins2
 	 else
 	    {Send CreateGhostPort nil}
@@ -355,7 +357,7 @@ define
 	 COINS2 NewCoins in
 	 case ARITY of X|T then
 	    {DrawBox LINE.X X Y}
-	    case LINE.X of 3 then %CreateGhost
+	    case LINE.X of 3 then %Launch Ghost
 	       {NewGhost X Y}
 	       COINS2 = 0
 	    [] 4 then %Launch Pacman
@@ -364,12 +366,9 @@ define
 	    [] 0 then
 	       COINS2 = 1
 	    else COINS2 = 0 end
-	    {System.show 'test2'}
 	    {CreateLine LINE T Y NewCoins}
-	    {System.show 'test3'}
 	    COINS = COINS2 + NewCoins
 	 else
-	    {System.show 'test4'}
 	    COINS = 0
 	 end
 	 
@@ -453,7 +452,6 @@ define
       {Window show}
 
       {CreateTable MAP {Record.arity MAP} COINS}
-      {System.show COINS}
 
       local GHOST2 in
 	 {CreateNilList {List.length GHOSTS} GHOST2}
@@ -492,7 +490,7 @@ define
       
       NewMap = {CreateGame MAP}
       
-      {Map PacmanStream GhostPort NewMap 10}
+      {Map PacmanStream GhostPort NewMap COINS}
 
       {System.show 'Jeu fini'}
    end
