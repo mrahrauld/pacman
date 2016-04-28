@@ -330,9 +330,10 @@ define
 
 
    
-   proc {CreateGame MAP}
+   fun {CreateGame MAP}
       CreateGhostStream
       CreateGhostPort = {NewPort CreateGhostStream}
+      NewMap
       GHOSTS
 
       proc {CreateTable MAP ARITY}
@@ -351,7 +352,7 @@ define
 	    case LINE.X of 3 then %CreateGhost
 	       {NewGhost X Y}
 	    [] 4 then %Launch Pacman
-	       thread {Pacman pos(4 X Y LIVES 0) Command} end
+	       {NewPacman X Y}
 	    else skip end
 	    {CreateLine LINE T Y}
 	 else
@@ -364,13 +365,35 @@ define
 	 {Send CreateGhostPort r(3 X Y)}
       end
 
+      proc {NewPacman X Y}
+	 {Send CreateGhostPort r(4 X Y)}
+	 thread {Pacman pos(4 X Y LIVES 0) Command} end
+      end
+
       proc {CreateGhost CreateGhostStream NGHOST}
 	 NewGHOST in
 	 case CreateGhostStream of r(C X Y)|T then
-	       {CreateGhost T NewGHOST}
+	    {CreateGhost T NewGHOST}
+	    case C of 3 then 
 	       NGHOST = r(C X Y)|NewGHOST
+	    else
+	       NGHOST = NewGHOST
 	 [] nil|T then
 	       NGHOST = nil
+	 else
+	    skip
+	 end
+      end
+
+      fun {AdaptMap MapStream MAP}
+	 case MapStream of r(C X Y)|T then
+	    case C of 3 then
+	       {AdaptMap MapStream {ChangeMap MAP ~1 X Y}}
+	    else
+	       {AdaptMap MapStream {ChangeMap MAP 0 X Y}}
+	    end
+	 [] nil|T then
+	       MAP
 	 else
 	    skip
 	 end
@@ -389,7 +412,10 @@ define
       
    in
 
-      thread  {CreateGhost CreateGhostStream GHOSTS} end
+      thread
+	 {CreateGhost CreateGhostStream GHOSTS}
+	 NewMap = {AdaptMap MapStream MAP}
+      end
 
       %Taille du tableau 
       {Record.width MAP NW}
@@ -419,6 +445,8 @@ define
 	 {CreateNilList {List.length GHOSTS} GHOST2}
 	 thread {Ghost GHOSTS GhostStream MAP GHOST2} end
       end
+
+      NewMap
  
    end
 
@@ -443,15 +471,16 @@ define
       Ghosts
       Ghosts2
       Ghosts3
+      NewMap
    in
       LIVES = LIVE
       %{Browse show}
       
-      {CreateGame MAP}
+      NewMap = {CreateGame MAP}
+      
+      {Map PacmanStream GhostPort NewMap 10}
 
-
-    
-      {Map PacmanStream GhostPort MAP 10} 
+      {System.show 'Jeu fini'}
    end
 
   
