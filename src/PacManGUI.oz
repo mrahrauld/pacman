@@ -33,19 +33,19 @@ define
    
    proc{DrawBox Number X Y}
       case Number of 0 then  %Empty case
-	 {Canvas create(image X*WidthCell + WidthCell div 2 Y*HeightCell + HeightCell div 2   image:CoinImg)}
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:CoinImg)}
       [] -1 then
-	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:black outline:black)}
+	 {Canvas create(rect (X-1)*WidthCell (Y-1)*HeightCell (X-1)*WidthCell+WidthCell (Y-1)*HeightCell+HeightCell fill:black outline:black)}
       [] 1 then %Wall
-	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:white outline:black)}
+	 {Canvas create(rect (X-1)*WidthCell (Y-1)*HeightCell (X-1)*WidthCell+WidthCell (Y-1)*HeightCell+HeightCell fill:white outline:black)}
       [] 2 then %Power pellets
 	 skip
       [] 3 then %Ghost
-	 {Canvas create(image X*WidthCell + WidthCell div 2 Y*HeightCell + HeightCell div 2   image:GhostImg)}
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:GhostImg)}
       [] 4 then %Pacman
-	 {Canvas create(image X*WidthCell + WidthCell div 2  Y*HeightCell + HeightCell div 2    image:PacManImg)}
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManImg)}
       else %Whorhole
-	 {Canvas create(rect X*WidthCell Y*HeightCell X*WidthCell+WidthCell Y*HeightCell+HeightCell fill:black outline:black)}
+	 {Canvas create(rect (X-1)*WidthCell (Y-1)*HeightCell (X-1)*WidthCell+WidthCell (Y-1)*HeightCell+HeightCell fill:black outline:black)}
       end
    end
 
@@ -57,10 +57,10 @@ define
 	  NewX = OldX + DX
 	  NewY = OldY + DY
 	  
-	  if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
+	  if NewX<1 orelse NewX>(NW) orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	     false
 	  else
-	     true
+	     r(Color NewX NewY)
 	  end 
    end
    fun {Map MapStream MAP CoinCount}
@@ -115,7 +115,7 @@ define
 	 r(DX DY) = Movement
 	 NewX = OldX + DX
 	 NewY = OldY + DY
-	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
+	 if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	    r(Type OldX OldY)
 	 else
 	    {DrawBox black OldX OldY}
@@ -149,7 +149,7 @@ define
 	 r(DX DY) = Movement
 	 NewX = OldX + DX
 	 NewY = OldY + DY
-	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
+	 if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	    r(Color OldX OldY)
 	 else
 	    {DrawBox black OldX OldY}
@@ -256,7 +256,7 @@ define
 
    proc {CreateTable MAP ARITY}
       case ARITY of H|T then
-	 {CreateLine MAP.H {Record.arity MAP.H} H-1}
+	 {CreateLine MAP.H {Record.arity MAP.H} H}
 	 {CreateTable MAP T}
       else
 	 skip
@@ -265,7 +265,7 @@ define
 
    proc {CreateLine LINE ARITY Y}
       case ARITY of H|T then
-	 {DrawBox LINE.H H-1 Y}
+	 {DrawBox LINE.H H Y}
 	 {CreateLine LINE T Y}
       else
 	 skip
@@ -274,11 +274,11 @@ define
 
    fun {GetElement X Y MAP}
       Line in
-      if X > (NW - 1) orelse X < 0 orelse Y > (NH - 1) orelse Y < 0 then
+      if X > NW orelse X < 1 orelse Y > NH orelse Y < 1 then
 	 MAP
       else
-	 Line = MAP.(Y+1)
-	 Line.(X+1)
+	 Line = MAP.Y
+	 Line.X
       end
    end
    
