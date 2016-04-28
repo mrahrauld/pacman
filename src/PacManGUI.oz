@@ -34,7 +34,7 @@ define
    proc{DrawBox Number X Y}
       case Number of 0 then  %Empty case
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:CoinImg)}
-      [] -1 then
+      [] ~1 then
 	 {Canvas create(rect (X-1)*WidthCell (Y-1)*HeightCell (X-1)*WidthCell+WidthCell (Y-1)*HeightCell+HeightCell fill:black outline:black)}
       [] 1 then %Wall
 	 {Canvas create(rect (X-1)*WidthCell (Y-1)*HeightCell (X-1)*WidthCell+WidthCell (Y-1)*HeightCell+HeightCell fill:white outline:black)}
@@ -79,7 +79,7 @@ define
 	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
 	    {DrawBox 4 NewX NewY}
 	    {Send GhostPort r(NewX NewY)}
-	    {ChangeMap MAP -1 NX NY}
+	    {ChangeMap MAP ~1 NX NY}
 	 else
 	    MAP
 	 end
