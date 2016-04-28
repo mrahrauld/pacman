@@ -392,7 +392,7 @@ define
 
       local GHOST2 in
 	 {CreateNilList {List.length GHOSTS} GHOST2}
-	 {System.show GHOST2}
+	 thread {Ghost GHOSTS GhostStream MAP GHOST2} end
       end
  
    end
@@ -431,7 +431,7 @@ define
       Ghosts3 = r(white 13 1)
       
       %{InitLayout MySelf|Ghosts}
-      thread {Ghost [Ghosts Ghosts2 Ghosts3] GhostStream MAP [nil nil nil]} end
+      %thread {Ghost [Ghosts Ghosts2 Ghosts3] GhostStream MAP [nil nil nil]} end
       %thread {Ghost Ghosts2 GhostStream2 MAP nil} end
       thread {Map PacmanStream GhostPort MAP 10} end
       {Pacman MySelf Command}
