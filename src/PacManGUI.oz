@@ -353,12 +353,8 @@ define
       
    in
 
-      thread  {CreateGhost CreateGhostStream GHOSTS}
-	 {System.show GHOSTS}
-      end
+      thread  {CreateGhost CreateGhostStream GHOSTS} end
 
-      
-      
       %Taille du tableau 
       {Record.width MAP NW}
       {Record.width MAP NH}
@@ -382,6 +378,8 @@ define
       {Window show}
 
       {CreateTable MAP {Record.arity MAP}}
+
+      {System.show {List.length GHOSTS}}
       
 
    end
