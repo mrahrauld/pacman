@@ -79,6 +79,7 @@ define
 	 case {GetElement NewX NewY MAP} of 0 then
 	    NewCoinCount = CoinCount-1
 	    NewCoins = Coins+1
+	    {DrawBox ~1 OldX OldY}
 	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
 	    {DrawBox 4 NewX NewY}
 	    {Send GhostPort r(NewX NewY)}
