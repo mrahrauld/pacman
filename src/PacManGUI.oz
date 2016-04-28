@@ -69,18 +69,18 @@ define
       NextCommand
       
        fun {MoveTo Movement OldState}
-	 NewX NewY DX DY OldX OldY Color  in
-	 r(Color OldX OldY) = OldState
+	 NewX NewY DX DY OldX OldY Type  in
+	 r(Type OldX OldY) = OldState
 	 r(DX DY) = Movement
 	 NewX = OldX + DX
 	 NewY = OldY + DY
 	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
-	    r(Color OldX OldY)
+	    r(Type OldX OldY)
 	 else
 	    {DrawBox black OldX OldY}
 	    {DrawBox 4 NewX NewY}
 	    {Send GhostPort r(NewX NewY)} 
-	    r(Color NewX NewY)
+	    r(Type NewX NewY)
 	 end
        end
 
@@ -101,7 +101,7 @@ define
       NextGhostStream
       NewDir
       LastDir
-      
+
        fun {MoveTo Movement OldState}
 	 NewX NewY DX DY OldX OldY Color  in
 	 r(Color OldX OldY) = OldState
@@ -118,6 +118,9 @@ define
 	 end
        end
 
+       %
+       % Regarde si une autre direction est disponible pour le Ghost
+       %
        fun {OtherDirAvailaible State LastDir}
        	  if LastDir \= r(1 0) andthen LastDir \= r(~1 0) andthen {MouvementIsAvailable State r(1 0) MAP} then
        	     true
@@ -133,6 +136,9 @@ define
        end
        
 
+       %
+       % Choisit une nouvelle direction pour le Ghost
+       %
        fun {NewDirection OldState}
 	  Dir = {Int.'mod' {OS.rand} 4}
 	  NewX NewY DX DY OldX OldY Color
@@ -145,7 +151,6 @@ define
 	  else
 	    r(DX DY) = r(0 ~1)
 	  end
-	  
 	  NewX = OldX + DX
 	  NewY = OldY + DY
 	  
@@ -178,55 +183,6 @@ define
        NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
        {Ghost GhostNewState NextGhostStream MAP NewDir}
    end
-
-   % proc{GameBis MySelf Ghosts Command MAP}
-   %    MyNewState
-   %    NextCommand
-   %    GhostNewStates
-   %    GhostNewStates1
-
-   %    fun {MoveTo Movement OldState}
-   % 	 NewX NewY DX DY OldX OldY Color  in
-   % 	 r(Color OldX OldY) = OldState
-   % 	 r(DX DY) = Movement
-   % 	 NewX = OldX + DX
-   % 	 NewY = OldY + DY
-   % 	 if NewX<0 orelse NewX>(NW-1) orelse NewY<0 orelse NewY>(NH-1) orelse {GetElement NewX NewY MAP} == 1 then
-   % 	    r(Color OldX OldY)
-   % 	 else
-   % 	    {DrawBox black OldX OldY}
-   % 	    {DrawBox 4 NewX NewY}
-   % 	    r(Color NewX NewY)
-   % 	 end
-   %    end
-      
-   %    fun {MoveAll OldState NewState}
-   % 	 Dir
-   %       in
-   % 	 case OldState
-   % 	 of Old|T then
-   % 	    Dir = {Int.'mod' {OS.rand} 4}
-   % 	    case Dir of 0 then
-   % 	       {MoveAll T {MoveTo r(~1 0) Old}|NewState}
-   % 	       [] 1 then {MoveAll T  {MoveTo r(0 1) Old}|NewState}
-   % 	       [] 2 then {MoveAll T  {MoveTo r(1 0) Old}|NewState}
-   % 	       [] 3 then {MoveAll T  {MoveTo r(0 ~1) Old}|NewState}
-   % 	    end
-   % 	 [] nil then  NewState
-   % 	 end
-   %    end
-   %    fun {UserCommand Command OldState NewState}
-   % 	 case Command of r(DX DY)|T then
-   % 	    NewState = {MoveTo r(DX DY) OldState}
-   % 	    T
-   % 	 end
-   %    end
-   % in
-   %    NextCommand = {UserCommand Command MySelf MyNewState}
-   %    GhostNewStates = {MoveAll Ghosts nil}
-   %    GhostNewStates1 = {MoveAll GhostNewStates nil}
-   %    {GameBis MyNewState GhostNewStates1 NextCommand MAP}
-   % end
 
    proc {CreateGame MAP}
 
