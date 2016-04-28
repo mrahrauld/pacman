@@ -388,6 +388,7 @@ define
 
       fun {AdaptMap MapStream MAP}
 	 case MapStream of r(C X Y)|T then
+	    {System.show 'test'}
 	    case C of 3 then
 	       {AdaptMap MapStream {ChangeMap MAP ~1 X Y}}
 	    else
@@ -414,7 +415,6 @@ define
       thread
 	 {CreateGhost CreateGhostStream GHOSTS}
 	 NewMap = {AdaptMap CreateGhostStream MAP}
-	 {System.show 'Fin'}
       end
 
       %Taille du tableau 
