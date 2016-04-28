@@ -52,14 +52,14 @@ define
    fun {MouvementIsAvailable OldState Dir MAP}
 	  NewX NewY DX DY OldX OldY Color 
 	  r(Color OldX OldY) = OldState
-	  in
+   in
 	  r(DX DY) = Dir
 	  NewX = OldX + DX
 	  NewY = OldY + DY
-	  
-	  if NewX<1 orelse NewX>(NW) orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
+      if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	     false
 	  else
+	     
 	     r(NewX NewY)
 	  end 
    end
@@ -88,10 +88,9 @@ define
       fun{WaitStream OldMAP NewMAP MapStream CoinCount NewCoinCount}
 	 NewCoins NewPos in
 	 case MapStream of H|T then
-	    {System.show 'test0'}
 	    case H of move(C OX OY DX DY Lives Coins)#Ack then
-	       {System.show 'test1'}
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
+	       {System.show NewPos}
 	       case NewPos of r(NX NY) then
 		  {System.show 'test2'}
 		  NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
