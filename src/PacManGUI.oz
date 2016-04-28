@@ -342,10 +342,12 @@ define
       proc {CreateGhost CreateGhostStream NGHOST}
 	 NewGHOST in
 	 case CreateGhostStream of H|T then
-	    if H \= nil then 
+	    if H \= nil then
+	       {System.show 'newgost'}
 	       {CreateGhost T NewGHOST}
 	       NGHOST = H|NewGHOST
 	    else
+	       {System.show 'fin gohst'}
 	       NGHOST = nil
 	    end
 	 end
