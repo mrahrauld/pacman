@@ -351,12 +351,12 @@ define
 	 end
       end
 
-      proc {CreateNilLis N NilList}
+      proc {CreateNilList N NilList}
 	 NewNilList in
 	 if N == 0 then
 	    NilList = nil
 	 else
-	    nil|{CreateNilLis N-1 NewNilList}
+	    NilList = nil|{CreateNilList N-1 NewNilList}
 	 end
       end
       
@@ -390,7 +390,7 @@ define
       {CreateTable MAP {Record.arity MAP}}
 
       local GHOST2 in
-	 {CreateNilLis {List.length GHOSTS} GHOST2}
+	 {CreateNilList {List.length GHOSTS} GHOST2}
 	 {System.show GHOST2}
       end
  
