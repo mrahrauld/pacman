@@ -18,6 +18,11 @@ define
    NCoinInit
    MainURL={OS.getCWD}
    PacManImg={QTk.newImage photo(url:MainURL#"/pacman.gif")}
+   PacManUImg={QTk.newImage photo(url:MainURL#"/pacmanU.gif")}
+   PacManDImg={QTk.newImage photo(url:MainURL#"/pacmanD.gif")}
+   PacManLImg={QTk.newImage photo(url:MainURL#"/pacmanL.gif")}
+   PacManRImg={QTk.newImage photo(url:MainURL#"/pacmanR.gif")}
+   
    GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
    CoinImg={QTk.newImage photo(url:MainURL#"/yellow-coin.gif")}
    WidthCell=40
@@ -44,6 +49,14 @@ define
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:GhostImg)}
       [] 4 then %Pacman
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManImg)}
+      []41 then
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManUImg)}
+      []42 then
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManDImg)}
+      []43 then
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManLImg)}
+      []44 then
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManRImg)}
       else %Whorhole
 	 {Canvas create(rect (X-1)*WidthCell (Y-1)*HeightCell (X-1)*WidthCell+WidthCell (Y-1)*HeightCell+HeightCell fill:black outline:black)}
       end
@@ -86,7 +99,16 @@ define
 	 end
 	 {DrawBox ~1 OldX OldY}
 	 {DrawBox {GetElement OldX OldY MAP} OldX OldY}
-	 {DrawBox 4 NewX NewY}
+	 {DrawBox ~1 NewX NewY}
+	 if OldX-NewX == ~1 then
+	    {DrawBox 44 NewX NewY}
+	 elseif OldX-NewX == 1 then
+	    {DrawBox 43 NewX NewY}
+	 elseif OldY-NewY == ~1 then
+	    {DrawBox 42 NewX NewY}
+	 elseif OldY-NewY == 1 then
+	    {DrawBox 41 NewX NewY}
+	 end
 	 NewMAP
 	 
       end
