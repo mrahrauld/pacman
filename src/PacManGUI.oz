@@ -60,7 +60,7 @@ define
 	  if NewX<1 orelse NewX>(NW) orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	     false
 	  else
-	     r(Color NewX NewY)
+	     r(NewX NewY)
 	  end 
    end
    proc {Map MapStream MAP CoinCount}
@@ -88,15 +88,18 @@ define
       fun{WaitStream OldMAP NewMAP MapStream CoinCount NewCoinCount}
 	 NewCoins NewPos in
 	 case MapStream of H|T then
-	    case H of move(C OX OY DX DY Lives Coins)#Ack|T then
+	    {System.show 'test0'}
+	    case H of move(C OX OY DX DY Lives Coins)#Ack then
+	       {System.show 'test1'}
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
-	       case NewPos of r(C NX NY) then
-		  
+	       case NewPos of r(NX NY) then
+		  {System.show 'test2'}
 		  NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
-		  Ack= pos(NX NY Lives NewCoins)
+		  Ack= pos(C NX NY Lives NewCoins)
 	       else
+		  {System.show 'teste'}
 		  NewMAP = MAP
-		  Ack = pos(OX OY Lives Coins)
+		  Ack = pos(C OX OY Lives Coins)
 	       end
 	    % [] CreateMap(M)#Ack|T then
 	       
@@ -120,17 +123,21 @@ define
       NextCommand
 
       fun {UserCommand Command OldState NewState}
-	  X Y Ack Lives Coins C in
-	  pos(C X Y Lives Coins) = OldState
-	 case Command of r(DX DY)|T then
+	 X Y DX DY Ack Lives Coins C in
+	 {System.show 'AAA'}
+	 pos(C X Y Lives Coins) = OldState
+	 case Command of H|T then
+	    {System.show 'test-3'}
 	    {Send PacmanPort move(C X Y DX DY Lives Coins)#Ack}
+	    {System.show 'test-4'}
 	    {Wait Ack} % Ack = pos(X Y Lives Coins)
 	    NewState = Ack
 	    T
 	 end
       end in
-
+      {System.show 'test-1'}
       NextCommand = {UserCommand Command MySelf MyNewState}
+      {System.show 'test-5'}
       case MyNewState of pos(C X Y Lives Coins) then
 	 if Lives \= 0 then
 	    {Pacman MyNewState NextCommand} 
@@ -300,7 +307,7 @@ define
       {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
-      MySelf = r(4 1 1 LIVES 0)
+      MySelf = pos(4 1 1 3 0)
       Ghosts = r(white 2 9)
       Ghosts2 = r(white 7 5)
       %{InitLayout MySelf|Ghosts}
