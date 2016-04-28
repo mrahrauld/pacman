@@ -414,6 +414,7 @@ define
       thread
 	 {CreateGhost CreateGhostStream GHOSTS}
 	 NewMap = {AdaptMap CreateGhostStream MAP}
+	 {System.show 'Fin'}
       end
 
       %Taille du tableau 
