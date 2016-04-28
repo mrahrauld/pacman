@@ -320,7 +320,7 @@ define
       end
 
 
-      fun {CreateLine LINE ARITY Y}
+      proc {CreateLine LINE ARITY Y}
 	 case ARITY of X|T then
 	    {DrawBox LINE.X X Y}
 	    case LINE.X of 3 then %CreateGhost
