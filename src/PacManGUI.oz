@@ -11,6 +11,7 @@ define
    Desc
    Window
    Canvas
+   LIVES
    W
    H
    NW
@@ -325,33 +326,77 @@ define
        {Ghost GhostNewState NextGhostStream MAP NewDir}
    end
 
+
+
+
+   
    proc {CreateGame MAP}
+      CreateGhostStream
+      CreateGhostPort = {NewPort CreateGhostStream}
+      GHOSTS
 
       proc {CreateTable MAP ARITY}
-      case ARITY of H|T then
-	 {CreateLine MAP.H {Record.arity MAP.H} H}
-	 {CreateTable MAP T}
-      else
-	 skip
+	 case ARITY of H|T then
+	    {CreateLine MAP.H {Record.arity MAP.H} H}
+	    {CreateTable MAP T}
+	 else
+	    {Send CreateGhostPort nil} 
+	 end
       end
-   end
 
-   proc {CreateLine LINE ARITY Y}
-      case ARITY of H|T then
-	 {DrawBox LINE.H H Y}
-	 {CreateLine LINE T Y}
-      else
-	 skip
+
+      proc {CreateLine LINE ARITY Y}
+	 case ARITY of X|T then
+	    {DrawBox LINE.X X Y}
+	    case LINE.X of 3 then %CreateGhost
+	       {NewGhost X Y}
+	    [] 4 then %Launch Pacman
+	       thread {Pacman pos(4 X Y LIVES 0) Command} end
+	    else skip end
+	    {CreateLine LINE T Y}
+	 else
+	    skip
+	 end
+	 
       end
-   end
+
+      proc {NewGhost X Y}
+	 {Send CreateGhostPort r(3 X Y)}
+      end
+
+      proc {CreateGhost CreateGhostStream NGHOST}
+	 NewGHOST in
+	 case CreateGhostStream of r(C X Y)|T then
+	       {CreateGhost T NewGHOST}
+	       NGHOST = r(C X Y)|NewGHOST
+	 [] nil|T then
+	       NGHOST = nil
+	 else
+	    skip
+	 end
+      end
+
+      proc {CreateNilList N NilList}
+	 NewNilList in
+	 if N == 0 then
+	    NilList = nil
+	 else
+	    {CreateNilList N-1 NewNilList}
+	    NilList = nil|NewNilList
+	 end
+      end
+      
+      
    in
+
+      thread  {CreateGhost CreateGhostStream GHOSTS} end
+
       %Taille du tableau 
       {Record.width MAP NW}
       {Record.width MAP NH}
 
       W =WidthCell*NW
       H =HeightCell*NH
-      %NH = NW
 
       %Creation de la window
       Desc=td(canvas(bg:black
@@ -370,6 +415,11 @@ define
 
       {CreateTable MAP {Record.arity MAP}}
 
+      local GHOST2 in
+	 {CreateNilList {List.length GHOSTS} GHOST2}
+	 thread {Ghost GHOSTS GhostStream MAP GHOST2} end
+      end
+ 
    end
 
    fun {ChangeMap MAP C X Y}
@@ -388,27 +438,20 @@ define
       end
    end
    
-   proc {StartGame MAP LIVES}
+   proc {StartGame MAP LIVE}
       MySelf
       Ghosts
       Ghosts2
       Ghosts3
    in
+      LIVES = LIVE
       %{Browse show}
       
       {CreateGame MAP}
-      %{Browse aftershow}
-      %Initialize ghosts and user
-      MySelf = pos(4 2 2 10 0)
-      Ghosts = r(white 2 9)
-      Ghosts2 = r(white 7 5)
-      Ghosts3 = r(white 13 1)
-      
-      %{InitLayout MySelf|Ghosts}
-      thread {Ghost [Ghosts Ghosts2 Ghosts3] GhostStream MAP [nil nil nil]} end
-      %thread {Ghost Ghosts2 GhostStream2 MAP nil} end
-      thread {Map PacmanStream GhostPort MAP 10} end
-      {Pacman MySelf Command}
+
+
+    
+      {Map PacmanStream GhostPort MAP 10} 
    end
 
   
