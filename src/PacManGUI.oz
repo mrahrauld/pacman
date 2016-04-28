@@ -57,8 +57,8 @@ define
       r(DX DY) = Dir
       NewX = OldX + DX
       NewY = OldY + DY
-      {System.show NewX}
-      {System.show NewY}
+      {System.show {GetElement NewX NewY MAP}}
+      
       if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	     false
 	  else
