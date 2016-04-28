@@ -98,6 +98,7 @@ define
 	       case NewPos of r(NX NY) then
 		  {System.show 'test2'}
 		  NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
+		  {System.show NewMAP}
 		  Ack= pos(C NX NY Lives NewCoins)
 	       else
 		  {System.show 'teste'}
