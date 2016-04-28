@@ -72,7 +72,7 @@ define
       NewCoinCount
 
       fun {MovePacman MAP OldState NewState CoinCount NewCoinCount Coins NewCoins}
-	 NewX NewY OldX OldY  in
+	 NewX NewY OldX OldY NewMAP in
 	 r(OldX OldY) = OldState
 	 r(NewX NewY) = NewState
 
@@ -82,11 +82,16 @@ define
 	    {DrawBox ~1 OldX OldY}
 	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
 	    {DrawBox 4 NewX NewY}
-	    {Send GhostPort r(NewX NewY)}
-	    {ChangeMap MAP ~1 NewX NewY}
+	    
+	    NewMAP = {ChangeMap MAP ~1 NewX NewY}
 	 else
-	    MAP
+	    NewMAP = MAP
+	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
+	    {DrawBox 4 NewX NewY}
 	 end
+	 {Send GhostPort r(NewX NewY)}
+	 NewMAP
+	 
       end
       
       fun{WaitStream OldMAP NewMAP MapStream CoinCount NewCoinCount}
