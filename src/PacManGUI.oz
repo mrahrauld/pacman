@@ -88,6 +88,7 @@ define
 	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
 	    {DrawBox 4 NewX NewY}
 	    NewCoinCount = CoinCount
+	    NewCoins = Coins
 	 end
 	 {Send GhostPort r(NewX NewY)}
 	 NewMAP
