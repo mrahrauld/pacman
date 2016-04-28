@@ -28,8 +28,8 @@ define
    CommandPort = {NewPort Command}
    GhostStream
    GhostPort = {NewPort GhostStream}
-   MapStream
-   MapPort = {NewPort MapStream}
+   PacmanStream
+   PacmanPort = {NewPort PacmanStream}
    
    proc{DrawBox Number X Y}
       case Number of 0 then  %Empty case
@@ -63,7 +63,7 @@ define
 	     r(Color NewX NewY)
 	  end 
    end
-   fun {Map MapStream MAP CoinCount}
+   proc {Map MapStream MAP CoinCount}
       NextMapStream
       NewMAP
       NewCoinCount
@@ -73,54 +73,55 @@ define
 	 r(OldX OldY) = OldState
 	 r(NewX NewY) = NewState
 
-	 case {GetElement NX NY MAP} of 0
+	 case {GetElement NewX NewY MAP} of 0 then
 	    NewCoinCount = CoinCount-1
-	    NewCoins = Coins+1;
+	    NewCoins = Coins+1
 	    {DrawBox {GetElement OldX OldY MAP} OldX OldY}
 	    {DrawBox 4 NewX NewY}
 	    {Send GhostPort r(NewX NewY)}
-	    {ChangeMap MAP ~1 NX NY}
+	    {ChangeMap MAP ~1 NewX NewY}
 	 else
 	    MAP
 	 end
       end
       
       fun{WaitStream OldMAP NewMAP MapStream CoinCount NewCoinCount}
-	 NewCoins in
+	 NewCoins NewPos in
 	 case MapStream of H|T then
-	    case H of move(C OX OY DX DY Lives Coins)#Ack|T
+	    case H of move(C OX OY DX DY Lives Coins)#Ack|T then
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
 	       case NewPos of r(C NX NY) then
 		  
 		  NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
-		  Ack= pos(NX NY Lives NewCoins}
+		  Ack= pos(NX NY Lives NewCoins)
 	       else
 		  NewMAP = MAP
 		  Ack = pos(OX OY Lives Coins)
 	       end
-	    [] CreateMap(M)#Ack|T then
+	    % [] CreateMap(M)#Ack|T then
 	       
 	    
 	    end
+	    T
 	 end
-	 T
+	 
       end
 
       in
-      NextMapStream = {WaitStream MAP NewMap MapStream CoinCount NewCoinCount}
-      {Map NextMapStream NewMap NewCoinCount}
+      NextMapStream = {WaitStream MAP NewMAP MapStream CoinCount NewCoinCount}
+      {Map NextMapStream NewMAP NewCoinCount}
    end
    
       
    
-   fun{Pacman MySelf Command}
+   proc {Pacman MySelf Command}
 
       MyNewState
       NextCommand
 
       fun {UserCommand Command OldState NewState}
-	  X Y Ack in
-	  r(C X Y) = OldState
+	  X Y Ack Lives Coins C in
+	  pos(C X Y Lives Coins) = OldState
 	 case Command of r(DX DY)|T then
 	    {Send PacmanPort move(C X Y DX DY Lives Coins)#Ack}
 	    {Wait Ack} % Ack = pos(X Y Lives Coins)
@@ -130,11 +131,9 @@ define
       end in
 
       NextCommand = {UserCommand Command MySelf MyNewState}
-      case MyNewState of pos(X Y Lives Coins) then
+      case MyNewState of pos(C X Y Lives Coins) then
 	 if Lives \= 0 then
 	    {Pacman MyNewState NextCommand} 
-	 else
-	    Coins
 	 end
       end
    end
@@ -301,12 +300,13 @@ define
       {CreateGame MAP}
       %{Browse aftershow}
       %Initialize ghosts and user
-      MySelf = r(1 1 LIVES 0)
+      MySelf = r(4 1 1 LIVES 0)
       Ghosts = r(white 2 9)
       Ghosts2 = r(white 7 5)
       %{InitLayout MySelf|Ghosts}
       %thread {Ghost Ghosts GhostStream MAP nil} end
       %thread {Ghost Ghosts2 GhostStream MAP nil} end
+      thread {Map PacmanStream MAP 10} end
       thread {Pacman MySelf Command} end
    end
 
