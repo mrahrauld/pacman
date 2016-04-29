@@ -408,6 +408,8 @@ define
 	       COINS2 = 0
 	    [] 0 then
 	       COINS2 = 1
+	    [] 5 then
+	       {NewWormhole X Y}
 	    else COINS2 = 0 end
 	    {CreateLine LINE T Y NewCoins}
 	    COINS = COINS2 + NewCoins
@@ -425,6 +427,11 @@ define
 	 {Send CreateGhostPort r(4 X Y)}
 	 thread {Pacman pos(4 X Y X Y LIVES 0) Command} end
       end
+
+      proc {NewWormhole X Y}
+	 {Send CreateGhostPort r(5 X Y)}
+      end
+      
 
       proc {CreateGhost CreateGhostStream NGHOST}
 	 NewGHOST in
