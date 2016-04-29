@@ -394,6 +394,8 @@ define
        fun{MakeScared Scared N}
 	  case Scared of H|T then
 	     N|{MakeScared T N}
+	  else
+	     nil
 	  end
        end
        
