@@ -415,7 +415,7 @@ define
 	     case H of ~1 then
 		H
 	     [] scared(A) then
-		{System.show Scared}
+		{System.show A}
 		NewScared = {MakeScared Scared A}
 	     else
 		NewDir = {GhostCommand2 OldState LastDir}
