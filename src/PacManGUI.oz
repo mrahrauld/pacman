@@ -410,6 +410,7 @@ define
 	       COINS2 = 1
 	    [] 5 then
 	       {NewWormhole X Y}
+	       COINS2 = 0
 	    else COINS2 = 0 end
 	    {CreateLine LINE T Y NewCoins}
 	    COINS = COINS2 + NewCoins
