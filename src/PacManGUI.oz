@@ -93,7 +93,7 @@ define
       N RAND in
       N = {List.length HoleList}
       case N of 2 then
-	 skip
+	 unit
       else
 	 RAND = {Int.'mod' {OS.rand} N}
 	 local
