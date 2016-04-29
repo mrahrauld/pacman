@@ -327,7 +327,7 @@ define
        %
        % Choisit une nouvelle direction pour le Ghost
        %
-       fun {NewDirection OldState}
+       fun {NewDirection OldState LastDir}
    	  Dir = {Int.'mod' {OS.rand} 4}
    	  NewX NewY DX DY OldX OldY Color
        in
@@ -341,9 +341,11 @@ define
    	  end
    	  NewX = OldX + DX
    	  NewY = OldY + DY
-	  
-   	  if {MouvementIsAvailable OldState r(DX DY) MAP} == false then
-   	     {NewDirection OldState}
+
+	  if {MouvementIsAvailable OldState LastDir MAP} \= false  andthen r(~DX ~DY) == LasDir then
+	     {NewDirection OldState LastDir}
+   	  elseif {MouvementIsAvailable OldState r(DX DY) MAP} == false then
+	     {NewDirection OldState LastDir}
    	  else
    	     r(DX DY)
    	  end
@@ -356,7 +358,7 @@ define
 		if {OtherDirAvailaible H LastDir.1} == false andthen {MouvementIsAvailable H LastDir.1 MAP} \= false then
 		   LastDir.1|{GhostCommand2 T LastDir.2}
 		else
-		   {NewDirection H}|{GhostCommand2 T LastDir.2}
+		   {NewDirection H LastDir.1}|{GhostCommand2 T LastDir.2}
 		end
 	     end
 	  end
@@ -366,9 +368,7 @@ define
 		H
 	     else
 		NewDir = {GhostCommand2 OldState LastDir}
-		{System.show 'anvant erreur'}
 		GhostNewState = {MoveGhost NewDir OldState}
-		{System.show 'après erreur'}
 		H = OldState#GhostNewState
 		T
 	     end
