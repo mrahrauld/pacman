@@ -187,8 +187,7 @@ define
 	    r(C2 GNX GNY) = NewGhost.1
 	    if GNX==NX  andthen GNY==NY then % si les nouvelles positions sont les mêmes
 	       if C2 == 33 then
-
-		  {Send GhostPort dead({List.length NbreGhost}-{List.length T} GNX GNY)} %Si le ghost est en mode scared
+		  {Send GhostPort dead(NbreGhost-{List.length T} GNX GNY)} %Si le ghost est en mode scared
 		  Lives
 	       else
 		  {System.show 'Tu perds une vie'}
@@ -196,7 +195,7 @@ define
 	       end
 	    elseif GNX==OX andthen GNY==OY andthen NX==GOX andthen NY==GOY then % S'ils se croisent
 	       if C2 == 33 then
-		  {Send GhostPort dead({List.length NbreGhost}-{List.length T} GNX GNY)} %Si le ghost est en mode scared
+		  {Send GhostPort dead(NbreGhost-{List.length T} GNX GNY)} %Si le ghost est en mode scared
 		  Lives
 	       else
 		   {System.show 'Tu perds une vie'}
