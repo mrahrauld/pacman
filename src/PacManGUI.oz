@@ -354,6 +354,7 @@ define
 	     case OldState of nil then nil
 	     [] H|T then
 		if {OtherDirAvailaible H LastDir.1} == false andthen {MouvementIsAvailable H LastDir.1 MAP} \= false then
+		   {System.show 'ancienne direction'}
 		   LastDir|{GhostCommand2 T LastDir.2}
 		else
 		   {NewDirection H}|{GhostCommand2 T LastDir.2}
@@ -366,7 +367,9 @@ define
 		H
 	     else
 		NewDir = {GhostCommand2 OldState LastDir}
+		{System.show 'anvant erreur'}
 		GhostNewState = {MoveGhost NewDir OldState}
+		{System.show 'après erreur'}
 		H = OldState#GhostNewState
 		T
 	     end
