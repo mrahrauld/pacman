@@ -412,9 +412,9 @@ define
        fun{MakeScaredOneGhost Scared A N}
 	  case Scared of H|T then
 	     if N == 0 then
-		3|{MakeScared T A N-1}
-	     else
 		A|{MakeScared T A N-1}
+	     else
+		H|{MakeScared T A N-1}
 	     end
 	  else
 	     nil
@@ -452,7 +452,7 @@ define
 		NewDir = LastDir
 		T
 	     [] dead(N X Y) then
-		NewScared = {MakeScaredOneGhost Scared A N-1}
+		NewScared = {MakeScaredOneGhost Scared 3 N-1}
 		GhostNewState = {MakeScaredState NewScared OldState}
 		NewDir = LastDir
 		T
