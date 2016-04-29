@@ -94,7 +94,7 @@ define
       N = {List.length HoleList}
       {System.show OH}
       case N of 2 then
-	 unit
+	 unit %TODO
       else
 	 RAND = {Int.'mod' {OS.rand} N} +1
 	 {System.show 'RAND'}
@@ -120,10 +120,11 @@ define
       NewAlivePacmans
       NextAlivePacmanStream
 
-      fun {MovePacman MAP OldState NewState CoinCount NewCoinCount Coins NewCoins}
-	 NewX NewY OldX OldY NewMAP in
+      fun {MovePacman MAP OldState NewState Move CoinCount NewCoinCount Coins NewCoins}
+	 NewX NewY OldX OldY NewMAP DX DY in
 	 r(OldX OldY) = OldState
 	 r(NewX NewY) = NewState
+	 r(DX DY) = Move
 
 	 case {GetElement NewX NewY MAP} of 0 then
 	    NewMAP = {ChangeMap MAP ~1 NewX NewY}
@@ -137,13 +138,13 @@ define
 	 {DrawBox ~1 OldX OldY}
 	 {DrawBox {GetElement OldX OldY MAP} OldX OldY}
 	 {DrawBox ~1 NewX NewY}
-	 if OldX-NewX == ~1 then
+	 if DX == 1 then
 	    {DrawBox 44 NewX NewY}
-	 elseif OldX-NewX == 1 then
+	 elseif DX == ~1 then
 	    {DrawBox 43 NewX NewY}
-	 elseif OldY-NewY == ~1 then
+	 elseif DY == 1 then
 	    {DrawBox 42 NewX NewY}
-	 elseif OldY-NewY == 1 then
+	 elseif DY == ~1 then
 	    {DrawBox 41 NewX NewY}
 	 else
 	    {DrawBox 4 NewX NewY}
@@ -198,10 +199,10 @@ define
 	       	  NewLives = {IsDead Lives OX OY NX NY OldGhost NewGhost}
 		  if NewLives==Lives then
 		     Ack= pos(C NX NY OriginX OriginY Lives NewCoins)
-		     NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
+		     NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY) r(DX DY) CoinCount NewCoinCount Coins NewCoins}
 		  else
 		     Ack= pos(C OriginX OriginY OriginX OriginY NewLives NewCoins)
-		     NewMAP = {MovePacman OldMAP r(OX OY) r(OriginX OriginY)  CoinCount NewCoinCount Coins NewCoins} 
+		     NewMAP = {MovePacman OldMAP r(OX OY) r(OriginX OriginY) r(DX DY) CoinCount NewCoinCount Coins NewCoins} 
 		  end	  
 	       else
 		  NX = OX
@@ -212,7 +213,7 @@ define
 		  Ack = pos(C OX OY OriginX OriginY Lives Coins)
 		     NewCoinCount = Coins
 		  else
-		     NewMAP = {MovePacman OldMAP r(OX OY) r(OriginX OriginY)  CoinCount NewCoinCount Coins NewCoins} 
+		     NewMAP = {MovePacman OldMAP r(OX OY) r(OriginX OriginY) r(DX DY) CoinCount NewCoinCount Coins NewCoins} 
 		     Ack = pos(C OriginX OriginY OriginX OriginY NewLives Coins)
 		     NewCoinCount = Coins
 		  end
