@@ -342,7 +342,7 @@ define
    	  NewX = OldX + DX
    	  NewY = OldY + DY
 
-	  if {MouvementIsAvailable OldState LastDir MAP} \= false  andthen r(~DX ~DY) == LastDir then
+	  if LastDir \= nil andthen {MouvementIsAvailable OldState LastDir MAP} \= false  andthen r(~DX ~DY) == LastDir then
 	     {NewDirection OldState LastDir}
    	  elseif {MouvementIsAvailable OldState r(DX DY) MAP} == false then
 	     {NewDirection OldState LastDir}
@@ -376,7 +376,7 @@ define
        end in
 
       if InitDir == nil then
-   	 LastDir = {NewDirection MySelf r(0 0)}
+   	 LastDir = {NewDirection MySelf nil}
       else
    	 LastDir = InitDir
       end
