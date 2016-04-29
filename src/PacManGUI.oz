@@ -425,6 +425,7 @@ define
 	  X Y Color in
 	  case Scared of H|T then
 	     r(Color X Y) = OldState.1
+	     {DrawBox 33 X Y}
 	     r(H X Y)|{MakeScaredState T OldState.2}
 	  else
 	     nil
