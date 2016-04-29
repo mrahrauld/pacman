@@ -13,6 +13,7 @@ define
    Canvas
    LIVES
    COINS
+   NOMBREPACMAN
    W
    H
    NW
@@ -439,6 +440,19 @@ define
 	 end
       end
 
+      fun {NombrePacman MapStream}
+	 case MapStream of r(C X Y)|T then
+	    case C of 4 then
+	       1 + {NombrePacman T}
+	    else
+	       {NombrePacman T}
+	    end
+	 [] nil|T then
+	       0
+	 end
+      end
+      
+
       fun {AdaptMap MapStream MAP}
 	 case MapStream of r(C X Y)|T then
 	       {AdaptMap T {ChangeMap MAP ~1 X Y}}
@@ -463,6 +477,7 @@ define
       thread
 	 {CreateGhost CreateGhostStream GHOSTS}
 	 NewMap = {AdaptMap CreateGhostStream MAP}
+	 NOMBREPACMAN = {NombrePacman CreateGhostStream}
       end
 
       %Taille du tableau 
@@ -493,6 +508,8 @@ define
 	 {CreateNilList {List.length GHOSTS} GHOST2}
 	 thread {Ghost GHOSTS GhostStream MAP GHOST2} end
       end
+
+      {System.show NOMBREPACMAN}
 
       NewMap
  
