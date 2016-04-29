@@ -59,13 +59,7 @@ define
 	    end
 	 end
 	 {Wait Stream.1}
-	 case Stream.1 of 1 then
-	    {System.show 'Temps finis'}
-	    {Scared T}
-	 else
-	    {System.show 'Nouveau temps'}
-	    {Scared T}
-	 end
+	 {Scared T}
       end
    end
    
@@ -152,6 +146,10 @@ define
 	    NewMAP = {ChangeMap MAP ~1 NewX NewY}
 	    NewCoinCount = CoinCount-1
 	    NewCoins = Coins+1
+	 [] 2 then
+	    NewMAP = {ChangeMap MAP ~1 NewX NewY}
+	    NewCoinCount = CoinCount
+	    NewCoins = Coins
 	 else
 	    NewMAP = MAP
 	    NewCoinCount = CoinCount
