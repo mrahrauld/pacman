@@ -55,12 +55,11 @@ define
 	 thread {Delay Time} {Send Port 1}  end
 	 thread
 	    case T of scared(Time)|L then
-	       {System.show 'test'}
 	       {Send Port T}
 	    end
 	 end
 	 {Wait Stream.1}
-	 case Stream of 1 then
+	 case Stream.1 of 1 then
 	    {System.show 'Temps finis'}
 	 else
 	    {System.show 'Nouveau temps'}
@@ -611,7 +610,15 @@ define
 
       thread {Scared ScaredModeStream} end
 
-      {Send ScaredModePort scared(10000)}
+      {Send ScaredModePort scared(5000)}
+
+      {Delay 7000}
+      
+      {Send ScaredModePort scared(5000)}
+
+      {Delay 2000}
+
+      {Send ScaredModePort scared(5000)}
       
       NewMAP = {CreateGame MAP}
 
