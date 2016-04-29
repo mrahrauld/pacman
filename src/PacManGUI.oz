@@ -421,6 +421,7 @@ define
 		NewDir = {GhostCommand2 OldState LastDir}
 		GhostNewState = {MoveGhost NewDir OldState}
 		H = OldState#GhostNewState
+		NewScared = Scared
 		T
 	     end
    	 end
