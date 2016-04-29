@@ -493,7 +493,11 @@ define
 
       fun {AdaptMap MapStream MAP}
 	 case MapStream of r(C X Y)|T then
+	    if C \= 5 andthen C \= 2 then
 	       {AdaptMap T {ChangeMap MAP ~1 X Y}}
+	    else
+	       {AdaptMap T MAP}
+	    end
 	 [] nil|T then
 	    MAP
 	 end
