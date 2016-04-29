@@ -89,7 +89,8 @@ define
    end
 
    fun {ChooseNewHole OH HoleList}
-      N RAND in
+      N RAND OX OY Color in
+      r(Color OX OY) = OH
       N = {List.length HoleList}
       {System.show OH}
       case N of 2 then
@@ -100,9 +101,8 @@ define
 	 {System.show RAND}
 	 local
 	    r(C X Y) = {List.nth HoleList RAND}
-	    {System.show r(C X Y)}
 	 in 
-	    if r(C X Y) \= OH then
+	    if r(C X Y) \= r(C OX OY) then
 	       r(X Y)
 	    else
 	       {ChooseNewHole OH HoleList}
