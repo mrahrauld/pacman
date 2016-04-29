@@ -209,10 +209,15 @@ define
 	 case MapStream of H|T then
 	    {Send GhostPort GhostPos}	 
 	    OldGhost#NewGhost=GhostPos
-	    
 	    case H of move(C OX OY DX DY OriginX OriginY Lives Coins)#Ack then
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
 	       case NewPos of r(X Y) then
+
+                  % GHOST PASSE EN MODE SCARED 
+		  if {GetElement X Y OldMap} == 2 then
+		     {Send ScaredModePort scared(3000)}
+		  end
+		  
 		  NX = X
 		  NY = Y
 	       	  NewLives = {IsDead Lives OX OY NX NY OldGhost NewGhost}
