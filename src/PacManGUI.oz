@@ -52,6 +52,7 @@ define
       case ScaredModeStream of scared(Time)|T then
 	 Stream
 	 Port = {NewPort Stream} in
+	 {Send GhostPort scared(1)}
 	 thread {Delay Time} {Send Port 1}  end
 	 thread
 	    case T of scared(Time)|L then
@@ -59,7 +60,12 @@ define
 	    end
 	 end
 	 {Wait Stream.1}
-	 {System.show 'Temps fini'}
+
+	 %Temps fini
+	 case Stream.1 of 1 then
+	    {System.show 'Temps fini'}
+	    {Send GhostPort scared(nil)}
+	 end
 	 {Scared T}
       end
    end
@@ -297,11 +303,12 @@ define
 
    
    %%%% GHOST %%%%
-   proc{Ghost MySelf GhostStream MAP InitDir}
+   proc{Ghost MySelf GhostStream MAP InitDir Scared}
 
       GhostNewState
       NextGhostStream
       NewDir
+      NewScared
       LastDir
 
       fun {MoveGhost Movement OldState}
@@ -383,8 +390,14 @@ define
    	     r(DX DY)
    	  end
        end
+
+       fun{MakeScared Scared N}
+	  case Scared of H|T then
+	     N|{MakeScared T N}
+	  end
+       end
        
-       fun {GhostCommand GhostStream OldState LastDir GhostNewState NewDir}
+       fun {GhostCommand GhostStream OldState LastDir Scared GhostNewState NewDir NewScared}
 	  fun{GhostCommand2 OldState LastDir}
 	     case OldState of nil then nil
 	     [] H|T then
@@ -397,8 +410,10 @@ define
 	  end
 	  in
 	  case GhostStream of H|T then
-	     if H == ~1 then
+	     case H of ~1 then
 		H
+	     [] scared(A) then
+		{MakeScared Scared A}
 	     else
 		NewDir = {GhostCommand2 OldState LastDir}
 		GhostNewState = {MoveGhost NewDir OldState}
@@ -414,11 +429,11 @@ define
    	 LastDir = InitDir
       end
       
-      NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
+      NextGhostStream = {GhostCommand GhostStream MySelf LastDir Scared GhostNewState NewDir NewScared}
       
       if NextGhostStream== ~1 then {System.show 'Quelques chose à faire ici mais quoi ? '}
       else
-	 {Ghost GhostNewState NextGhostStream MAP NewDir}
+	 {Ghost GhostNewState NextGhostStream MAP NewDir NewState}
       end
    end
 
