@@ -609,16 +609,6 @@ define
       %{Browse show}
 
       thread {Scared ScaredModeStream} end
-
-      {Send ScaredModePort scared(5000)}
-
-      {Delay 7000}
-      
-      {Send ScaredModePort scared(5000)}
-
-      {Delay 2000}
-
-      {Send ScaredModePort scared(5000)}
       
       NewMAP = {CreateGame MAP}
 
