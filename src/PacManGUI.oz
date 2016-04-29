@@ -428,12 +428,12 @@ define
 		{System.show A}
 		NewScared = {MakeScared Scared A}
 		GhostNewState = {MakeScaredState NewScared OldState}
+		{System.show GhostNewState}
 		NewDir = LastDir
 		T
 	     else
 		NewDir = {GhostCommand2 OldState LastDir}
 		GhostNewState = {MoveGhost NewDir OldState}
-		{System.show GhostNewState}
 		H = OldState#GhostNewState
 		NewScared = Scared
 		T
