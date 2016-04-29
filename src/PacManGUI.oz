@@ -81,7 +81,7 @@ define
       NewY = OldY + DY
       if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	 false
-      elseif {GetElement NewX NewY MAP} == 5 andthen Color == 4 then
+      elseif {GetElement NewX NewY MAP} == 5 then
 	 {ChooseNewHole r(Color NewX NewY) WORMHOLES}
       else 
 	    r(NewX NewY)
