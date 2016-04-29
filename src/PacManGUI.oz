@@ -413,8 +413,8 @@ define
 	     case H of ~1 then
 		H
 	     [] scared(A) then
-		NewScared = {MakeScared Scared A}
 		{System.show 'Ghost Scared or not'}
+		NewScared = {MakeScared Scared A}
 	     else
 		NewDir = {GhostCommand2 OldState LastDir}
 		GhostNewState = {MoveGhost NewDir OldState}
