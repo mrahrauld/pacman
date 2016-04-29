@@ -59,6 +59,7 @@ define
 	    end
 	 end
 	 {Wait Stream.1}
+	 {System.show 'Temps fini'}
 	 {Scared T}
       end
    end
