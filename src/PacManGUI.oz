@@ -62,7 +62,7 @@ define
 	 {Wait Stream.1}
 
 	 %Temps fini
-	 case Stream.1 of 1 then
+	 if Stream.1 == 1 then
 	    {System.show 'Temps fini'}
 	    {Send GhostPort scared(3)}
 	 end
