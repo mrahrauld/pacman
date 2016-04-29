@@ -286,8 +286,10 @@ define
    	 r(DX DY) = H
 	    NewX = OldX + DX
 	    NewY = OldY +  DY
-	    case {GetElement NewX NewY MAP} of 5 then   
-	       {ChooseNewHole r(Color NewX NewY) WORMHOLES}|{MoveGhost T OldState.2}
+	    case {GetElement NewX NewY MAP} of 5 then
+	       local X Y in
+		  r(X Y) = {ChooseNewHole r(Color NewX NewY) WORMHOLES}
+	       r(Color X Y)|{MoveGhost T OldState.2}
 	    else	    
 	       r(Color NewX NewY)|{MoveGhost T OldState.2}
 	    end
