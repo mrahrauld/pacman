@@ -376,7 +376,7 @@ define
        end in
 
       if InitDir == nil then
-   	 LastDir = {NewDirection MySelf}
+   	 LastDir = {NewDirection MySelf r(0 0)}
       else
    	 LastDir = InitDir
       end
