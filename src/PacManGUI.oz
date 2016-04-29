@@ -413,7 +413,7 @@ define
 	     case H of ~1 then
 		H
 	     [] scared(A) then
-		{MakeScared Scared A}
+		NewScared = {MakeScared Scared A}
 		{System.show 'Ghost Scared or not'}
 	     else
 		NewDir = {GhostCommand2 OldState LastDir}
@@ -434,7 +434,7 @@ define
       
       if NextGhostStream== ~1 then {System.show 'Quelques chose à faire ici mais quoi ? '}
       else
-	 {Ghost GhostNewState NextGhostStream MAP NewDir Scared}
+	 {Ghost GhostNewState NextGhostStream MAP NewDir NewScared}
       end
    end
 
@@ -597,7 +597,7 @@ define
 
       local GHOST2 in
 	 {CreateNilList {List.length GHOSTS} GHOST2}
-	 thread {Ghost GHOSTS GhostStream MAP GHOST2} end
+	 thread {Ghost GHOSTS GhostStream MAP GHOST2 GHOST2} end
       end
 
       NewMap
