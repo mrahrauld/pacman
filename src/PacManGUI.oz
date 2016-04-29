@@ -88,25 +88,23 @@ define
       end 
    end
 
+   %% Si Pacman/Ghost rentre dans un trou, sa nouvelles position sera choisie aléatoirement entre tous les autres trous.
+   %Ils ne peuvent pas être bloqués entre deux trous
    fun {ChooseNewHole OH HoleList}
       N RAND OX OY Color in
       r(Color OX OY) = OH
       N = {List.length HoleList}
       {System.show OH}
-      case N of 2 then
-	 unit %TODO
-      else
-	 RAND = {Int.'mod' {OS.rand} N} +1
-	 {System.show 'RAND'}
-	 {System.show RAND}
-	 local
-	    r(C X Y) = {List.nth HoleList RAND}
-	 in 
-	    if r(C X Y) \= r(C OX OY) then
-	       r(X Y)
-	    else
-	       {ChooseNewHole OH HoleList}
-	    end
+      RAND = {Int.'mod' {OS.rand} N} +1
+      {System.show 'RAND'}
+      {System.show RAND}
+      local
+	 r(C X Y) = {List.nth HoleList RAND}
+      in 
+	 if r(C X Y) \= r(C OX OY) then
+	    r(X Y)
+	 else
+	    {ChooseNewHole OH HoleList}
 	 end
       end
    end
@@ -150,7 +148,6 @@ define
 	    {DrawBox 4 NewX NewY}
 	 end
 	 NewMAP
-	 
       end
       
       fun{IsDead Lives OX OY NX NY OldGhost NewGhost}
@@ -356,7 +353,7 @@ define
 	  fun{GhostCommand2 OldState LastDir}
 	     case OldState of nil then nil
 	     [] H|T then
-		if {OtherDirAvailaible H LastDir.1} == false andthen {MouvementIsAvailable H LastDir.1 MAP} == true then
+		if {OtherDirAvailaible H LastDir.1} == false andthen {MouvementIsAvailable H LastDir.1 MAP} \= false then
 		   LastDir|{GhostCommand2 T LastDir.2}
 		else
 		   {NewDirection H}|{GhostCommand2 T LastDir.2}
@@ -389,8 +386,6 @@ define
 	 {Ghost GhostNewState NextGhostStream MAP NewDir}
       end
    end
-
-
 
 
    
