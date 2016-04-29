@@ -434,7 +434,7 @@ define
       
       if NextGhostStream== ~1 then {System.show 'Quelques chose à faire ici mais quoi ? '}
       else
-	 {Ghost GhostNewState NextGhostStream MAP NewDir NewState}
+	 {Ghost GhostNewState NextGhostStream MAP NewDir Scared}
       end
    end
 
