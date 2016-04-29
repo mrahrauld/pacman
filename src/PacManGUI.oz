@@ -28,6 +28,7 @@ define
    PacManRImg={QTk.newImage photo(url:MainURL#"/pacmanR.gif")}
    WormholeImg={QTk.newImage photo(url:MainURL#"/wormhole.gif")}
    WallImg={QTk.newImage photo(url:MainURL#"/wall.gif")}
+   PowerImg={QTk.newImage photo(url:MainURL#"/power.gif")}
    
    GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
    CoinImg={QTk.newImage photo(url:MainURL#"/yellow-coin.gif")}
@@ -52,7 +53,7 @@ define
       [] 1 then %Wall
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:WallImg)}
       [] 2 then %Power pellets
-	 skip
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:PowerImg)}
       [] 3 then %Ghost
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:GhostImg)}
       [] 4 then %Pacman
@@ -94,10 +95,7 @@ define
       N RAND OX OY Color in
       r(Color OX OY) = OH
       N = {List.length HoleList}
-      {System.show OH}
       RAND = {Int.'mod' {OS.rand} N} +1
-      {System.show 'RAND'}
-      {System.show RAND}
       local
 	 r(C X Y) = {List.nth HoleList RAND}
       in 
@@ -259,11 +257,9 @@ define
       NextCommand = {UserCommand Command MySelf MyNewState}
       case MyNewState of pos(C X Y OX OY Lives Coins) then
 	 if Lives \= 0 then
-	    {System.show 'test'}
 	    {Send AlivePacmansPort 0}
 	    {Pacman MyNewState NextCommand}
 	 else
-	    {System.show 'test3'}
 	    {Send AlivePacmansPort 1}
 	 end
       end
@@ -390,7 +386,7 @@ define
       
       NextGhostStream = {GhostCommand GhostStream MySelf LastDir GhostNewState NewDir}
       
-      if NextGhostStream== ~1 then {System.show NextGhostStream}
+      if NextGhostStream== ~1 then {System.show 'Quelques chose à faire ici mais quoi ? '}
       else
 	 {Ghost GhostNewState NextGhostStream MAP NewDir}
       end
