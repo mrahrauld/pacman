@@ -284,9 +284,12 @@ define
 	 [] H|T then
    	 r(Color OldX OldY) = OldState.1
    	 r(DX DY) = H
-   	 NewX = OldX + DX
-   	 NewY = OldY +  DY
-	    r(Color NewX NewY)|{MoveGhost T OldState.2}
+	    NewX = OldX + DX
+	    NewY = OldY +  DY
+	    case {GetElement NewX NewY MAP} == 5 then   
+	       {ChooseNewHole r(Color NewX NewY) WORMHOLES}|{MoveGhost T OldState.2}
+	    else	    
+	       r(Color NewX NewY)|{MoveGhost T OldState.2}
 	 end
        end
 
