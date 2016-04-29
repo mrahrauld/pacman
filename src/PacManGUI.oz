@@ -29,7 +29,7 @@ define
    WormholeImg={QTk.newImage photo(url:MainURL#"/wormhole.gif")}
    WallImg={QTk.newImage photo(url:MainURL#"/wall.gif")}
    PowerImg={QTk.newImage photo(url:MainURL#"/power.gif")}
-   
+   GhostScaredImg={QTk.newImage photo(url:MainURL#"/ghostScared.gif")}
    GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
    CoinImg={QTk.newImage photo(url:MainURL#"/yellow-coin.gif")}
    WidthCell=40
@@ -56,6 +56,8 @@ define
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:PowerImg)}
       [] 3 then %Ghost
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:GhostImg)}
+      []  31 then
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:GhostScaredImg)}
       [] 4 then %Pacman
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManImg)}
       [] 5 then %Pacman
