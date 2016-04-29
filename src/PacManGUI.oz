@@ -91,8 +91,7 @@ define
    fun {ChooseNewHole OH HoleList}
       N RAND in
       N = {List.length HoleList}
-      {System.show 'Taille'}
-      {System.show N}
+      {System.show OH}
       case N of 2 then
 	 unit
       else
