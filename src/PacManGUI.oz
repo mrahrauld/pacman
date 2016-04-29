@@ -313,7 +313,7 @@ define
 
    
    %%%% GHOST %%%%
-   proc{Ghost MySelf GhostStream MAP InitDir Scared}
+   proc{Ghost MySelf GhostStream MAP InitDir Scared OriginalPos}
 
       GhostNewState
       NextGhostStream
@@ -425,14 +425,28 @@ define
 	  X Y Color in
 	  case Scared of H|T then
 	     r(Color X Y) = OldState.1
-	     {DrawBox H X Y}
 	     r(H X Y)|{MakeScaredState T OldState.2}
 	  else
 	     nil
 	  end
        end
+
+       fun{MakeScaredStateDead Scared OldState N OriginalPos}
+	  X Y Color OX OY OColor in
+	  case Scared of H|T then
+	     r(Color X Y) = OldState.1
+	     r(OColor OX OY) = OriginalPos.1
+	     if N == 0 then
+		r(H OX OY)|{MakeScaredStateDead T OldState.2 N-1 OriginalPos.2}
+	     else
+		r(H X Y)|{MakeScaredStateDead T OldState.2 N-1 OriginalPos.2}
+	     end
+	  else
+	     nil
+	  end
+       end
        
-       fun {GhostCommand GhostStream OldState LastDir Scared GhostNewState NewDir NewScared}
+       fun {GhostCommand GhostStream OldState LastDir Scared OriginalPos GhostNewState NewDir NewScared}
 	  fun{GhostCommand2 OldState LastDir}
 	     case OldState of nil then nil
 	     [] H|T then
@@ -454,7 +468,7 @@ define
 		T
 	     [] dead(N X Y) then
 		NewScared = {MakeScaredOneGhost Scared 3 N-1}
-		GhostNewState = {MakeScaredState NewScared OldState}
+		GhostNewState = {MakeScaredStateDead NewScared OldState N-1 OriginalPos}
 		NewDir = LastDir
 		T
 	     else
@@ -473,11 +487,11 @@ define
    	 LastDir = InitDir
       end
       
-      NextGhostStream = {GhostCommand GhostStream MySelf LastDir Scared GhostNewState NewDir NewScared}
+      NextGhostStream = {GhostCommand GhostStream MySelf LastDir Scared OriginalPos GhostNewState NewDir NewScared}
       
       if NextGhostStream== ~1 then {System.show 'Quelques chose à faire ici mais quoi ? '}
       else
-	 {Ghost GhostNewState NextGhostStream MAP NewDir NewScared}
+	 {Ghost GhostNewState NextGhostStream MAP NewDir NewScared OriginalPos}
       end
    end
 
@@ -641,7 +655,7 @@ define
       local GHOST2 Scared in
 	 {CreateList {List.length GHOSTS} GHOST2 nil}
 	 {CreateList {List.length GHOSTS} Scared 3}
-	 thread {Ghost GHOSTS GhostStream MAP GHOST2 GHOST2} end
+	 thread {Ghost GHOSTS GhostStream MAP GHOST2 GHOST2 GHOSTS} end
       end
 
       NewMap
