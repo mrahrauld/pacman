@@ -91,10 +91,12 @@ define
    fun {ChooseNewHole OH HoleList}
       N RAND in
       N = {List.length HoleList}
+      {System.show 'Taille'}
+      {System.show N}
       case N of 2 then
 	 unit
       else
-	 RAND = {Int.'mod' {OS.rand} N}
+	 RAND = {Int.'mod' {OS.rand} N} +1
 	 {System.show 'RAND'}
 	 {System.show RAND}
 	 local
