@@ -81,7 +81,7 @@ define
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:PowerImg)}
       [] 3 then %Ghost
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:GhostImg)}
-      []  31 then
+      [] 33 then
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:GhostScaredImg)}
       [] 4 then %Pacman
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManImg)}
@@ -186,9 +186,19 @@ define
 	    r(C GOX GOY) = H
 	    r(C2 GNX GNY) = NewGhost.1
 	    if GNX==NX  andthen GNY==NY then % si les nouvelles positions sont les mêmes
-	       Lives-1
+	       if C2 == 33 then
+		  {Send GhostPort dead({List.length OldGhost}-{List.length T} GNX GNY)} %Si le ghost est en mode scared
+		  Lives
+	       else
+		  Lives-1
+	       end
 	    elseif GNX==OX andthen GNY==OY andthen NX==GOX andthen NY==GOY then % S'ils se croisent
-	       Lives-1
+	       if C2 == 33 then
+		  {Send GhostPort dead({List.length OldGhost}-{List.length T} GNX GNY)} %Si le ghost est en mode scared
+		  Lives
+	       else
+		  Lives-1
+	       end
 	    else
 	       {IsDead Lives OX OY NX NY OldGhost.2 NewGhost.2}
 	    end
@@ -207,7 +217,7 @@ define
 		     {DrawBox 4 OldX OldY}
 		  end
 	       end
-	       {DrawBox 3 NewX NewY}
+	       {DrawBox C NewX NewY}
 	       {MoveGhost OldStates.2 NewStates.2 NX NY OX OY}
 	    end
       end
@@ -222,7 +232,7 @@ define
 
                   % GHOST PASSE EN MODE SCARED 
 		  if {GetElement X Y OldMAP} == 2 then
-		     {Send ScaredModePort scared(3000)}
+		     {Send ScaredModePort scared(10000)}
 		  end
 		  
 		  NX = X
@@ -318,7 +328,7 @@ define
    	 r(Color OldX OldY) = OldState.1
    	 r(DX DY) = H
 	    NewX = OldX + DX
-	    NewY = OldY +  DY
+	    NewY = OldY + DY
 	    case {GetElement NewX NewY MAP} of 5 then
 	       local X Y in
 		  r(X Y) = {ChooseNewHole r(Color NewX NewY) WORMHOLES}
@@ -391,9 +401,21 @@ define
    	  end
        end
 
-       fun{MakeScared Scared N}
+       fun{MakeScared Scared A}
 	  case Scared of H|T then
-	     N|{MakeScared T N}
+	     A|{MakeScared T A}
+	  else
+	     nil
+	  end
+       end
+
+       fun{MakeScaredOneGhost Scared A N}
+	  case Scared of H|T then
+	     if N == 0 then
+		3|{MakeScared T A N-1}
+	     else
+		A|{MakeScared T A N-1}
+	     end
 	  else
 	     nil
 	  end
@@ -425,11 +447,13 @@ define
 	     case H of ~1 then
 		H
 	     [] scared(A) then
-		{System.show A}
 		NewScared = {MakeScared Scared A}
 		GhostNewState = {MakeScaredState NewScared OldState}
-		{System.show NewScared}
-		{System.show GhostNewState}
+		NewDir = LastDir
+		T
+	     [] dead(N X Y) then
+		NewScared = {MakeScaredOneGhost Scared A N-1}
+		GhostNewState = {MakeScaredState NewScared OldState}
 		NewDir = LastDir
 		T
 	     else
