@@ -612,7 +612,7 @@ define
       thread {Scared ScaredModeStream} end
 
       {System.show 'test1'}
-      {Send ScaredModePort scared(10000)}
+      %{Send ScaredModePort scared(10000)}
       {System.show 'test2'}
       
       NewMAP = {CreateGame MAP}
