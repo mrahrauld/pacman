@@ -190,16 +190,16 @@ define
 		  {Send GhostPort dead({List.length OldGhost}-{List.length T} GNX GNY)} %Si le ghost est en mode scared
 		  Lives
 	       else
-		  Lives-1
 		  {System.show 'Tu perds une vie'}
+		  Lives-1
 	       end
 	    elseif GNX==OX andthen GNY==OY andthen NX==GOX andthen NY==GOY then % S'ils se croisent
 	       if C2 == 33 then
 		  {Send GhostPort dead({List.length OldGhost}-{List.length T} GNX GNY)} %Si le ghost est en mode scared
 		  Lives
 	       else
+		   {System.show 'Tu perds une vie'}
 		  Lives-1
-		  {System.show 'Tu perds une vie'}
 	       end
 	    else
 	       {IsDead Lives OX OY NX NY OldGhost.2 NewGhost.2}
