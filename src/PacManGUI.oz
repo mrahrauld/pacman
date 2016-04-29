@@ -328,7 +328,7 @@ define
 	       r(Color NewX NewY)|{MoveGhost T OldState.2}
 	    end
 	 end
-       end
+      end
 
        %
        % Regarde si une autre direction est disponible pour le Ghost
@@ -398,6 +398,16 @@ define
 	     nil
 	  end
        end
+
+       fun{MakeScaredState Scared OldState}
+	  X Y Color in
+	  case Scared of H|T then
+	     r(Color X Y) = OldState.1
+	     r(H X Y)|{MakeScared T OldState.2}
+	  else
+	     nil
+	  end
+       end
        
        fun {GhostCommand GhostStream OldState LastDir Scared GhostNewState NewDir NewScared}
 	  fun{GhostCommand2 OldState LastDir}
@@ -417,7 +427,7 @@ define
 	     [] scared(A) then
 		{System.show A}
 		NewScared = {MakeScared Scared A}
-		GhostNewState = OldState
+		GhostNewState = {MakeScaredState NewScared OldState}
 		NewDir = LastDir
 		T
 	     else
