@@ -412,9 +412,9 @@ define
        fun{MakeScaredOneGhost Scared A N}
 	  case Scared of H|T then
 	     if N == 0 then
-		A|{MakeScared T A N-1}
+		A|{MakeScaredOneGhost T A N-1}
 	     else
-		H|{MakeScared T A N-1}
+		H|{MakeScaredOneGhost T A N-1}
 	     end
 	  else
 	     nil
