@@ -82,7 +82,7 @@ define
       
       if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	 false
-      elseif {GetElement NewX NewY MAP} == 5 and Color == 4 then
+      elseif {GetElement NewX NewY MAP} == 5 andthen Color == 4 then
 	 {System.show 'hole'}
 	 {ChooseNewHole OldState WORMHOLES}
       else 
