@@ -100,6 +100,7 @@ define
 	 {System.show RAND}
 	 local
 	    r(C X Y) = {List.nth HoleList RAND}
+	    {System.show r(C X Y)}
 	 in 
 	    if r(C X Y) \= OH then
 	       r(X Y)
