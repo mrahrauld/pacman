@@ -187,7 +187,8 @@ define
 	    r(C2 GNX GNY) = NewGhost.1
 	    if GNX==NX  andthen GNY==NY then % si les nouvelles positions sont les mêmes
 	       if C2 == 33 then
-		  {System.show {List.length OldGhost}-{List.length T}}
+		  {System.show {List.length OldGhost}}
+		  {System.show {List.length T}}
 		  {Send GhostPort dead({List.length OldGhost}-{List.length T} GNX GNY)} %Si le ghost est en mode scared
 		  Lives
 	       else
