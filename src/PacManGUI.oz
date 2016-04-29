@@ -52,7 +52,7 @@ define
       case ScaredModeStream of scared(Time)|T then
 	 Stream
 	 Port = {NewPort Stream} in
-	 {Send GhostPort scared(1)}
+	 {Send GhostPort scared(33)}
 	 thread {Delay Time} {Send Port 1}  end
 	 thread
 	    case T of scared(Time)|L then
@@ -64,7 +64,7 @@ define
 	 %Temps fini
 	 case Stream.1 of 1 then
 	    {System.show 'Temps fini'}
-	    {Send GhostPort scared(nil)}
+	    {Send GhostPort scared(3)}
 	 end
 	 {Scared T}
       end
