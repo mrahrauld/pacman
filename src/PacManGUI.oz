@@ -81,7 +81,7 @@ define
       NewY = OldY + DY
       if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
 	 false
-      elseif {GetElement OldX OldY MAP} == 5 andthen Color == 4 then
+      elseif {GetElement NewX NewY MAP} == 5 andthen Color == 4 then
 	 {ChooseNewHole OldState WORMHOLES}
       else 
 	    r(NewX NewY)
@@ -95,6 +95,7 @@ define
 	 unit
       else
 	 RAND = {Int.'mod' {OS.rand} N}
+	 {System.show 'RAND'}
 	 {System.show RAND}
 	 local
 	    r(C X Y) = {List.nth HoleList RAND}
