@@ -179,7 +179,7 @@ define
 	 NewMAP
       end
       
-      fun{IsDead Lives OX OY NX NY OldGhost NewGhost}
+      fun{IsDead Lives OX OY NX NY OldGhost NewGhost NbreGhost}
 	 GOX GOY GNX GNY C C2 in
 	 case OldGhost of nil then Lives
 	 [] H|T then
@@ -187,9 +187,8 @@ define
 	    r(C2 GNX GNY) = NewGhost.1
 	    if GNX==NX  andthen GNY==NY then % si les nouvelles positions sont les mêmes
 	       if C2 == 33 then
-		  {System.show {List.length OldGhost}}
-		  {System.show {List.length T}}
-		  {Send GhostPort dead({List.length OldGhost}-{List.length T} GNX GNY)} %Si le ghost est en mode scared
+
+		  {Send GhostPort dead({List.length NbreGhost}-{List.length T} GNX GNY)} %Si le ghost est en mode scared
 		  Lives
 	       else
 		  {System.show 'Tu perds une vie'}
@@ -197,14 +196,14 @@ define
 	       end
 	    elseif GNX==OX andthen GNY==OY andthen NX==GOX andthen NY==GOY then % S'ils se croisent
 	       if C2 == 33 then
-		  {Send GhostPort dead({List.length OldGhost}-{List.length T} GNX GNY)} %Si le ghost est en mode scared
+		  {Send GhostPort dead({List.length NbreGhost}-{List.length T} GNX GNY)} %Si le ghost est en mode scared
 		  Lives
 	       else
 		   {System.show 'Tu perds une vie'}
 		  Lives-1
 	       end
 	    else
-	       {IsDead Lives OX OY NX NY OldGhost.2 NewGhost.2}
+	       {IsDead Lives OX OY NX NY OldGhost.2 NewGhost.2 NbreGhost}
 	    end
 	 end
       end
@@ -241,7 +240,7 @@ define
 		  
 		  NX = X
 		  NY = Y
-	       	  NewLives = {IsDead Lives OX OY NX NY OldGhost NewGhost}
+	       	  NewLives = {IsDead Lives OX OY NX NY OldGhost NewGhost {List.length OldGhost}}
 		  if NewLives==Lives then
 		     Ack= pos(C NX NY OriginX OriginY Lives NewCoins)
 		     NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY) r(DX DY) CoinCount NewCoinCount Coins NewCoins}
@@ -252,7 +251,7 @@ define
 	       else
 		  NX = OX
 		  NY = OY
-	       	  NewLives = {IsDead Lives OX OY OX OY OldGhost NewGhost}
+	       	  NewLives = {IsDead Lives OX OY OX OY OldGhost NewGhost {List.length OldGhost}}
 		  if NewLives==Lives then
 		  NewMAP = MAP
 		  Ack = pos(C OX OY OriginX OriginY Lives Coins)
@@ -262,8 +261,6 @@ define
 		     Ack = pos(C OriginX OriginY OriginX OriginY NewLives Coins)
 		     NewCoinCount = Coins
 		  end
-		  
-
 	       end
 	       {MoveGhost OldGhost NewGhost NX NY OX OY}
 	    end
