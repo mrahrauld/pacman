@@ -569,13 +569,13 @@ define
 	 end
       end
 
-      proc {CreateNilList N NilList A}
-	 NewNilList in
+      proc {CreateList N List A}
+	 NewList in
 	 if N == 0 then
-	    NilList = A
+	    List = A
 	 else
-	    {CreateNilList N-1 NewNilList A}
-	    NilList = A|NewNilList
+	    {CreateList N-1 NewList A}
+	    List = A|NewList
 	 end
       end
       
@@ -613,8 +613,9 @@ define
 
       {CreateTable MAP {Record.arity MAP} COINS}
 
-      local GHOST2 in
+      local GHOST2 Scared in
 	 {CreateList {List.length GHOSTS} GHOST2 nil}
+	 {CreateList {List.length GHOSTS} Scared 3}
 	 thread {Ghost GHOSTS GhostStream MAP GHOST2 GHOST2} end
       end
 
