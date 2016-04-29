@@ -214,7 +214,7 @@ define
 	       case NewPos of r(X Y) then
 
                   % GHOST PASSE EN MODE SCARED 
-		  if {GetElement X Y OldMap} == 2 then
+		  if {GetElement X Y OldMAP} == 2 then
 		     {Send ScaredModePort scared(3000)}
 		  end
 		  
