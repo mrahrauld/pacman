@@ -417,7 +417,8 @@ define
 	     [] scared(A) then
 		{System.show A}
 		NewScared = {MakeScared Scared A}
-	        GhostNewState = OldState
+		GhostNewState = OldState
+		NewDir = LastDir
 		T
 	     else
 		NewDir = {GhostCommand2 OldState LastDir}
