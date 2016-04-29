@@ -11,14 +11,14 @@ define
    Desc
    Window
    Canvas
-   LIVES
-   COINS
-   NOMBREPACMAN
-   WORMHOLES
-   W
-   H
-   NW
-   NH
+   LIVES %PARAM NOMBRE DE VIES
+   COINS %PARAM NOMBRE DE PIECE AU DEBUT
+   NOMBREPACMAN %PARAM NOMBRE DE PACMAN DANS LA PARTIE
+   WORMHOLES %PARAM LISTE DES POSITIONS DES TROUS
+   W %LARGEUR D'UNE CASE
+   H %HAUTEUR D'UNE CASE
+   NW %NOMBRE DE CASE DANS LA LONGUEUR
+   NH %NOMBRE DE CASE DANS LA HAUTEUR
    NCoinInit
    MainURL={OS.getCWD}
    PacManImg={QTk.newImage photo(url:MainURL#"/pacman.gif")}
@@ -76,19 +76,38 @@ define
       NewX NewY DX DY OldX OldY Color 
       r(Color OldX OldY) = OldState
    in
-      
       r(DX DY) = Dir
       NewX = OldX + DX
       NewY = OldY + DY
       
       if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
-	     false
-	  else
-	     
+	 false
+      elseif {GetElement NewX NewY MAP} == 5 then 
+	 {ChooseNewHole OldState WORMHOLES}
+      else 
 	     r(NewX NewY)
-	  end 
+      end 
    end
 
+   fun {ChooseNewHole OH HoleList}
+      N RAND in
+      N = {List.length HoleList}
+      case N of 2 then
+	 skip
+      else
+	 RAND = {Int.'mod' {OS.rand} N}
+	 local
+	    r(C X Y) = {List.nth HoleList RAND}
+	 in 
+	    case r(C X Y) \= OH then
+	       r(X Y)
+	    else
+	       {ChooseNewHole OH HoleList}
+	    end
+	 end
+      end
+   end
+   
    
    %%%%% MAP %%%%
    proc {Map MapStream GhostPort MAP CoinCount AlivePacmans AlivePacmanStream}
@@ -155,7 +174,6 @@ define
 	       {DrawBox {GetElement OldX OldY MAP} OldX OldY}
 	       if  NX==OldX andthen NY==OldY then %Si pacman est juste derriere ghost
 		  if OX\= NewX orelse OY\=NewY then
-		     {System.show OX}
 		     {DrawBox 4 OldX OldY}
 		  end
 	       end
@@ -179,7 +197,6 @@ define
 		     Ack= pos(C NX NY OriginX OriginY Lives NewCoins)
 		     NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY)  CoinCount NewCoinCount Coins NewCoins}
 		  else
-		     {System.show NewLives}
 		     Ack= pos(C OriginX OriginY OriginX OriginY NewLives NewCoins)
 		     NewMAP = {MovePacman OldMAP r(OX OY) r(OriginX OriginY)  CoinCount NewCoinCount Coins NewCoins} 
 		  end	  
@@ -200,7 +217,6 @@ define
 
 	       end
 	       {MoveGhost OldGhost NewGhost NX NY OX OY}
-	      
 	    end
 	    T
 	 end
@@ -210,10 +226,8 @@ define
    in
       NextMapStream = {WaitStream MAP NewMAP MapStream GhostPort CoinCount NewCoinCount}
       case AlivePacmanStream of H|T then %recalcul du nombre de pacman en vie
-	  {System.show H}
 	 NextAlivePacmanStream = T
 	 NewAlivePacmans = AlivePacmans-H
-	 {System.show NewAlivePacmans}
 	 
       end
       if NewAlivePacmans==0 then {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
@@ -532,8 +546,6 @@ define
 	 thread {Ghost GHOSTS GhostStream MAP GHOST2} end
       end
 
-      {System.show WORMHOLES}
-
       NewMap
  
    end
@@ -565,6 +577,8 @@ define
       %{Browse show}
       
       NewMAP = {CreateGame MAP}
+
+      %Liste des WORMHOLES DANS la variable globale WORMHOLES !!!
       
       {Map PacmanStream GhostPort NewMAP COINS NOMBREPACMAN AlivePacmanStream}
 
