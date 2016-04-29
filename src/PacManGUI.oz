@@ -99,7 +99,7 @@ define
 	 local
 	    r(C X Y) = {List.nth HoleList RAND}
 	 in 
-	    case r(C X Y) \= OH then
+	    if r(C X Y) \= OH then
 	       r(X Y)
 	    else
 	       {ChooseNewHole OH HoleList}
