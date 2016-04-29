@@ -191,6 +191,7 @@ define
 		  Lives
 	       else
 		  Lives-1
+		  {System.show 'Tu perds une vie'}
 	       end
 	    elseif GNX==OX andthen GNY==OY andthen NX==GOX andthen NY==GOY then % S'ils se croisent
 	       if C2 == 33 then
@@ -198,6 +199,7 @@ define
 		  Lives
 	       else
 		  Lives-1
+		  {System.show 'Tu perds une vie'}
 	       end
 	    else
 	       {IsDead Lives OX OY NX NY OldGhost.2 NewGhost.2}
