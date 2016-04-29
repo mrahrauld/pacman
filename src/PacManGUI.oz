@@ -55,7 +55,7 @@ define
 	 thread {Delay Time} {Send Port 1}  end
 	 thread
 	    case T of scared(Time)|L then
-	       {Send Port T}
+	       {Send Port 2}
 	    end
 	 end
 	 {Wait Stream.1}
@@ -63,6 +63,7 @@ define
 	    {System.show 'Temps finis'}
 	 else
 	    {System.show 'Nouveau temps'}
+	    {Scared T}
 	 end
       end
    end
