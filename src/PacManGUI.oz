@@ -61,6 +61,7 @@ define
 	 {Wait Stream.1}
 	 case Stream.1 of 1 then
 	    {System.show 'Temps finis'}
+	    {Scared T}
 	 else
 	    {System.show 'Nouveau temps'}
 	    {Scared T}
