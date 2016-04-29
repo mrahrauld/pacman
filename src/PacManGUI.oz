@@ -96,6 +96,7 @@ define
 	 unit
       else
 	 RAND = {Int.'mod' {OS.rand} N}
+	 {System.show RAND}
 	 local
 	    r(C X Y) = {List.nth HoleList RAND}
 	 in 
