@@ -428,6 +428,7 @@ define
 		{System.show A}
 		NewScared = {MakeScared Scared A}
 		GhostNewState = {MakeScaredState NewScared OldState}
+		{System.show NewScared}
 		{System.show GhostNewState}
 		NewDir = LastDir
 		T
