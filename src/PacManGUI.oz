@@ -289,7 +289,8 @@ define
 	    case {GetElement NewX NewY MAP} of 5 then
 	       local X Y in
 		  r(X Y) = {ChooseNewHole r(Color NewX NewY) WORMHOLES}
-	       r(Color X Y)|{MoveGhost T OldState.2}
+		  r(Color X Y)|{MoveGhost T OldState.2}
+	       end
 	    else	    
 	       r(Color NewX NewY)|{MoveGhost T OldState.2}
 	    end
