@@ -50,6 +50,7 @@ define
 
    proc{Scared ScaredModeStream}
       case ScaredModeStream of scared(Time)|T then
+	 Stream
 	 Port = {NewPort Stream} in 
 	 thread {Delay Time} {Send Port 1}  end
 	 thread
