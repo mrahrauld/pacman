@@ -52,10 +52,10 @@ define
       case ScaredModeStream of scared(Time)|T then
 	 Stream
 	 Port = {NewPort Stream} in
-	 {System.show 'test3'}
 	 thread {Delay Time} {Send Port 1}  end
 	 thread
 	    case T of scared(Time)|L then
+	       {System.show 'test'}
 	       {Send Port T}
 	    end
 	 end
@@ -611,9 +611,7 @@ define
 
       thread {Scared ScaredModeStream} end
 
-      {System.show 'test1'}
-      %{Send ScaredModePort scared(10000)}
-      {System.show 'test2'}
+      {Send ScaredModePort scared(10000)}
       
       NewMAP = {CreateGame MAP}
 
