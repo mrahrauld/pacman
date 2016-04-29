@@ -290,6 +290,7 @@ define
 	       {ChooseNewHole r(Color NewX NewY) WORMHOLES}|{MoveGhost T OldState.2}
 	    else	    
 	       r(Color NewX NewY)|{MoveGhost T OldState.2}
+	    end
 	 end
        end
 
