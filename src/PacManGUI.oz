@@ -433,6 +433,7 @@ define
 	     else
 		NewDir = {GhostCommand2 OldState LastDir}
 		GhostNewState = {MoveGhost NewDir OldState}
+		{System.show GhostNewState}
 		H = OldState#GhostNewState
 		NewScared = Scared
 		T
