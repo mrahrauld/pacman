@@ -342,7 +342,7 @@ define
    	  NewX = OldX + DX
    	  NewY = OldY + DY
 
-	  if {MouvementIsAvailable OldState LastDir MAP} \= false  andthen r(~DX ~DY) == LasDir then
+	  if {MouvementIsAvailable OldState LastDir MAP} \= false  andthen r(~DX ~DY) == LastDir then
 	     {NewDirection OldState LastDir}
    	  elseif {MouvementIsAvailable OldState r(DX DY) MAP} == false then
 	     {NewDirection OldState LastDir}
