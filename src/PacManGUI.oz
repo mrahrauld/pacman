@@ -14,6 +14,7 @@ define
    LIVES
    COINS
    NOMBREPACMAN
+   WORMHOLES
    W
    H
    NW
@@ -380,6 +381,7 @@ define
       CreateGhostPort = {NewPort CreateGhostStream}
       NewMap
       GHOSTS
+      
 
       proc {CreateTable MAP ARITY COINS}
 	 NewCoins1 NewCoins2 in
@@ -451,6 +453,18 @@ define
 	       0
 	 end
       end
+
+      fun {WormholesList MapStream}
+	 case MapStream of r(C X Y)|T then
+	    case C of 5 then
+	       r(C X Y)|{WormholesList T}
+	    else
+	       {WormholesList T}
+	    end
+	 [] nil|T then
+	       nil
+	 end
+      end
       
 
       fun {AdaptMap MapStream MAP}
@@ -478,6 +492,7 @@ define
 	 {CreateGhost CreateGhostStream GHOSTS}
 	 NewMap = {AdaptMap CreateGhostStream MAP}
 	 NOMBREPACMAN = {NombrePacman CreateGhostStream}
+	 WORMHOLES = {WormholesList CreateGhostStream}
       end
 
       %Taille du tableau 
@@ -509,7 +524,7 @@ define
 	 thread {Ghost GHOSTS GhostStream MAP GHOST2} end
       end
 
-      {System.show NOMBREPACMAN}
+      {System.show WORMHOLES}
 
       NewMap
  
@@ -543,7 +558,7 @@ define
       
       NewMAP = {CreateGame MAP}
       
-      {Map PacmanStream GhostPort NewMAP COINS 1 AlivePacmanStream}
+      {Map PacmanStream GhostPort NewMAP COINS NOMBREPACMAN AlivePacmanStream}
 
    end
 
