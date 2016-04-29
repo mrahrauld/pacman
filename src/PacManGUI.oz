@@ -154,7 +154,7 @@ define
 	 [] H|T then
 	    r(C GOX GOY) = H
 	    r(C2 GNX GNY) = NewGhost.1
-	    if GNX==NX andthen andthen GNY==NY then % si les nouvelles positions sont les mêmes
+	    if GNX==NX  andthen GNY==NY then % si les nouvelles positions sont les mêmes
 	       Lives-1
 	    elseif GNX==OX andthen GNY==OY andthen NX==GOX andthen NY==GOY then % S'ils se croisent
 	       Lives-1
