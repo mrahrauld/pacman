@@ -44,6 +44,27 @@ define
    PacmanPort = {NewPort PacmanStream}
    AlivePacmanStream
    AlivePacmansPort = {NewPort AlivePacmanStream}
+   ScaredModeStream
+   ScaredModePort = {NewPort ScaredModeStream}
+
+
+   proc{Scared ScaredModeStream}
+      case ScaredModeStream of scared(Time)|T then
+	 Port = {NewPort Stream} in 
+	 thread {Delay Time} {Send Port 1}  end
+	 thread
+	    case T of scared(Time)|L then
+	       {Send Port T}
+	    end
+	 end
+	 {Wait Stream.1}
+	 case Stream of 1 then
+	    {System.show 'Temps finis'}
+	 else
+	    {System.show 'Nouveau temps'}
+	 end
+      end
+   end
    
    proc{DrawBox Number X Y}
       case Number of 0 then  %Empty case
@@ -585,6 +606,10 @@ define
    in
       LIVES = LIVE
       %{Browse show}
+
+      thread {Scared ScaredModeStream} end
+
+      {Send ScaredModePort scared(1000)}
       
       NewMAP = {CreateGame MAP}
 
