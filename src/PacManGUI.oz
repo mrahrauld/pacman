@@ -402,6 +402,7 @@ define
        fun{MakeScaredState Scared OldState}
 	  X Y Color in
 	  case Scared of H|T then
+	     {System.show 'boucle'}
 	     r(Color X Y) = OldState.1
 	     r(H X Y)|{MakeScared T OldState.2}
 	  else
