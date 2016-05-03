@@ -179,33 +179,7 @@ define
 	 NewMAP
       end
       
-      fun{IsDead Lives OX OY NX NY OldGhost NewGhost NbreGhost}
-	 GOX GOY GNX GNY C C2 in
-	 case OldGhost of nil then Lives
-	 [] H|T then
-	    r(C GOX GOY) = H
-	    r(C2 GNX GNY) = NewGhost.1
-	    if GNX==NX  andthen GNY==NY then % si les nouvelles positions sont les mêmes
-	       if C2 == 33 then
-		  {Send GhostPort dead(NbreGhost-{List.length T} GNX GNY)} %Si le ghost est en mode scared
-		  Lives
-	       else
-		  {System.show 'Tu perds une vie'}
-		  Lives-1
-	       end
-	    elseif GNX==OX andthen GNY==OY andthen NX==GOX andthen NY==GOY then % S'ils se croisent
-	       if C2 == 33 then
-		  {Send GhostPort dead(NbreGhost-{List.length T} GNX GNY)} %Si le ghost est en mode scared
-		  Lives
-	       else
-		   {System.show 'Tu perds une vie'}
-		  Lives-1
-	       end
-	    else
-	       {IsDead Lives OX OY NX NY OldGhost.2 NewGhost.2 NbreGhost}
-	    end
-	 end
-      end
+
       proc{MoveGhost OldStates NewStates NX NY OX OY}
 	    OldX OldY NewX NewY C C2 in
 	    case OldStates of nil then skip
@@ -223,15 +197,54 @@ define
 	       {MoveGhost OldStates.2 NewStates.2 NX NY OX OY}
 	    end
       end
+      fun{IsDead Lives NewLives OX OY NX NY OG NG NbreGhost NewGhost}
+	 GOX GOY GNX GNY C C2 ACK  in
+	 case OG of nil then
+	    NewLives  = Lives
+	    NewGhost
+	 [] H|T then
+	    r(C GOX GOY) = H
+	    r(C2 GNX GNY) = NG.1
+	    if GNX==NX  andthen GNY==NY then % si les nouvelles positions sont les mêmes
+	       if C2 == 33 then
+		  {Send GhostPort dead(NbreGhost-{List.length T} GNX GNY ACK)} %Si le ghost est en mode scared
+		  
+		  NewLives = Lives
+		  ACK
+	       else
+		  {System.show 'Tu perds une vie'}
+		  
+		  NewLives = Lives-1
+		  NewGhost
+	       end
+	    elseif GNX==OX andthen GNY==OY andthen NX==GOX andthen NY==GOY then % S'ils se croisent
+	       if C2 == 33 then
+		  {Send GhostPort dead(NbreGhost-{List.length T} GNX GNY ACK)} %Si le ghost est en mode scared
+		 
+		  NewLives = Lives
+		   ACK
+	       else
+		  {System.show 'Tu perds une vie'}
+		  
+		  NewLives = Lives-1
+		  NewGhost
+	       end
+	    else
+	        
+	       {IsDead Lives NewLives OX OY NX NY OG.2 NG.2 NbreGhost NewGhost}
+	    end
+	 end
+      end
       fun{WaitStream OldMAP NewMAP MapStream GhostPort CoinCount NewCoinCount }
-	 NewCoins NewPos GhostPos NX NY NewLives OldGhost NewGhost in
+	 NewCoins NewPos GhostPos NX NY NewLives OldGhost NewGhost OG NG in
 	 case MapStream of H|T then
-	    {Send GhostPort GhostPos}	 
-	    OldGhost#NewGhost=GhostPos
+	    {Send GhostPort GhostPos}
+	    OG#NG=GhostPos
+	    OldGhost = OG
 	    case H of move(C OX OY DX DY OriginX OriginY Lives Coins)#Ack then
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
 	       case NewPos of r(X Y) then
-
+		  
                   % GHOST PASSE EN MODE SCARED 
 		  if {GetElement X Y OldMAP} == 2 then
 		     {Send ScaredModePort scared(10000)}
@@ -239,7 +252,7 @@ define
 		  
 		  NX = X
 		  NY = Y
-	       	  NewLives = {IsDead Lives OX OY NX NY OldGhost NewGhost {List.length OldGhost}}
+		  NewGhost = {IsDead Lives NewLives OX OY NX NY  OG NG {List.length OG} NG}
 		  if NewLives==Lives then
 		     Ack= pos(C NX NY OriginX OriginY Lives NewCoins)
 		     NewMAP = {MovePacman OldMAP r(OX OY) r(NX NY) r(DX DY) CoinCount NewCoinCount Coins NewCoins}
@@ -250,7 +263,7 @@ define
 	       else
 		  NX = OX
 		  NY = OY
-	       	  NewLives = {IsDead Lives OX OY OX OY OldGhost NewGhost {List.length OldGhost}}
+		  NewGhost = {IsDead Lives NewLives OX OY OX OY OG NG {List.length OldGhost} NG}
 		  if NewLives==Lives then
 		  NewMAP = MAP
 		  Ack = pos(C OX OY OriginX OriginY Lives Coins)
@@ -466,10 +479,11 @@ define
 		GhostNewState = {MakeScaredState NewScared OldState}
 		NewDir = LastDir
 		T
-	     [] dead(N X Y) then
+	     [] dead(N X Y ACK) then
 		NewScared = {MakeScaredOneGhost Scared 3 N-1}
 		GhostNewState = {MakeScaredStateDead NewScared OldState N-1 OriginalPos}
 		NewDir = LastDir
+		ACK = GhostNewState
 		T
 	     else
 		NewDir = {GhostCommand2 OldState LastDir}
@@ -629,7 +643,7 @@ define
       end
 
       %Taille du tableau 
-      {Record.width MAP NW}
+      {Record.width MAP.1 NW}
       {Record.width MAP NH}
 
       W =WidthCell*NW
@@ -681,8 +695,8 @@ define
    proc {StartGame MAP LIVE}
       MySelf
       Ghosts
-      Ghosts2
-      Ghosts3
+      %Ghosts2
+     %MGhosts3
       NewMAP
    in
       LIVES = LIVE
