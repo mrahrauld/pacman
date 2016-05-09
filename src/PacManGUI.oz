@@ -88,7 +88,8 @@ define
    end
    
    proc{Timer TimerStream}
-      Port = {NewPort Stream}
+      Stream
+      Port = {NewPort Stream} in
       thread {Delay TIMETIMER} {Send Port 1} end
       thread
 	 case TimerStream of H|T then
