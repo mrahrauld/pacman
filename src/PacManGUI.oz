@@ -330,7 +330,6 @@ define
       else
 	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
       end
-      {System.show 'fin Map'}
    end
    
       
