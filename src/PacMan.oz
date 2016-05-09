@@ -71,7 +71,7 @@ in
    %{Say "Map:\t"#Args.map}
    %{Say "Pac-man lives:\t"#Args.lives}
 
-   %{System.show MAP}
+   {System.show LIVES}
 
    {GUI.startGame MAP LIVES}
    {Application.exit 0}
