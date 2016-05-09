@@ -97,7 +97,7 @@ define
 	 end
       end
       {Wait Port.1}
-      case Port.1 of 1 then
+      if Port.1 == 1 then
 	 {Send ReadCommandPort time(1)}
 	 {Timer TimerStream}
       end
