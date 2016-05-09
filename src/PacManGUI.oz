@@ -37,7 +37,8 @@ define
    WidthCell=40
    HeightCell=40
 
-   
+   TimerStream
+   TimerPort = {NewPort TimerStream}
    Command
    CommandPort = {NewPort Command}
    ReadCommand
@@ -86,10 +87,19 @@ define
       end
    end
    
-   proc{Timer}
-      {Delay TIMETIMER}
-      {Send ReadCommandPort time(1)}
-      {Timer}
+   proc{Timer TimerStream}
+      Port = {NewPort Stream}
+      thread {Delay TIMETIMER} {Send Port 1} end
+      thread
+	 case TimerStream of H|T then
+	    {Send Port 2}
+	 end
+      end
+      {Wait Port.1}
+      case Port.1 of 1 then
+	 {Send ReadCommandPort time(1)}
+	 {Timer}
+      end
    end
    
    proc{DrawBox Number X Y}
@@ -308,10 +318,14 @@ define
 	 NextAlivePacmanStream = T
 	 NewAlivePacmans = AlivePacmans-H
       end
-      if NewAlivePacmans==0 then {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
+      if NewAlivePacmans==0 then
+	 {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
+	 {Send ReadCommand ~1}
+	 {Send TimerStream ~1}
       elseif NewCoinCount == 0 then
 	 {Send GhostPort ~1}
 	 {Send ReadCommand ~1}
+	 {Send TimerStream ~1}
 	 {System.show 'Jeu fini'}
       else
 	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
