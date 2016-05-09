@@ -79,6 +79,7 @@ define
 	    {ContinuousGame T r(A B)}
 	 else
 	    {Send CommandPort Last}
+	    {ContinuousGame ReadCommand Last}
 	 end
       end
    end
