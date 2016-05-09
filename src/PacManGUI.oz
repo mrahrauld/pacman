@@ -268,7 +268,7 @@ define
 		  if NewLives==Lives then
 		  NewMAP = MAP
 		  Ack = pos(C OX OY OriginX OriginY Lives Coins)
-		     NewCoinCount = Coins
+		  NewCoinCount = CoinCount
 		  else
 		     NewMAP = {MovePacman OldMAP r(OX OY) r(OriginX OriginY) r(DX DY) CoinCount NewCoinCount Coins NewCoins} 
 		     Ack = pos(C OriginX OriginY OriginX OriginY NewLives Coins)
