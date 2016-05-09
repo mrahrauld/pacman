@@ -300,7 +300,6 @@ define
       end
 
    in
-      thread {Timer} end
       NextMapStream = {WaitStream MAP NewMAP MapStream GhostPort CoinCount NewCoinCount}
       case AlivePacmanStream of H|T then %recalcul du nombre de pacman en vie
 	 NextAlivePacmanStream = T
@@ -725,6 +724,7 @@ define
 
       thread {Scared ScaredModeStream} end
       thread {ContinuousGame ReadCommand r(1 0)} end
+      thread {Timer} end
       
       NewMAP = {CreateGame MAP}
 
