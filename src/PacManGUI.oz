@@ -80,7 +80,7 @@ define
 	 [] time(A) then
 	    {Send CommandPort Last}
 	    {System.show 'time passed 2'}
-	    {ContinuousGame ReadCommand Last}
+	    {ContinuousGame T Last}
 	 end
       end
    end
