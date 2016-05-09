@@ -93,7 +93,6 @@ define
       thread {Delay TIMETIMER} {Send Port 1} end
       thread
 	 case TimerStream of H|T then
-	    {System.show 'test'}
 	    {Send Port 2}
 	 end
       end
@@ -322,21 +321,16 @@ define
       end
       if NewAlivePacmans==0 then
 	 {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
-	 {System.show 'Jeu fini1'}
 	 {Send TimerPort ~1}
-	 {System.show 'Jeu fini2'}
 	 {Send ReadCommandPort ~1}
-	 {System.show 'Jeu fini3'}
       elseif NewCoinCount == 0 then
 	 {Send GhostPort ~1}
-	 {System.show 'Jeu fini1'}
 	 {Send TimerPort ~1}
-	 {System.show 'Jeu fini2'}
 	 {Send ReadCommandPort ~1}
-	 {System.show 'Jeu fini3'}
       else
 	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
       end
+      {System.show 'fin Map'}
    end
    
       
@@ -757,7 +751,7 @@ define
       
       thread {Map PacmanStream GhostPort NewMAP COINS NOMBREPACMAN AlivePacmanStream} end
       {Timer TimerStream}
-      {System.show 'FIN'}
+      {Window close}
    end
 
   
