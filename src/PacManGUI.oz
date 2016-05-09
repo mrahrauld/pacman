@@ -272,7 +272,6 @@ define
 		  else
 		     NewMAP = {MovePacman OldMAP r(OX OY) r(OriginX OriginY) r(DX DY) CoinCount NewCoinCount Coins NewCoins} 
 		     Ack = pos(C OriginX OriginY OriginX OriginY NewLives Coins)
-		     NewCoinCount = Coins
 		  end
 	       end
 	       {MoveGhost OldGhost NewGhost NX NY OX OY}
