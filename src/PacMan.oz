@@ -48,34 +48,31 @@ define
    Say    = System.showInfo
 
    % Posible arguments
-   % Args = {Application.getArgs
-   %            record(
-   %                   map(single char:&m type:atom default:MAP)
-   %                   lives(single char:&l type:int default:LIVES)
-   %                   help(single char:[&? &h] default:false)
-   %                  )}
+   Args = {Application.getArgs
+               record(
+		  map(single char:&m type:atom default:MAP)
+		  lives(single char:&l type:int default:LIVES)
+		  help(single char:[&? &h] default:false)
+		  )}
 
 in
    
-   % Help message
-   % if Args.help then
-   %    {Say "Usage: "#{Property.get 'application.url'}#" [option]"}
-   %    {Say "Options:"}
-   %    {Say "  -m, --map FILE\tFile containing the map (default "#MAP#")"}
-   %    {Say "  -l, --lives INT\tNumber of pac-man lives"}
-   %    {Say "  -h, -?, --help\tThis help"}
-   %    {Application.exit 0}
-   % end
+    Help message
+    if Args.help then
+       {Say "Usage: "#{Property.get 'application.url'}#" [option]"}
+       {Say "Options:"}
+       {Say "  -m, --map FILE\tFile containing the map (default "#MAP#")"}
+       {Say "  -l, --lives INT\tNumber of pac-man lives"}
+       {Say "  -h, -?, --help\tThis help"}
+       {Application.exit 0}
+    end
 
    {System.show 'These are the arguments to run the application'}
-   %{Say "Map:\t"#Args.map}
-   %{Say "Pac-man lives:\t"#Args.lives}
+   {Say "Map:\t"#Args.map}
+   {Say "Pac-man lives:\t"#Args.lives}
 
    %{System.show MAP}
 
    {GUI.startGame MAP LIVES}
-   {System.show 'fin pacman'}
-   % {Delay 1000}
-    {Application.exit 0}
-    {System.show 'fin pacman'}
+   {Application.exit 0}
 end
