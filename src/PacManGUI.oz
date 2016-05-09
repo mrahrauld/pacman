@@ -96,8 +96,8 @@ define
 	    {Send Port 2}
 	 end
       end
-      {Wait Port.1}
-      if Port.1 == 1 then
+      {Wait Stream.1}
+      if Stream.1 == 1 then
 	 {Send ReadCommandPort time(1)}
 	 {Timer TimerStream}
       end
