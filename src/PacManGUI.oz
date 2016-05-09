@@ -285,7 +285,7 @@ define
    in
       NextMapStream = {WaitStream MAP NewMAP MapStream GhostPort CoinCount NewCoinCount}
       {System.show '1tour'}
-      {System.show newCoinCount}
+      {System.show NewCoinCount}
       case AlivePacmanStream of H|T then %recalcul du nombre de pacman en vie
 	 NextAlivePacmanStream = T
 	 NewAlivePacmans = AlivePacmans-H
