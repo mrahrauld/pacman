@@ -19,7 +19,7 @@
 functor
 import
    Application
-   %Property
+   Property
    System
    GUI at 'PacManGUI.ozf'
 
