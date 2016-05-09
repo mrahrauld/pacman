@@ -99,7 +99,7 @@ define
       {Wait Port.1}
       case Port.1 of 1 then
 	 {Send ReadCommandPort time(1)}
-	 {Timer}
+	 {Timer TimerStream}
       end
    end
    
