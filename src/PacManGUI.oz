@@ -288,7 +288,7 @@ define
 	 NewAlivePacmans = AlivePacmans-H
       end
       if NewAlivePacmans==0 then {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
-      elseif NewCountCoin = 0 then
+      elseif NewCoinCount = 0 then
 	 {Send GhostPort ~1}
 	 {System.show 'Jeu fini'}
       else
