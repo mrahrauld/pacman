@@ -11,7 +11,8 @@ define
    Desc
    Window
    Canvas
-   TIMESCARED = 10000
+   TIMESCARED = 5000
+   TIMETIMER = 1000
    LIVES %PARAM NOMBRE DE VIES
    COINS %PARAM NOMBRE DE PIECE AU DEBUT
    NOMBREPACMAN %PARAM NOMBRE DE PACMAN DANS LA PARTIE
@@ -39,6 +40,8 @@ define
    
    Command
    CommandPort = {NewPort Command}
+   ReadCommand
+   ReadCommandPort = {NewPort ReadCommand}
    GhostStream
    GhostPort = {NewPort GhostStream}
    PacmanStream
@@ -64,11 +67,26 @@ define
 
 	 %Temps fini
 	 if Stream.1 == 1 then
-	    {System.show 'Temps fini'}
 	    {Send GhostPort scared(3)}
 	 end
 	 {Scared T}
       end
+   end
+
+   proc{ContinuousGame ReadCommand Last}
+      case ReadCommand of H|T then
+	 case H of r(A B) then
+	    {ContinuousGame T r(A B)}
+	 else
+	    {Send CommandPort Last}
+	 end
+      end
+   end
+   
+   proc{Timer}
+      {Delay TIMETIMER}
+      {Send ReadCommandPort time(1)}
+      {Timer}
    end
    
    proc{DrawBox Number X Y}
@@ -282,6 +300,7 @@ define
       end
 
    in
+      thread {Timer} end
       NextMapStream = {WaitStream MAP NewMAP MapStream GhostPort CoinCount NewCoinCount}
       case AlivePacmanStream of H|T then %recalcul du nombre de pacman en vie
 	 NextAlivePacmanStream = T
@@ -659,10 +678,10 @@ define
       Window={QTk.build Desc}
 
       %Ajout des commandes
-      {Window bind(event:"<Up>" action:proc{$} {Send CommandPort r(0 ~1)} end)}
-      {Window bind(event:"<Left>" action:proc{$} {Send CommandPort r(~1 0)} end)}
-      {Window bind(event:"<Down>" action:proc{$} {Send CommandPort r(0 1)}  end)}
-      {Window bind(event:"<Right>" action:proc{$} {Send CommandPort r(1 0)} end)}
+      {Window bind(event:"<Up>" action:proc{$} {Send ReadCommandPort r(0 ~1)} end)}
+      {Window bind(event:"<Left>" action:proc{$} {Send ReadCommandPort r(~1 0)} end)}
+      {Window bind(event:"<Down>" action:proc{$} {Send ReadCommandPort r(0 1)}  end)}
+      {Window bind(event:"<Right>" action:proc{$} {Send ReadCommandPort r(1 0)} end)}
 
       {Window show}
 
@@ -705,6 +724,7 @@ define
       %{Browse show}
 
       thread {Scared ScaredModeStream} end
+      thread {ContinuousGame ReadCommand r(1 0)} end
       
       NewMAP = {CreateGame MAP}
 
