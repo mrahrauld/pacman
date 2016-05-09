@@ -283,14 +283,14 @@ define
 
    in
       NextMapStream = {WaitStream MAP NewMAP MapStream GhostPort CoinCount NewCoinCount}
-      {System.show '1tour'}
-      {System.show NewCoinCount}
       case AlivePacmanStream of H|T then %recalcul du nombre de pacman en vie
 	 NextAlivePacmanStream = T
 	 NewAlivePacmans = AlivePacmans-H
-	 
       end
       if NewAlivePacmans==0 then {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
+      elseif NewCountCoin = 0 then
+	 {Send GhostPort ~1}
+	 {System.show 'Jeu fini'}
       else
 	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
       end
