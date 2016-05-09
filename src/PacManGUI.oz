@@ -322,16 +322,16 @@ define
       if NewAlivePacmans==0 then
 	 {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
 	 {System.show 'Jeu fini1'}
-	 {Send ReadCommand ~1}
-	 {System.show 'Jeu fini2'}
 	 {Send TimerStream ~1}
+	 {System.show 'Jeu fini2'}
+	 {Send ReadCommand ~1}
 	 {System.show 'Jeu fini3'}
       elseif NewCoinCount == 0 then
 	 {Send GhostPort ~1}
 	 {System.show 'Jeu fini1'}
-	 {Send ReadCommand ~1}
-	 {System.show 'Jeu fini2'}
 	 {Send TimerStream ~1}
+	 {System.show 'Jeu fini2'}
+	 {Send ReadCommand ~1}
 	 {System.show 'Jeu fini3'}
       else
 	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
