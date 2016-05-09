@@ -750,7 +750,7 @@ define
       %Liste des WORMHOLES DANS la variable globale WORMHOLES !!!
       
       thread {Map PacmanStream GhostPort NewMAP COINS NOMBREPACMAN AlivePacmanStream} end
-      {Timer} 
+      {Timer TimerStream} 
    end
 
   
