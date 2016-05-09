@@ -12,7 +12,7 @@ define
    Window
    Canvas
    TIMESCARED = 5000
-   TIMETIMER = 200
+   TIMETIMER = 300
    LIVES %PARAM NOMBRE DE VIES
    COINS %PARAM NOMBRE DE PIECE AU DEBUT
    NOMBREPACMAN %PARAM NOMBRE DE PACMAN DANS LA PARTIE
@@ -323,6 +323,7 @@ define
 	 {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
 	 {Send ReadCommand ~1}
 	 {Send TimerStream ~1}
+	 {System.show 'Jeu fini'}
       elseif NewCoinCount == 0 then
 	 {Send GhostPort ~1}
 	 {Send ReadCommand ~1}
