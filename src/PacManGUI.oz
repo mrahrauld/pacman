@@ -77,8 +77,9 @@ define
       case ReadCommand of H|T then
 	 case H of r(A B) then
 	    {ContinuousGame T r(A B)}
-	 else
+	 [] time(A) then
 	    {Send CommandPort Last}
+	    {System.show 'time passed 2'}
 	    {ContinuousGame ReadCommand Last}
 	 end
       end
@@ -87,6 +88,7 @@ define
    proc{Timer}
       {Delay TIMETIMER}
       {Send ReadCommandPort time(1)}
+      {System.show 'time passed 1'}
       {Timer}
    end
    
