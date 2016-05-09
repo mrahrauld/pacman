@@ -325,14 +325,14 @@ define
 	 {System.show 'Jeu fini1'}
 	 {Send TimerPort ~1}
 	 {System.show 'Jeu fini2'}
-	 {Send ReadCommand ~1}
+	 {Send ReadCommandPort ~1}
 	 {System.show 'Jeu fini3'}
       elseif NewCoinCount == 0 then
 	 {Send GhostPort ~1}
 	 {System.show 'Jeu fini1'}
 	 {Send TimerPort ~1}
 	 {System.show 'Jeu fini2'}
-	 {Send ReadCommand ~1}
+	 {Send ReadCommandPort ~1}
 	 {System.show 'Jeu fini3'}
       else
 	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
