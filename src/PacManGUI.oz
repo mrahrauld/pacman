@@ -93,6 +93,7 @@ define
       thread {Delay TIMETIMER} {Send Port 1} end
       thread
 	 case TimerStream of H|T then
+	    {System.show 'test'}
 	    {Send Port 2}
 	 end
       end
