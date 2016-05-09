@@ -57,7 +57,7 @@ define
 
 in
    
-    Help message
+    %Help message
     if Args.help then
        {Say "Usage: "#{Property.get 'application.url'}#" [option]"}
        {Say "Options:"}
