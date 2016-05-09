@@ -727,14 +727,14 @@ define
 
       thread {Scared ScaredModeStream} end
       thread {ContinuousGame ReadCommand r(1 0)} end
-      thread {Timer} end
+      
       
       NewMAP = {CreateGame MAP}
 
       %Liste des WORMHOLES DANS la variable globale WORMHOLES !!!
       
-      {Map PacmanStream GhostPort NewMAP COINS NOMBREPACMAN AlivePacmanStream}
-
+      thread {Map PacmanStream GhostPort NewMAP COINS NOMBREPACMAN AlivePacmanStream} end
+      {Timer} 
    end
 
   
