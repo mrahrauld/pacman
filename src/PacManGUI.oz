@@ -11,6 +11,7 @@ define
    Desc
    Window
    Canvas
+   TIMESCARED = 10000
    LIVES %PARAM NOMBRE DE VIES
    COINS %PARAM NOMBRE DE PIECE AU DEBUT
    NOMBREPACMAN %PARAM NOMBRE DE PACMAN DANS LA PARTIE
@@ -247,7 +248,7 @@ define
 		  
                   % GHOST PASSE EN MODE SCARED 
 		  if {GetElement X Y OldMAP} == 2 then
-		     {Send ScaredModePort scared(10000)}
+		     {Send ScaredModePort scared(TIMESCARED)}
 		  end
 		  
 		  NX = X
@@ -283,6 +284,8 @@ define
 
    in
       NextMapStream = {WaitStream MAP NewMAP MapStream GhostPort CoinCount NewCoinCount}
+      {System.show '1tour'}
+      {System.show newCoinCount}
       case AlivePacmanStream of H|T then %recalcul du nombre de pacman en vie
 	 NextAlivePacmanStream = T
 	 NewAlivePacmans = AlivePacmans-H
