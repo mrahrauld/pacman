@@ -79,8 +79,9 @@ define
 	    {ContinuousGame T r(A B)}
 	 [] time(A) then
 	    {Send CommandPort Last}
-	    {System.show 'time passed 2'}
 	    {ContinuousGame T Last}
+	 else
+	    skip
 	 end
       end
    end
@@ -88,7 +89,6 @@ define
    proc{Timer}
       {Delay TIMETIMER}
       {Send ReadCommandPort time(1)}
-      {System.show 'time passed 1'}
       {Timer}
    end
    
@@ -311,6 +311,7 @@ define
       if NewAlivePacmans==0 then {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
       elseif NewCoinCount == 0 then
 	 {Send GhostPort ~1}
+	 {Send ReadCommand ~1}
 	 {System.show 'Jeu fini'}
       else
 	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
