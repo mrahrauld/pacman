@@ -21,7 +21,6 @@ define
    H %HAUTEUR D'UNE CASE
    NW %NOMBRE DE CASE DANS LA LONGUEUR
    NH %NOMBRE DE CASE DANS LA HAUTEUR
-   NCoinInit
    MainURL={OS.getCWD}
    PacManImg={QTk.newImage photo(url:MainURL#"/pacman.gif")}
    PacManUImg={QTk.newImage photo(url:MainURL#"/pacmanU.gif")}
@@ -704,9 +703,8 @@ define
 
       {CreateTable MAP {Record.arity MAP} COINS}
 
-      local GHOST2 Scared in
+      local GHOST2 in
 	 {CreateList {List.length GHOSTS} GHOST2 nil}
-	 {CreateList {List.length GHOSTS} Scared 3}
 	 thread {Ghost GHOSTS GhostStream MAP GHOST2 GHOST2 GHOSTS} end
       end
 
@@ -731,10 +729,6 @@ define
    end
    
    proc {StartGame MAP LIVE}
-      MySelf
-      Ghosts
-      %Ghosts2
-     %MGhosts3
       NewMAP
    in
       LIVES = LIVE
