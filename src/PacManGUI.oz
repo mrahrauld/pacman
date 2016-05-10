@@ -79,7 +79,7 @@ define
       case ReadCommand of H|T then
 	 case H of r(A B) then
 	    {ContinuousGame T r(A B)}
-	 [] time(A) then
+	 [] time(_) then
 	    {Send CommandPort Last}
 	    {ContinuousGame T Last}
 	 else
@@ -93,9 +93,10 @@ define
       Port = {NewPort Stream} in
       thread {Delay TIMETIMER} {Send Port 1} end
       thread
-	 case TimerStream of H|T then
+	 {Wait TimerStream.1}
+	 %case TimerStream of H|T then
 	    {Send Port 2}
-	 end
+	 %end
       end
       {Wait Stream.1}
       if Stream.1 == 1 then
