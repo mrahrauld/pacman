@@ -623,7 +623,7 @@ define
       end
 
       fun {NombrePacman MapStream}
-	 case MapStream of r(1:C 2:X)|T then
+	 case MapStream of r(1:C)|T then
 	    case C of 4 then
 	       1 + {NombrePacman T}
 	    else
