@@ -432,10 +432,8 @@ define
        %
        fun {NewDirection OldState LastDir}
    	  Dir = {Int.'mod' {OS.rand} 4}
-   	  DX DY OldX OldY
+   	  DX DY 
        in
-   	  r(_ OldX OldY) = OldState
-	  
    	  case Dir of 1 then r(DX DY) = r(1 0)
    	  [] 2 then  r(DX DY) = r(~1 0)
    	  [] 3 then r(DX DY) = r(0 1)
