@@ -60,9 +60,10 @@ define
 	 thread {Delay Time} {Send Port 1}  end
 	 thread
 	    %scared(Time)
-	    case T of H|L then
+	    %case T of H|L then
+	    {Wait T.1}
 	       {Send Port 2}
-	    end
+	   % end
 	 end
 	 {Wait Stream.1}
 
