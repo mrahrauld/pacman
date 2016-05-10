@@ -154,8 +154,8 @@ define
    %% Si Pacman/Ghost rentre dans un trou, sa nouvelles position sera choisie aléatoirement entre tous les autres trous.
    %Ils ne peuvent pas être bloqués entre deux trous
    fun {ChooseNewHole OH HoleList}
-      N RAND OX OY Color in
-      r(Color OX OY) = OH
+      N RAND OX OY in
+      r(_ OX OY) = OH     %Enleve color
       N = {List.length HoleList}
       RAND = {Int.'mod' {OS.rand} N} +1
       local
@@ -218,7 +218,7 @@ define
       proc{MoveGhost OldStates NewStates NX NY OX OY}
 	    OldX OldY NewX NewY C C2 in
 	    case OldStates of nil then skip
-	    []H|T then
+	    []H|_ then
 	       r(C2 OldX OldY) = H
 	       r(C NewX NewY) = NewStates.1
 	       {DrawBox ~1 OldX OldY}
@@ -354,7 +354,7 @@ define
 	 end
       end in
       NextCommand = {UserCommand Command MySelf MyNewState}
-      case MyNewState of pos(C X Y OX OY Lives Coins) then
+      case MyNewState of pos(_ _ _ _ _ Lives _) then
 	 if Lives \= 0 then
 	    {Send AlivePacmansPort 0}
 	    {Pacman MyNewState NextCommand}
@@ -398,8 +398,8 @@ define
        %
       fun {OtherDirAvailaible State LastDir}
 	 fun {MouvementIsAvailable OldState Dir MAP}
-	    NewX NewY DX DY OldX OldY Color 
-	    r(Color OldX OldY) = OldState
+	    NewX NewY DX DY OldX OldY 
+	    r(_ OldX OldY) = OldState
 	 in
 	    
 	    r(DX DY) = Dir
@@ -432,9 +432,9 @@ define
        %
        fun {NewDirection OldState LastDir}
    	  Dir = {Int.'mod' {OS.rand} 4}
-   	  NewX NewY DX DY OldX OldY Color
+   	  DX DY OldX OldY
        in
-   	  r(Color OldX OldY) = OldState
+   	  r(_ OldX OldY) = OldState
 	  
    	  case Dir of 1 then r(DX DY) = r(1 0)
    	  [] 2 then  r(DX DY) = r(~1 0)
@@ -455,7 +455,7 @@ define
        end
 
        fun{MakeScared Scared A}
-	  case Scared of H|T then
+	  case Scared of _|T then
 	     A|{MakeScared T A}
 	  else
 	     nil
@@ -519,7 +519,7 @@ define
 		GhostNewState = {MakeScaredState NewScared OldState}
 		NewDir = LastDir
 		T
-	     [] dead(N X Y ACK) then
+	     [] dead(N _ _ ACK) then
 		NewScared = {MakeScaredOneGhost Scared 3 N-1}
 		GhostNewState = {MakeScaredStateDead NewScared OldState N-1 OriginalPos}
 		NewDir = LastDir
@@ -618,7 +618,7 @@ define
 	    else
 	       NGHOST = NewGHOST
 	    end
-	 [] nil|T then
+	 [] nil|_ then
 	       NGHOST = nil
 	 else
 	    skip
@@ -632,7 +632,7 @@ define
 	    else
 	       {NombrePacman T}
 	    end
-	 [] nil|T then
+	 [] nil|_ then
 	       0
 	 end
       end
