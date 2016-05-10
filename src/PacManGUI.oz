@@ -59,7 +59,7 @@ define
 	 {Send GhostPort scared(33)}
 	 thread {Delay Time} {Send Port 1}  end
 	 thread
-	    case T of scared()|L then
+	    case T of scared(Time)|L then
 	       {Send Port 2}
 	    end
 	 end
