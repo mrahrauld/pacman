@@ -629,7 +629,7 @@ define
 	    else
 	       {NombrePacman T}
 	    end
-	 [] nil|T
+	 [] nil|T then
 	       0
 	 end
       end
