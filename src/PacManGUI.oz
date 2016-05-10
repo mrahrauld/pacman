@@ -623,13 +623,13 @@ define
       end
 
       fun {NombrePacman MapStream}
-	 case MapStream of r(C X Y)|T then
+	 case MapStream of r(1:C 2:X)|T then
 	    case C of 4 then
 	       1 + {NombrePacman T}
 	    else
 	       {NombrePacman T}
 	    end
-	 [] nil|T then
+	 else
 	       0
 	 end
       end
@@ -641,7 +641,7 @@ define
 	    else
 	       {WormholesList T}
 	    end
-	 [] nil|T then
+	 else
 	       nil
 	 end
       end
