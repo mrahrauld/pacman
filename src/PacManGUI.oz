@@ -442,8 +442,6 @@ define
    	  else
    	    r(DX DY) = r(0 ~1)
    	  end
-   	  NewX = OldX + DX
-   	  NewY = OldY + DY
 
 	  if LastDir \= nil andthen {MouvementIsAvailable OldState LastDir MAP} \= false  andthen r(~DX ~DY) == LastDir then
 	     {NewDirection OldState LastDir}
