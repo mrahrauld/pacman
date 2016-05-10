@@ -654,7 +654,7 @@ define
 	    else
 	       {AdaptMap T MAP}
 	    end
-	 [] nil then
+	 else 
 	    MAP
 	 end
       end
