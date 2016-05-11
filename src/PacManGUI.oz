@@ -33,6 +33,8 @@ define
    GhostScaredImg={QTk.newImage photo(url:MainURL#"/ghostScared.gif")}
    GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
    CoinImg={QTk.newImage photo(url:MainURL#"/yellow-coin.gif")}
+   WinImg={QTk.newImage photo(url:MainURL#"/youwin.gif")}
+   OverImg={QTk.newImage photo(url:MainURL#"/gameover.gif")}
    WidthCell=40
    HeightCell=40
 
@@ -130,7 +132,12 @@ define
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManLImg)}
       []44 then
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:PacManRImg)}
+      [] 37 then
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:WinImg)}
+      [] 38 then
+	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2  (Y-1)*HeightCell + HeightCell div 2    image:OverImg)}
       else %Whorhole
+	 
 	 {Canvas create(rect (X-1)*WidthCell (Y-1)*HeightCell (X-1)*WidthCell+WidthCell (Y-1)*HeightCell+HeightCell fill:black outline:black)}
       end
    end
@@ -325,10 +332,14 @@ define
 	 {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
 	 {Send TimerPort ~1}
 	 {Send ReadCommandPort ~1}
+	 {DrawBox 38 {Int.'div' NW 2} {Int.'div' NH 2}}
+
       elseif NewCoinCount == 0 then
 	 {Send GhostPort ~1}
 	 {Send TimerPort ~1}
 	 {Send ReadCommandPort ~1}
+	 {DrawBox 37 {Int.'div' NW 2} {Int.'div' NH 2}}
+
       else
 	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
       end
