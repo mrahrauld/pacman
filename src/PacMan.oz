@@ -42,7 +42,7 @@ define
 	r(1 1 1 1 1 0 1 1 1 1 0 1 1 1 1 0 1)
 	r(1 0 0 0 0 0 1 0 5 0 0 0 0 0 0 0 1)
 	r(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1))
-   LIVES    = 5
+   LIVES   = 5
 
    %% For feedback
    Say    = System.showInfo
@@ -72,8 +72,6 @@ in
    %{Say "Map:\t"#Args.map}
     {Say "Pac-man lives:\t"#Args.lives}
 
-    {System.show LIVES}
-
-   {GUI.startGame MAP LIVES}
+   {GUI.startGame MAP Args.lives}
    {Application.exit 0}
 end
