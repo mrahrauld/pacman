@@ -54,7 +54,6 @@ define
 		  lives(single char:&l type:int default:LIVES)
 		  help(single char:[&? &h] default:false)
 		  )}
-
 in
    
     %Help message
@@ -66,11 +65,12 @@ in
        {Say "  -h, -?, --help\tThis help"}
     
        {Application.exit 0}
-     end
+    end
+    
 
    {System.show 'These are the arguments to run the application'}
    %{Say "Map:\t"#Args.map}
-   %{Say "Pac-man lives:\t"#Args.lives}
+   {Say "Pac-man lives:\t"#Args.lives}
 
    {GUI.startGame MAP LIVES}
    {Application.exit 0}
