@@ -77,13 +77,13 @@ define
       end
    end
 
-   proc{ContinuousGame ReadCommand Last}
+   proc{ContinuousGame ReadCommand Current Last}
       case ReadCommand of H|T then
 	 case H of r(A B) then
-	    {ContinuousGame T r(A B)}
+	    {ContinuousGame T r(A B) Current}
 	 [] time(_) then
-	    {Send CommandPort Last}
-	    {ContinuousGame T Last}
+	    {Send CommandPort Current#Last}
+	    {ContinuousGame T Current Last}
 	 else
 	    skip
 	 end
@@ -142,15 +142,24 @@ define
       end
    end
 
-   fun {MouvementIsAvailable OldState Dir MAP}
-      NewX NewY DX DY OldX OldY Color 
+   fun {MouvementIsAvailable OldState Dir LastDir MAP}
+      NewX NewY DX DY OldX OldY Color LastDX LastDY NewX2 NewY2 
       r(Color OldX OldY) = OldState
    in
       r(DX DY) = Dir
+      r(LastDX LastDY) = LastDir
       NewX = OldX + DX
       NewY = OldY + DY
+      NewX2 = OldX + LastDX
+      NewY2 = OldY + LastDY
       if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
-	 false
+	 if NewX2<1 orelse NewX2>NW orelse NewY2<1 orelse NewY2>NH orelse {GetElement NewX2 NewY2 MAP} == 1 then
+	    false
+	 elseif {GetElement NewX2 NewY2 MAP} == 5 then
+	    {ChooseNewHole r(Color NewX2 NewY2) WORMHOLES}
+	 else
+	    r(NewX2 NewY2)
+	 end
       elseif {GetElement NewX NewY MAP} == 5 then
 	 {ChooseNewHole r(Color NewX NewY) WORMHOLES}
       else 
@@ -175,6 +184,12 @@ define
 	 end
       end
    end
+
+
+
+
+
+
    
    
    %%%%% MAP %%%%
@@ -283,8 +298,8 @@ define
 	    {Send GhostPort GhostPos}
 	    OG#NG=GhostPos
 	    OldGhost = OG
-	    case H of move(C OX OY DX DY OriginX OriginY Lives Coins)#Ack then
-	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) OldMAP}
+	    case H of move(C OX OY DX DY OriginX OriginY Lives Coins LastDX LastDY)#Ack then
+	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) r(LastDX LastDY) OldMAP}
 	       case NewPos of r(X Y) then
 		  
                   % GHOST PASSE EN MODE SCARED 
@@ -345,7 +360,14 @@ define
       end
    end
    
-      
+
+
+
+
+
+
+
+   
    %%%% PACMAN %%%%
    proc {Pacman MySelf Command}
 
@@ -356,8 +378,8 @@ define
 	 X Y OX OY Ack Lives Coins C in
 
 	 pos(C X Y OX OY Lives Coins) = OldState
-	 case Command of r(DX DY)|T then
-	    {Send PacmanPort move(C X Y DX DY OX OY Lives Coins)#Ack}
+	 case Command of r(DX DY)#r(LastDX LastDY)|T then
+	    {Send PacmanPort move(C X Y DX DY OX OY Lives Coins LastDX LastDY)#Ack}
 	    
 	    {Wait Ack} % Ack = pos(X Y Lives Coins)
 	    NewState = Ack
@@ -375,6 +397,13 @@ define
       end
    end
 
+
+
+
+
+
+
+   
    
    %%%% GHOST %%%%
    proc{Ghost MySelf GhostStream MAP InitDir Scared OriginalPos}
@@ -452,9 +481,9 @@ define
    	    r(DX DY) = r(0 ~1)
    	  end
 
-	  if LastDir \= nil andthen {MouvementIsAvailable OldState LastDir MAP} \= false  andthen r(~DX ~DY) == LastDir then
+	  if LastDir \= nil andthen {MouvementIsAvailable OldState LastDir LastDir MAP} \= false  andthen r(~DX ~DY) == LastDir then
 	     {NewDirection OldState LastDir}
-   	  elseif {MouvementIsAvailable OldState r(DX DY) MAP} == false then
+   	  elseif {MouvementIsAvailable OldState r(DX DY) r(DX DY) MAP} == false then
 	     {NewDirection OldState LastDir}
    	  else
    	     r(DX DY)
@@ -510,7 +539,7 @@ define
 	  fun{GhostCommand2 OldState LastDir}
 	     case OldState of nil then nil
 	     [] H|T then
-		if {OtherDirAvailaible H LastDir.1} == false andthen {MouvementIsAvailable H LastDir.1 MAP} \= false then
+		if {OtherDirAvailaible H LastDir.1} == false andthen {MouvementIsAvailable H LastDir.1 LastDir.1 MAP} \= false then
 		   LastDir.1|{GhostCommand2 T LastDir.2}
 		else
 		   {NewDirection H LastDir.1}|{GhostCommand2 T LastDir.2}
@@ -557,6 +586,13 @@ define
    end
 
 
+
+
+
+
+
+
+   %%%% CREATEGAME %%%%
    
    fun {CreateGame MAP}
       CreateGhostStream
@@ -745,7 +781,7 @@ define
       %{Browse show}
 
       thread {Scared ScaredModeStream} end
-      thread {ContinuousGame ReadCommand r(1 0)} end
+      thread {ContinuousGame ReadCommand r(1 0) r(1 0)} end
       
       
       NewMAP = {CreateGame MAP}
