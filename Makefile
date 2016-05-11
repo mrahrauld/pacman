@@ -1,5 +1,5 @@
 all: run 
-ARGS = -h
+ARGS = -h true
 
 bin:
 	mkdir -p bin
