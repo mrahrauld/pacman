@@ -1,5 +1,5 @@
 all: run 
-ARGS = -h true
+
 
 bin:
 	mkdir -p bin
@@ -9,7 +9,7 @@ compile: bin
 	ozc -c src/PacManGUI.oz -o bin/PacManGUI.ozf
 	
 run: compile 
-	ozengine bin/PacMan.ozf $(ARGS)
+	ozengine bin/PacMan.ozf $(ARG)
 
 clean:
 	rm -rf bin

@@ -60,7 +60,7 @@ in
     if Args.help then
        {Say "Usage: "#{Property.get 'application.url'}#" [option]"}
        {Say "Options:"}
-       {Say "  -m, --map FILE\tFile containing the map (default "#{Value.toVirtualString MAP 100 100}#")"}
+       {Say "  -m, --map FILE\tFile containing the map (default "#{Value.toVirtualString MAP 1000 1000}#")"}
        {Say "  -l, --lives INT\tNumber of pac-man lives (default "#LIVES#")"}
        {Say "  -h, -?, --help\tThis help"}
     
