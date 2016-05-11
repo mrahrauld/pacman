@@ -61,7 +61,7 @@ in
        {Say "Usage: "#{Property.get 'application.url'}#" [option]"}
        {Say "Options:"}
        {Say "  -m, --map FILE\tFile containing the map (default "#MAP#")"}
-       {Say "  -l, --lives INT\tNumber of pac-man lives"}
+       {Say "  -l, --lives INT\tNumber of pac-man lives (default "#LIVES#")"}
        {Say "  -h, -?, --help\tThis help"}
     
        {Application.exit 0}
