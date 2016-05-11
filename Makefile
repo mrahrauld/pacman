@@ -8,7 +8,7 @@ compile: bin
 	ozc -c src/PacManGUI.oz -o bin/PacManGUI.ozf
 	
 run: compile 
-	ozengine bin/PacMan.ozf $(ARGS)
+	ozengine bin/PacMan.ozf $(MAKECMDGOALS)
 
 clean:
 	rm -rf bin
