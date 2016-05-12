@@ -343,15 +343,13 @@ define
 	 NewAlivePacmans = AlivePacmans-H
       end
       if NewAlivePacmans==0 then
+	 {DrawBox 38 {Int.'div' NW 2} {Int.'div' NH 2}}
 	 {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
 	 {Send TimerPort ~1}
-	 {DrawBox 38 {Int.'div' NW 2} {Int.'div' NH 2}}
-
       elseif NewCoinCount == 0 then
+	 {DrawBox 37 {Int.'div' NW 2} {Int.'div' NH 2}}
 	 {Send GhostPort ~1}
 	 {Send TimerPort ~1}
-	 {DrawBox 37 {Int.'div' NW 2} {Int.'div' NH 2}}
-
       else
 	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
       end
