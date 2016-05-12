@@ -785,7 +785,7 @@ define
       
       thread {Map PacmanStream GhostPort NewMAP COINS NOMBREPACMAN AlivePacmanStream} end
       {Timer TimerStream}
-      {Delay 5000}
+      {Delay 3000}
       {Window close}
    end
 
