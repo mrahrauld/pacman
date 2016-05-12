@@ -96,15 +96,14 @@ define
       thread {Delay TIMETIMER} {Send Port 1} end
       thread
 	 {Wait TimerStream.1}
-	 %case TimerStream of H|T then
 	    {Send Port 2}
-	 %end
       end
       {Wait Stream.1}
       if Stream.1 == 1 then
 	 {Send ReadCommandPort time(1)}
 	 {Timer TimerStream}
       end
+      {Send ReadCommandPort ~1}
    end
    
    proc{DrawBox Number X Y}
@@ -346,13 +345,11 @@ define
       if NewAlivePacmans==0 then
 	 {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
 	 {Send TimerPort ~1}
-	 {Send ReadCommandPort ~1}
 	 {DrawBox 38 {Int.'div' NW 2} {Int.'div' NH 2}}
 
       elseif NewCoinCount == 0 then
 	 {Send GhostPort ~1}
 	 {Send TimerPort ~1}
-	 {Send ReadCommandPort ~1}
 	 {DrawBox 37 {Int.'div' NW 2} {Int.'div' NH 2}}
 
       else
