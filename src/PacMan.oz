@@ -44,6 +44,19 @@ define
 	r(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1))
    LIVES   = 5
 
+   fun {LoadPickle URL}
+   F={New Open.file init(url:URL flags:[read])}
+in
+   try   
+      VBS
+   in
+      {F read(size:all list:VBS)}
+      {Pickle.unpack VBS}
+   finally
+      {F close}
+   end
+end
+
    MAP2 = './test_map.ozp'
 
    %{Value.toVirtualString MAP 1000 1000}

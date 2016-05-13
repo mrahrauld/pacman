@@ -268,7 +268,7 @@ define
 		  NewLives = Lives
 		  ACK
 	       else
-		  {System.show 'Tu perds une vie'}
+		  {System.show 'You loose a life'}
 		  
 		  NewLives = Lives-1
 		  NewGhost
@@ -575,7 +575,7 @@ define
       
       NextGhostStream = {GhostCommand GhostStream MySelf LastDir Scared OriginalPos GhostNewState NewDir NewScared}
       
-      if NextGhostStream== ~1 then {System.show 'Quelques chose à faire ici mais quoi ? '}
+      if NextGhostStream== ~1 then
       else
 	 {Ghost GhostNewState NextGhostStream MAP NewDir NewScared OriginalPos}
       end
