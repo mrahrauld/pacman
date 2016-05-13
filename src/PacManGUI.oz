@@ -387,6 +387,10 @@ define
 	    {Send AlivePacmansPort 0}
 	    {Pacman MyNewState NextCommand}
 	 else
+	    pos(_ _ _ _ _ LastLives _)
+	    if Lives > LastLives then
+	       {Delay 3000}
+	    end
 	    {Send AlivePacmansPort 1}
 	 end
       end
@@ -773,7 +777,6 @@ define
       NewMAP
    in
       LIVES = LIVE
-      %{Browse show}
 
       thread {Scared ScaredModeStream} end
       thread {ContinuousGame ReadCommand r(1 0) r(1 0)} end
@@ -784,6 +787,7 @@ define
       %Liste des WORMHOLES DANS la variable globale WORMHOLES !!!
       
       thread {Map PacmanStream GhostPort NewMAP COINS NOMBREPACMAN AlivePacmanStream} end
+      
       {Timer TimerStream}
       {Delay 3000}
       {Window close}
