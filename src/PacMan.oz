@@ -38,7 +38,7 @@ define
    % Posible arguments
    Args = {Application.getArgs
                record(
-		  map(single char:&m type:atom default:MAP)
+		  map(single char:&m type:atom default:DEFMAP)
 		  lives(single char:&l type:int default:LIVES)
 		  help(single char:[&? &h] default:false)
 		  )}
@@ -76,6 +76,6 @@ in
    %{Say "Map:\t"#Args.map}
     {Say "Pac-man lives:\t"#Args.lives}
 
-   {GUI.startGame {LoadPickles Args.map} Args.lives}
+   {GUI.startGame {LoadPickle Args.map} Args.lives}
    {Application.exit 0}
 end
