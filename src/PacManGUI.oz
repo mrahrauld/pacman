@@ -623,7 +623,8 @@ define
       
       NextGhostStream = {GhostCommand GhostStream MySelf LastDir Scared OriginalPos GhostNewState NewDir NewScared}
       
-      if NextGhostStream== ~1 then
+      if NextGhostStream == ~1 then
+	 skip
       else
 	 {Ghost GhostNewState NextGhostStream MAP NewDir NewScared OriginalPos}
       end
