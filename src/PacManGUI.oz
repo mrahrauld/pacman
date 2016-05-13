@@ -96,7 +96,7 @@ define
 	    {ContinuousGame T r(A B) Current}
 	 [] time(_) then
 	    {Send CommandPort Current#Last}
-	    {ContinuousGame T Current Last}
+	    {ContinuousGame T Current Current}
 	 else
 	    {System.show 'Continuous game se termine'}
 	    {Send TimerPort ~1}
