@@ -1,6 +1,6 @@
 all: run 
 
-ARGS = -l 1
+ARGS = 
 
 bin:
 	mkdir -p bin
