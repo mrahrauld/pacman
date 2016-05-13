@@ -109,9 +109,7 @@ in
     
        {Application.exit 0}
     end
-
-    MAP3 = {LoadPickle MAP2}
-
+    
    {System.show 'These are the arguments to run the application'}
     {Say "Map:\t"#Args.map}
     {Say "Pac-man lives:\t"#Args.lives}
