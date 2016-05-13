@@ -44,6 +44,10 @@ define
 	r(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1))
    LIVES   = 5
 
+   MAP2 = './test_map.ozp'
+
+   %{Value.toVirtualString MAP 1000 1000}
+
    %% For feedback
    Say    = System.showInfo
 
@@ -60,13 +64,14 @@ in
     if Args.help then
        {Say "Usage: "#{Property.get 'application.url'}#" [option]"}
        {Say "Options:"}
-       {Say "  -m, --map FILE\tFile containing the map (default "#{Value.toVirtualString MAP 1000 1000}#")"}
+       {Say "  -m, --map FILE\tFile containing the map (default "#MAP2#")"}
        {Say "  -l, --lives INT\tNumber of pac-man lives (default "#LIVES#")"}
        {Say "  -h, -?, --help\tThis help"}
     
        {Application.exit 0}
     end
-    
+
+    MAP3 = {LoadPickle MAP2}
 
    {System.show 'These are the arguments to run the application'}
    %{Say "Map:\t"#Args.map}
