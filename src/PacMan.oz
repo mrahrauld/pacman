@@ -28,7 +28,7 @@ import
 define
 
 
-   DEFMAP = 'defaultMap.ozp' 
+   DEFMAP = 'default_map.ozp' 
    LIVES   = 5
    
 
