@@ -98,6 +98,7 @@ define
 	    {Send CommandPort Current#Last}
 	    {ContinuousGame T Current Last}
 	 else
+	    {System.show 'Continuous game se termine'}
 	    skip
 	 end
       end
@@ -121,6 +122,7 @@ define
 	 {Timer TimerStream}
       end
       {Send ReadCommandPort ~1}
+      {System.show 'Timer se termine'}
    end
 
 
@@ -399,6 +401,7 @@ define
       else
 	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
       end
+      {System.show 'Waitstream se termine'}
    end
    
 
@@ -436,8 +439,8 @@ define
 	    {Send AlivePacmansPort 0}
 	    {Pacman MyNewState NextCommand}
 	 else
-	    {System.show 'pacman se termine'}
 	    {Send AlivePacmansPort 1} % Is dead, finish game
+	    {System.show 'pacman se termine'}
 	 end
       end
    end
@@ -625,10 +628,11 @@ define
       NextGhostStream = {GhostCommand GhostStream MySelf LastDir Scared OriginalPos GhostNewState NewDir NewScared}
       
       if NextGhostStream == ~1 then
-	 {System.show 'test21'}
+	 skip
       else
 	 {Ghost GhostNewState NextGhostStream MAP NewDir NewScared OriginalPos}
       end
+      {System.show 'Ghost se termine'}
    end
 
 
