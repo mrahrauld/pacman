@@ -26,22 +26,7 @@ import
 define
 
 
-   MAP  = map(
-	r(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1)
-	r(1 5 0 0 0 0 0 3 0 1 0 0 2 0 0 0 1)
-	r(1 1 1 0 1 1 1 0 1 1 1 1 1 1 1 0 1)
-	r(1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1)
-	r(1 0 0 0 1 1 1 1 1 1 1 0 1 1 1 1 1)
-	r(1 0 1 0 0 0 4 3 2 0 0 0 0 0 0 0 1)
-	r(1 1 1 1 1 0 1 1 1 1 0 1 1 1 1 0 1)
-	r(1 0 0 0 0 0 0 0 0 1 0 1 5 0 0 0 1)
-	r(1 0 1 1 1 1 1 1 0 1 0 1 1 1 1 0 1)
-	r(1 0 0 0 0 3 0 0 0 1 0 0 0 0 0 0 1)
-	r(1 1 1 0 1 1 1 1 0 1 1 1 1 1 0 1 1)
-	r(1 0 0 0 0 0 2 0 0 0 0 1 2 0 0 0 1)
-	r(1 1 1 1 1 0 1 1 1 1 0 1 1 1 1 0 1)
-	r(1 0 0 0 0 0 1 0 5 0 0 0 0 0 0 0 1)
-	r(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1))
+   DEFMAP = 'defaultMap.ozp' 
    LIVES   = 5
 
    
@@ -60,13 +45,29 @@ define
 		  lives(single char:&l type:int default:LIVES)
 		  help(single char:[&? &h] default:false)
 		  )}
+
+
+   fun {LoadPickle URL}
+      F={New Open.file init(url:URL flags:[read])}
+   in
+      try
+	 VBS
+      in
+	 {F read(size:all list:VBS)}
+	 {Pickle.unpack VBS}
+      finally
+	 {F close}
+      end
+   end
+
+   
 in
    
     %Help message
     if Args.help then
        {Say "Usage: "#{Property.get 'application.url'}#" [option]"}
        {Say "Options:"}
-       {Say "  -m, --map FILE\tFile containing the map (default "#MAP2#")"}
+       {Say "  -m, --map FILE\tFile containing the map (default "DEFMAP")"}
        {Say "  -l, --lives INT\tNumber of pac-man lives (default "#LIVES#")"}
        {Say "  -h, -?, --help\tThis help"}
     
@@ -79,6 +80,6 @@ in
    %{Say "Map:\t"#Args.map}
     {Say "Pac-man lives:\t"#Args.lives}
 
-   {GUI.startGame MAP Args.lives}
+   {GUI.startGame {LoadPickles Args.map} Args.lives}
    {Application.exit 0}
 end
