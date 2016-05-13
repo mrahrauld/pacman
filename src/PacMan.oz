@@ -114,6 +114,8 @@ in
     {Say "Map:\t"#Args.map}
     {Say "Pac-man lives:\t"#Args.lives}
 
-   {GUI.startGame {LoadPickle Args.map} Args.lives}
+    {GUI.startGame {LoadPickle Args.map} Args.lives}
+
+    {System.show 'test'}
    {Application.exit 0}
 end

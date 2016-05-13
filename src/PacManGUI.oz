@@ -436,6 +436,7 @@ define
 	    {Send AlivePacmansPort 0}
 	    {Pacman MyNewState NextCommand}
 	 else
+	    {System.show 'pacman se termine'}
 	    {Send AlivePacmansPort 1} % Is dead, finish game
 	 end
       end
