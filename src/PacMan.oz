@@ -22,6 +22,8 @@ import
    Property
    System
    GUI at 'PacManGUI.ozf'
+   Open
+   Pickle
 
 define
 
@@ -65,11 +67,9 @@ define
    r(1 0 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 1)
    r(1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1)
    r(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1))
+   DEFMAP = 'default_map.ozp' 
+   LIVES   = 5
    
-
-   MAP2 = './test_map.ozp'
-
-   %{Value.toVirtualString MAP 1000 1000}
 
    %% For feedback
    Say    = System.showInfo
@@ -77,29 +77,45 @@ define
    % Posible arguments
    Args = {Application.getArgs
                record(
-		  map(single char:&m type:atom default:MAP)
+		  map(single char:&m type:atom default:DEFMAP)
 		  lives(single char:&l type:int default:LIVES)
 		  help(single char:[&? &h] default:false)
 		  )}
+
+
+   fun {LoadPickle URL}
+      F={New Open.file init(url:URL flags:[read])}
+   in
+      try
+	 VBS
+      in
+	 {F read(size:all list:VBS)}
+	 {Pickle.unpack VBS}
+      finally
+	 {F close}
+      end
+   end
+
+   
 in
    
     %Help message
     if Args.help then
        {Say "Usage: "#{Property.get 'application.url'}#" [option]"}
        {Say "Options:"}
-       {Say "  -m, --map FILE\tFile containing the map (default "#MAP2#")"}
+       {Say "  -m, --map FILE\tFile containing the map (default "#DEFMAP#")"}
        {Say "  -l, --lives INT\tNumber of pac-man lives (default "#LIVES#")"}
        {Say "  -h, -?, --help\tThis help"}
     
        {Application.exit 0}
     end
 
-    %MAP3 = {LoadPickle MAP2}
+    MAP3 = {LoadPickle MAP2}
 
    {System.show 'These are the arguments to run the application'}
-   %{Say "Map:\t"#Args.map}
+    {Say "Map:\t"#Args.map}
     {Say "Pac-man lives:\t"#Args.lives}
 
-   {GUI.startGame MAP Args.lives}
+   {GUI.startGame {LoadPickle Args.map} Args.lives}
    {Application.exit 0}
 end
