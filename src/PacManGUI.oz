@@ -389,7 +389,7 @@ define
 	    {Pacman MyNewState NextCommand}
 	 else
 	    LastLives in 
-	    pos(_ _ _ _ _ LastLives _)
+	    pos(_ _ _ _ _ LastLives _) = MySelf
 	    if Lives > LastLives then
 	       {Delay 3000}
 	    end
