@@ -7,7 +7,6 @@ export
    StartGame
 define
    [QTk]={Module.link ["x-oz://system/wp/QTk.ozf"]}
-   Say    = System.showInfo
    Desc
    Window
    Canvas
@@ -26,19 +25,19 @@ define
    %
    % Main images
    %
-   PacManImg={QTk.newImage photo(url:MainURL#"/pacman.gif")}
-   PacManUImg={QTk.newImage photo(url:MainURL#"/pacmanU.gif")}
-   PacManDImg={QTk.newImage photo(url:MainURL#"/pacmanD.gif")}
-   PacManLImg={QTk.newImage photo(url:MainURL#"/pacmanL.gif")}
-   PacManRImg={QTk.newImage photo(url:MainURL#"/pacmanR.gif")}
-   WormholeImg={QTk.newImage photo(url:MainURL#"/wormhole.gif")}
-   WallImg={QTk.newImage photo(url:MainURL#"/wall.gif")}
-   PowerImg={QTk.newImage photo(url:MainURL#"/power.gif")}
-   GhostScaredImg={QTk.newImage photo(url:MainURL#"/ghostScared.gif")}
-   GhostImg={QTk.newImage photo(url:MainURL#"/ghost.gif")}
-   CoinImg={QTk.newImage photo(url:MainURL#"/yellow-coin.gif")}
-   WinImg={QTk.newImage photo(url:MainURL#"/youwin.gif")}
-   OverImg={QTk.newImage photo(url:MainURL#"/gameover.gif")}
+   PacManImg={QTk.newImage photo(url:MainURL#"/Img/pacman.gif")}
+   PacManUImg={QTk.newImage photo(url:MainURL#"/Img/pacmanU.gif")}
+   PacManDImg={QTk.newImage photo(url:MainURL#"/Img/pacmanD.gif")}
+   PacManLImg={QTk.newImage photo(url:MainURL#"/Img/pacmanL.gif")}
+   PacManRImg={QTk.newImage photo(url:MainURL#"/Img/pacmanR.gif")}
+   WormholeImg={QTk.newImage photo(url:MainURL#"/Img/wormhole.gif")}
+   WallImg={QTk.newImage photo(url:MainURL#"/Img/wall.gif")}
+   PowerImg={QTk.newImage photo(url:MainURL#"/Img/power.gif")}
+   GhostScaredImg={QTk.newImage photo(url:MainURL#"/Img/ghostScared.gif")}
+   GhostImg={QTk.newImage photo(url:MainURL#"/Img/ghost.gif")}
+   CoinImg={QTk.newImage photo(url:MainURL#"/Img/yellow-coin.gif")}
+   WinImg={QTk.newImage photo(url:MainURL#"/Img/youwin.gif")}
+   OverImg={QTk.newImage photo(url:MainURL#"/Img/gameover.gif")}
    WidthCell=40
    HeightCell=40
 
@@ -98,7 +97,6 @@ define
 	    {Send CommandPort Current#Last}
 	    {ContinuousGame T Current Current}
 	 else
-	    {System.show 'Continuous game se termine'}
 	    {Send TimerPort ~1}
 	    skip
 	 end
@@ -122,7 +120,6 @@ define
 	 {Send ReadCommandPort time(1)}
 	 {Timer TimerStream}
       end
-      {System.show 'Timer se termine'}
    end
 
 
@@ -401,7 +398,6 @@ define
       else
 	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
       end
-      {System.show 'Waitstream se termine'}
    end
    
 
@@ -440,7 +436,6 @@ define
 	    {Pacman MyNewState NextCommand}
 	 else
 	    {Send AlivePacmansPort 1} % Is dead, finish game
-	    {System.show 'pacman se termine'}
 	 end
       end
    end
@@ -632,7 +627,6 @@ define
       else
 	 {Ghost GhostNewState NextGhostStream MAP NewDir NewScared OriginalPos}
       end
-      {System.show 'Ghost se termine'}
    end
 
 
