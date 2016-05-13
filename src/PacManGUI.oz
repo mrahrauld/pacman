@@ -216,7 +216,7 @@ define
 
 
 
-   
+   %%%% MAP %%%%
    %
    % Main function that generate the game. Pacman send its movement to the map and the map make ghost moving. Map counts points and pacman lives 
    %
@@ -624,6 +624,7 @@ define
       NextGhostStream = {GhostCommand GhostStream MySelf LastDir Scared OriginalPos GhostNewState NewDir NewScared}
       
       if NextGhostStream== ~1 then
+	 skip
       else
 	 {Ghost GhostNewState NextGhostStream MAP NewDir NewScared OriginalPos}
       end
