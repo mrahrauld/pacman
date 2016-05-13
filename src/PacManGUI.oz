@@ -98,6 +98,8 @@ define
 	    {Send CommandPort Current#Last}
 	    {ContinuousGame T Current Current}
 	 else
+	    {System.show 'Continuous game se termine'}
+	    {Send TimerPort ~1}
 	    skip
 	 end
       end
@@ -120,7 +122,7 @@ define
 	 {Send ReadCommandPort time(1)}
 	 {Timer TimerStream}
       end
-      {Send ReadCommandPort ~1}
+      {System.show 'Timer se termine'}
    end
 
 
@@ -321,7 +323,7 @@ define
 		  NewLives = Lives
 		   ACK
 	       else
-		  {System.show 'Tu perds une vie'}
+		  {System.show 'You loose a life'}
 		  
 		  NewLives = Lives-1
 		  NewGhost
@@ -391,14 +393,15 @@ define
       if NewAlivePacmans==0 then
 	 {DrawBox 38 {Int.'div' NW 2} {Int.'div' NH 2}}
 	 {Send GhostPort ~1} % s'il n'y a plus de pacman en vie on previent le thread Ghost
-	 {Send TimerPort ~1}
+	 {Send ReadCommandPort ~1}
       elseif NewCoinCount == 0 then
 	 {DrawBox 37 {Int.'div' NW 2} {Int.'div' NH 2}}
 	 {Send GhostPort ~1}
-	 {Send TimerPort ~1}
+	 {Send ReadCommandPort ~1}
       else
 	 {Map NextMapStream  GhostPort NewMAP  NewCoinCount NewAlivePacmans NextAlivePacmanStream}
       end
+      {System.show 'Waitstream se termine'}
    end
    
 
@@ -437,6 +440,7 @@ define
 	    {Pacman MyNewState NextCommand}
 	 else
 	    {Send AlivePacmansPort 1} % Is dead, finish game
+	    {System.show 'pacman se termine'}
 	 end
       end
    end
@@ -628,6 +632,7 @@ define
       else
 	 {Ghost GhostNewState NextGhostStream MAP NewDir NewScared OriginalPos}
       end
+      {System.show 'Ghost se termine'}
    end
 
 
