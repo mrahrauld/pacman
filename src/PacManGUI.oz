@@ -368,6 +368,7 @@ define
 
       MyNewState
       NextCommand
+      
 
       fun {UserCommand Command OldState NewState}
 	 X Y OX OY Ack Lives Coins C in
@@ -387,6 +388,7 @@ define
 	    {Send AlivePacmansPort 0}
 	    {Pacman MyNewState NextCommand}
 	 else
+	    LastLives in 
 	    pos(_ _ _ _ _ LastLives _)
 	    if Lives > LastLives then
 	       {Delay 3000}
