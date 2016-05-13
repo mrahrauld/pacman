@@ -385,13 +385,13 @@ define
       NextCommand = {UserCommand Command MySelf MyNewState}
       case MyNewState of pos(_ _ _ _ _ Lives _) then
 	 if Lives \= 0 then
+	    LastLives in 
 	    {Send AlivePacmansPort 0}
 	    if Lives > LastLives then
 	       {Delay 3000}
 	    end
 	    {Pacman MyNewState NextCommand}
 	 else
-	    LastLives in 
 	    pos(_ _ _ _ _ LastLives _) = MySelf
 	    {Send AlivePacmansPort 1}
 	 end
