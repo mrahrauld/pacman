@@ -22,6 +22,8 @@ import
    Property
    System
    GUI at 'PacManGUI.ozf'
+   Open
+   Pickle
 
 define
 
@@ -29,8 +31,6 @@ define
    DEFMAP = 'defaultMap.ozp' 
    LIVES   = 5
    
-
-   %{Value.toVirtualString MAP 1000 1000}
 
    %% For feedback
    Say    = System.showInfo
@@ -71,7 +71,6 @@ in
        {Application.exit 0}
     end
 
-    MAP3 = {LoadPickle MAP2}
 
    {System.show 'These are the arguments to run the application'}
    %{Say "Map:\t"#Args.map}
