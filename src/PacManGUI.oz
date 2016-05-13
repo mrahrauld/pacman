@@ -22,6 +22,10 @@ define
    NW %NOMBRE DE CASE DANS LA LONGUEUR
    NH %NOMBRE DE CASE DANS LA HAUTEUR
    MainURL={OS.getCWD}
+
+   %
+   % Main images
+   %
    PacManImg={QTk.newImage photo(url:MainURL#"/pacman.gif")}
    PacManUImg={QTk.newImage photo(url:MainURL#"/pacmanU.gif")}
    PacManDImg={QTk.newImage photo(url:MainURL#"/pacmanD.gif")}
@@ -38,6 +42,9 @@ define
    WidthCell=40
    HeightCell=40
 
+   %
+   % Ports and stream associated
+   %
    TimerStream
    TimerPort = {NewPort TimerStream}
    Command
@@ -54,18 +61,19 @@ define
    ScaredModePort = {NewPort ScaredModeStream}
 
 
+   %
+   %  Thread qui rend les Ghost scared
+   %
+   %
    proc{Scared ScaredModeStream}
       case ScaredModeStream of scared(Time)|T then
 	 Stream
 	 Port = {NewPort Stream} in
 	 {Send GhostPort scared(33)}
-	 thread {Delay Time} {Send Port 1}  end
+	 thread {Delay Time} {Send Port 1}  end % Scared
 	 thread
-	    %scared(Time)
-	    %case T of H|L then
-	    {Wait T.1}
+	    {Wait T.1}  % If new pellets is eaten when ghost are scared
 	       {Send Port 2}
-	   % end
 	 end
 	 {Wait Stream.1}
 
@@ -77,6 +85,11 @@ define
       end
    end
 
+   %
+   %
+   % Thread qui envoie stocke et envoie les commande lorsque le timer le lui dit et stocke les dernières commande envoyées par l'utilisateur
+   %
+   %
    proc{ContinuousGame ReadCommand Current Last}
       case ReadCommand of H|T then
 	 case H of r(A B) then
@@ -89,13 +102,17 @@ define
 	 end
       end
    end
-   
+
+   %
+   % Simple timer qui tourne et envoie à ContinuousGame les moments auxquels il doit envoyer une commande à pacman
+   %
+   %
    proc{Timer TimerStream}
       Stream
       Port = {NewPort Stream} in
-      thread {Delay TIMETIMER} {Send Port 1} end
+      thread {Delay TIMETIMER} {Send Port 1} end  % Attend que le ttemps soit passé
       thread
-	 {Wait TimerStream.1}
+	 {Wait TimerStream.1} %Pour ferme
 	    {Send Port 2}
       end
       {Wait Stream.1}
@@ -105,7 +122,11 @@ define
       end
       {Send ReadCommandPort ~1}
    end
-   
+
+
+   %
+   % Dessine les différentes cases
+   %
    proc{DrawBox Number X Y}
       case Number of 0 then  %Empty case
 	 {Canvas create(image (X-1)*WidthCell + WidthCell div 2 (Y-1)*HeightCell + HeightCell div 2   image:CoinImg)}
@@ -141,6 +162,12 @@ define
       end
    end
 
+   
+
+   %
+   %  Verify if pacman or ghost movement is possible or not. If movement is possible then return the movement, if not return false
+   %
+   %
    fun {MouvementIsAvailable OldState Dir LastDir MAP}
       NewX NewY DX DY OldX OldY Color LastDX LastDY NewX2 NewY2 
       r(Color OldX OldY) = OldState
@@ -152,8 +179,8 @@ define
       NewX2 = OldX + LastDX
       NewY2 = OldY + LastDY
       if NewX<1 orelse NewX>NW orelse NewY<1 orelse NewY>NH orelse {GetElement NewX NewY MAP} == 1 then
-	 if NewX2<1 orelse NewX2>NW orelse NewY2<1 orelse NewY2>NH orelse {GetElement NewX2 NewY2 MAP} == 1 then
-	    false
+	 if NewX2<1 orelse NewX2>NW orelse NewY2<1 orelse NewY2>NH orelse {GetElement NewX2 NewY2 MAP} == 1 then  %Movement not possible 
+	    false    
 	 elseif {GetElement NewX2 NewY2 MAP} == 5 then
 	    {ChooseNewHole r(Color NewX2 NewY2) WORMHOLES}
 	 else
@@ -170,7 +197,7 @@ define
    %Ils ne peuvent pas être bloqués entre deux trous
    fun {ChooseNewHole OH HoleList}
       N RAND OX OY in
-      r(_ OX OY) = OH     %Enleve color
+      r(_ OX OY) = OH    
       N = {List.length HoleList}
       RAND = {Int.'mod' {OS.rand} N} +1
       local
@@ -190,8 +217,10 @@ define
 
 
    
-   
-   %%%%% MAP %%%%
+   %
+   % Main function that generate the game. Pacman send its movement to the map and the map make ghost moving. Map counts points and pacman lives 
+   %
+   %
    proc {Map MapStream GhostPort MAP CoinCount AlivePacmans AlivePacmanStream}
       NextMapStream
       NewMAP
@@ -199,6 +228,10 @@ define
       NewAlivePacmans
       NextAlivePacmanStream
 
+      %
+      %
+      % Move pacman from one position to another. Take care of the map and the coins
+      %
       fun {MovePacman MAP OldState NewState Move CoinCount NewCoinCount Coins NewCoins}
 	 NewX NewY OldX OldY NewMAP DX DY in
 	 r(OldX OldY) = OldState
@@ -236,6 +269,10 @@ define
       end
       
 
+      %
+      % Find new movement for ghost 
+      %
+      %
       proc{MoveGhost OldStates NewStates NX NY OX OY}
 	    OldX OldY NewX NewY C C2 in
 	    case OldStates of nil then skip
@@ -253,6 +290,10 @@ define
 	       {MoveGhost OldStates.2 NewStates.2 NX NY OX OY}
 	    end
       end
+
+      %
+      % Function to verify if pacman loose a life
+      %
       fun{IsDead Lives NewLives OX OY NX NY OG NG NbreGhost NewGhost}
 	 GOX GOY GNX GNY C C2 ACK  in
 	 case OG of nil then
@@ -291,13 +332,18 @@ define
 	    end
 	 end
       end
+
+      %
+      % Main function of the MAP that waits for a pacman move
+      %
+      %
       fun{WaitStream OldMAP NewMAP MapStream GhostPort CoinCount NewCoinCount }
 	 NewCoins NewPos GhostPos NX NY NewLives OldGhost NewGhost OG NG in
 	 case MapStream of H|T then
 	    {Send GhostPort GhostPos}
 	    OG#NG=GhostPos
 	    OldGhost = OG
-	    case H of move(C OX OY DX DY OriginX OriginY Lives Coins LastDX LastDY)#Ack then
+	    case H of move(C OX OY DX DY OriginX OriginY Lives Coins LastDX LastDY)#Ack then  %wait for pacman move
 	       NewPos = {MouvementIsAvailable r(C OX OY) r(DX DY) r(LastDX LastDY) OldMAP}
 	       case NewPos of r(X Y) then
 		  
@@ -369,7 +415,9 @@ define
       MyNewState
       NextCommand
       
-
+      %
+      % Wait for new command in the CommandPort
+      %
       fun {UserCommand Command OldState NewState}
 	 X Y OX OY Ack Lives Coins C in
 
@@ -377,18 +425,18 @@ define
 	 case Command of r(DX DY)#r(LastDX LastDY)|T then
 	    {Send PacmanPort move(C X Y DX DY OX OY Lives Coins LastDX LastDY)#Ack}
 	    
-	    {Wait Ack} % Ack = pos(X Y Lives Coins)
+	    {Wait Ack} % Wait for ack and its new position 
 	    NewState = Ack
 	    T
 	 end
       end in
       NextCommand = {UserCommand Command MySelf MyNewState}
       case MyNewState of pos(_ _ _ _ _ Lives _) then
-	 if Lives \= 0 then
+	 if Lives \= 0 then % Not dead, start again
 	    {Send AlivePacmansPort 0}
 	    {Pacman MyNewState NextCommand}
 	 else
-	    {Send AlivePacmansPort 1}
+	    {Send AlivePacmansPort 1} % Is dead, finish game
 	 end
       end
    end
@@ -589,6 +637,10 @@ define
 
 
    %%%% CREATEGAME %%%%
+   %
+   % Functions that create the map, the interface, launch pacman and ghosts
+   %
+   %
    
    fun {CreateGame MAP}
       CreateGhostStream
@@ -597,6 +649,10 @@ define
       GHOSTS
       
 
+      %
+      %
+      % Draw the hole map by going row by row
+      %
       proc {CreateTable MAP ARITY COINS}
 	 NewCoins1 NewCoins2 in
 	 case ARITY of H|T then
@@ -610,6 +666,9 @@ define
       end
 
 
+      %
+      % Draw lines case by case
+      %
       proc {CreateLine LINE ARITY Y COINS}
 	 COINS2 NewCoins in
 	 case ARITY of X|T then
@@ -634,15 +693,24 @@ define
 	 
       end
 
+      %
+      % Add a ghost to the list (send to a port)
+      %
       proc {NewGhost X Y}
 	 {Send CreateGhostPort r(3 X Y)}
       end
 
+      %
+      % Launch new pacman (send to a port)
+      %
       proc {NewPacman X Y}
 	 {Send CreateGhostPort r(4 X Y)}
 	 thread {Pacman pos(4 X Y X Y LIVES 0) Command} end
       end
 
+      %
+      % Add a wormhole to the list
+      %
       proc {NewWormhole X Y}
 	 {Send CreateGhostPort r(5 X Y)}
       end
@@ -664,6 +732,9 @@ define
 	 end
       end
 
+      %
+      % Determine the number of pacman in the map
+      %
       fun {NombrePacman MapStream}
 	 case MapStream of r(C _ _)|T then
 	    case C of 4 then
@@ -676,6 +747,9 @@ define
 	 end
       end
 
+      %
+      % Makes a wormhole list 
+      %
       fun {WormholesList MapStream}
 	 case MapStream of r(C X Y)|T then
 	    case C of 5 then
@@ -754,12 +828,19 @@ define
  
    end
 
+   %
+   %  Change element at [X Y] by C
+   %
    fun {ChangeMap MAP C X Y}
       
      {AdjoinList MAP [Y#{AdjoinList MAP.Y [X#C]}]}
 
    end
 
+   %
+   % Return the elements on the map at [X Y]
+   %
+   %
    fun {GetElement X Y MAP}
       Line in
       if X > NW orelse X < 1 orelse Y > NH orelse Y < 1 then
