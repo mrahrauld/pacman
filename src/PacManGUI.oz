@@ -867,13 +867,11 @@ define
       
       
       NewMAP = {CreateGame MAP}
-
-      %Liste des WORMHOLES DANS la variable globale WORMHOLES !!!
       
       thread {Map PacmanStream GhostPort NewMAP COINS NOMBREPACMAN AlivePacmanStream} end
       
       {Timer TimerStream}
-      {Delay 3000}
+      {Delay 10000}
       {Window close}
    end
 
