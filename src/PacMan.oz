@@ -64,7 +64,7 @@ in
     if Args.help then
        {Say "Usage: "#{Property.get 'application.url'}#" [option]"}
        {Say "Options:"}
-       {Say "  -m, --map FILE\tFile containing the map (default "DEFMAP")"}
+       {Say "  -m, --map FILE\tFile containing the map (default "#DEFMAP#")"}
        {Say "  -l, --lives INT\tNumber of pac-man lives (default "#LIVES#")"}
        {Say "  -h, -?, --help\tThis help"}
     
