@@ -43,7 +43,7 @@ define
 		  help(single char:[&? &h] default:false)
 		  )}
 
-
+   
    fun {LoadPickle URL}
       F={New Open.file init(url:URL flags:[read])}
    in
@@ -70,8 +70,6 @@ in
     
        {Application.exit 0}
     end
-
-    MAP3 = {LoadPickle MAP2}
 
    {System.show 'These are the arguments to run the application'}
    %{Say "Map:\t"#Args.map}
