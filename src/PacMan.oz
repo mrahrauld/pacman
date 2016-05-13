@@ -28,10 +28,7 @@ define
 
    DEFMAP = 'defaultMap.ozp' 
    LIVES   = 5
-
    
-
-   MAP2 = './test_map.ozp'
 
    %{Value.toVirtualString MAP 1000 1000}
 
