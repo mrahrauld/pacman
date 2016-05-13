@@ -1,4 +1,5 @@
 declare
+
 fun {LoadPickle URL}
    F={New Open.file init(url:URL flags:[read])}
 in

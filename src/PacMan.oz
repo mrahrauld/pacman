@@ -24,8 +24,24 @@ import
    GUI at 'PacManGUI.ozf'
 
 define
-  
+
+   
+   fun {LoadPickle URL}
+      F={New Open.file init(url:URL flags:[read])}
+   in
+      try   
+	 VBS
+      in
+      {F read(size:all list:VBS)}
+	 {Pickle.unpack VBS}
+      finally
+	 {F close}
+      end
+   end
    %% Default values
+
+   MAP3
+   
    MAP  = map(
 	r(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1)
 	r(1 5 0 0 0 0 0 3 0 1 0 0 2 0 0 0 1)
@@ -44,18 +60,7 @@ define
 	r(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1))
    LIVES   = 5
 
-   fun {LoadPickle URL}
-   F={New Open.file init(url:URL flags:[read])}
-in
-   try   
-      VBS
-   in
-      {F read(size:all list:VBS)}
-      {Pickle.unpack VBS}
-   finally
-      {F close}
-   end
-end
+   
 
    MAP2 = './test_map.ozp'
 
