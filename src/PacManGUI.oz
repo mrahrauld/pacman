@@ -386,13 +386,13 @@ define
       case MyNewState of pos(_ _ _ _ _ Lives _) then
 	 if Lives \= 0 then
 	    {Send AlivePacmansPort 0}
+	    if Lives > LastLives then
+	       {Delay 3000}
+	    end
 	    {Pacman MyNewState NextCommand}
 	 else
 	    LastLives in 
 	    pos(_ _ _ _ _ LastLives _) = MySelf
-	    if Lives > LastLives then
-	       {Delay 3000}
-	    end
 	    {Send AlivePacmansPort 1}
 	 end
       end
